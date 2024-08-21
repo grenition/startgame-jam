@@ -1,9 +1,21 @@
+using UnityHFSM;
 using VContainer;
 using VContainer.Unity;
 
-public class RootLifetimeScope : LifetimeScope
+namespace Core.LifetimeScopes
 {
-    protected override void Configure(IContainerBuilder builder)
+    public sealed class RootLifetimeScope : LifetimeScope
     {
+        protected override void Configure(IContainerBuilder builder)
+        {
+            InstallStateMachine(builder);
+        }
+
+        private void InstallStateMachine(IContainerBuilder builder)
+        {
+            var fsmStateMachine = new UnityHFSM.StateMachine();
+            
+            builder.RegisterInstance(fsmStateMachine);
+        }
     }
 }
