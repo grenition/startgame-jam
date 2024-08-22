@@ -1,4 +1,5 @@
-using UnityHFSM;
+using Core.Networking.RelayService;
+using Core.StateMachine.Controllers;
 using VContainer;
 using VContainer.Unity;
 
@@ -8,14 +9,17 @@ namespace Core.LifetimeScopes
     {
         protected override void Configure(IContainerBuilder builder)
         {
-            InstallStateMachine(builder);
+            InstallStateMachines(builder);
+            InstallNetworking(builder);
         }
-
-        private void InstallStateMachine(IContainerBuilder builder)
+        
+        private void InstallStateMachines(IContainerBuilder builder)
         {
-            var fsmStateMachine = new UnityHFSM.StateMachine();
-            
-            builder.RegisterInstance(fsmStateMachine);
+            builder.RegisterEntryPoint<RootStateMachine>();
+        }
+        private void InstallNetworking(IContainerBuilder builder)
+        {
+            builder.Register<RelayService>(Lifetime.Singleton).As<IRelayService>();
         }
     }
 }

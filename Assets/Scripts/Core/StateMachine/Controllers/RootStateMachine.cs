@@ -5,7 +5,10 @@ namespace Core.StateMachine.Controllers
     public enum RootStates
     {
         Initialization,
-        Starting
+        NetworkInitialization,
+        NetworkInitializationFailure,
+        Offline,
+        Online
     }
     
     public class RootStateMachine : StateMachineController<RootStates>
@@ -15,7 +18,16 @@ namespace Core.StateMachine.Controllers
         {
             var initializationState = new InitializationState<RootStates>()
                 .ConnectToSoStateMachine(this, RootStates.Initialization)
-                .WithTransitionOnCompleteTo(RootStates.Starting);
+                .WithTransitionOnCompleteTo(RootStates.NetworkInitialization);
+
+            var networkInitializationState = new NetworkInitializationState<RootStates>()
+                .ConnectToSoStateMachine(this, RootStates.NetworkInitialization)
+                .WithTransitionOnCompleteTo(RootStates.Initialization)
+                .WithTransitionOnFailureTo(RootStates.NetworkInitializationFailure);
+
+            var networkInitializationFailureState = new NetworkInitializationFailureState<RootStates>()
+                .ConnectToSoStateMachine(this, RootStates.NetworkInitializationFailure)
+                .WithTransitionOnCompleteTo(RootStates.NetworkInitialization);
         }
     }
 }
