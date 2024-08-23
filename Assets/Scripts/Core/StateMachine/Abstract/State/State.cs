@@ -79,6 +79,7 @@ namespace Core.StateMachine.Abstract.CreatableState
 
             _stateMachineController = smc;
             _stateMachineController.FSM.AddState(stateId, CreateHFSMState());
+            _stateMachineController.ResolveState(this);
             
             return this;
         }

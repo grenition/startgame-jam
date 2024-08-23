@@ -1,5 +1,7 @@
 using Core.Networking.RelayService;
 using Core.StateMachine.Controllers;
+using SickDev.DevConsole;
+using Unity.Netcode;
 using VContainer;
 using VContainer.Unity;
 
@@ -11,6 +13,7 @@ namespace Core.LifetimeScopes
         {
             InstallStateMachines(builder);
             InstallNetworking(builder);
+            InstallTools(builder);
         }
         
         private void InstallStateMachines(IContainerBuilder builder)
@@ -20,6 +23,13 @@ namespace Core.LifetimeScopes
         private void InstallNetworking(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<RelayController>().As<IRelayController>();
+            
+            GetComponent<NetworkManager>().SetSingleton();
+            builder.RegisterInstance(NetworkManager.Singleton);
+        }
+        private void InstallTools(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(DevConsole.singleton);
         }
     }
 }

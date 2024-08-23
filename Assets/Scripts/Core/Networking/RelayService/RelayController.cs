@@ -5,7 +5,9 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Relay.Models;
 using UnityEngine;
+using VContainer;
 using VContainer.Unity;
+using DevConsole = SickDev.DevConsole.DevConsole;
 
 namespace Core.Networking.RelayService
 {
@@ -15,11 +17,20 @@ namespace Core.Networking.RelayService
         public ReadOnlyReactiveProperty<string> JoinCode => _joinCode.ToReadOnlyReactiveProperty();
         
         private ReactiveProperty<string> _joinCode = new();
+        private NetworkManager _networkManager;
+        private DevConsole _devConsole;
+
+        [Inject]
+        private void Construct(NetworkManager networkManager, DevConsole devConsole)
+        {
+            _networkManager = networkManager;
+            _devConsole = devConsole;
+        }
         
         public void Initialize()
         {
-            DevConsole.singleton.AddCommand(new ActionCommand(CreateRelay));
-            DevConsole.singleton.AddCommand(new ActionCommand<string>(JoinRelay));
+            _devConsole.AddCommand(new ActionCommand(CreateRelay));
+            _devConsole.AddCommand(new ActionCommand<string>(JoinRelay));
         }
         
         public async void CreateRelay()
@@ -32,7 +43,7 @@ namespace Core.Networking.RelayService
                 _joinCode.Value = await Unity.Services.Relay.RelayService.Instance
                     .GetJoinCodeAsync(allocation.AllocationId);
                 
-                NetworkManager.Singleton.GetComponent<UnityTransport>()
+                _networkManager.GetComponent<UnityTransport>()
                     .SetHostRelayData(
                         allocation.RelayServer.IpV4,
                         (ushort)allocation.RelayServer.Port,
@@ -41,7 +52,7 @@ namespace Core.Networking.RelayService
                         allocation.ConnectionData
                     );
 
-                NetworkManager.Singleton.StartHost();
+                _networkManager.StartHost();
                 
                 Debug.Log("Relay created, join code: " + JoinCode);
             }
@@ -57,7 +68,7 @@ namespace Core.Networking.RelayService
                 var joinAllocation = await Unity.Services.Relay.RelayService.Instance
                     .JoinAllocationAsync(joinCode);
                 
-                NetworkManager.Singleton.GetComponent<UnityTransport>()
+                _networkManager.GetComponent<UnityTransport>()
                     .SetClientRelayData(
                         joinAllocation.RelayServer.IpV4,
                         (ushort)joinAllocation.RelayServer.Port,
@@ -67,7 +78,7 @@ namespace Core.Networking.RelayService
                         joinAllocation.HostConnectionData
                     );
 
-                NetworkManager.Singleton.StartClient();
+                _networkManager.StartClient();
                 
                 Debug.Log("Joined relay: " + joinCode);
             }

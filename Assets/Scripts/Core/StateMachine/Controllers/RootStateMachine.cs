@@ -22,11 +22,20 @@ namespace Core.StateMachine.Controllers
 
             var networkInitializationState = new NetworkInitializationState<RootStates>()
                 .ConnectToSoStateMachine(this, RootStates.NetworkInitialization)
-                .WithTransitionOnFailureTo(RootStates.NetworkInitializationFailure);
-
+                .WithTransitionOnFailureTo(RootStates.NetworkInitializationFailure)
+                .WithTransitionOnCompleteTo(RootStates.Offline);
+            
             var networkInitializationFailureState = new NetworkInitializationFailureState<RootStates>()
                 .ConnectToSoStateMachine(this, RootStates.NetworkInitializationFailure)
                 .WithTransitionOnCompleteTo(RootStates.NetworkInitialization);
+
+            var offlineState = new OfflineState<RootStates>()
+                .ConnectToSoStateMachine(this, RootStates.Offline)
+                .WithTransitionOnCompleteTo(RootStates.Online);
+
+            var onlineState = new OnlineState<RootStates>()
+                .ConnectToSoStateMachine(this, RootStates.Online)
+                .WithTransitionOnCompleteTo(RootStates.Offline);
         }
     }
 }
