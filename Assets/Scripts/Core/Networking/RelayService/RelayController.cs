@@ -1,6 +1,8 @@
 using System;
 using SickDev.CommandSystem;
 using UniRx;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 using VContainer.Unity;
@@ -30,6 +32,17 @@ namespace Core.Networking.RelayService
                 _joinCode.Value = await Unity.Services.Relay.RelayService.Instance
                     .GetJoinCodeAsync(allocation.AllocationId);
                 
+                NetworkManager.Singleton.GetComponent<UnityTransport>()
+                    .SetHostRelayData(
+                        allocation.RelayServer.IpV4,
+                        (ushort)allocation.RelayServer.Port,
+                        allocation.AllocationIdBytes,
+                        allocation.Key,
+                        allocation.ConnectionData
+                    );
+
+                NetworkManager.Singleton.StartHost();
+                
                 Debug.Log("Relay created, join code: " + JoinCode);
             }
             catch (Exception ex)
@@ -41,10 +54,22 @@ namespace Core.Networking.RelayService
         {
             try
             {
-                Debug.Log("Joining relay: " + joinCode);
-                
-                await Unity.Services.Relay.RelayService.Instance
+                var joinAllocation = await Unity.Services.Relay.RelayService.Instance
                     .JoinAllocationAsync(joinCode);
+                
+                NetworkManager.Singleton.GetComponent<UnityTransport>()
+                    .SetClientRelayData(
+                        joinAllocation.RelayServer.IpV4,
+                        (ushort)joinAllocation.RelayServer.Port,
+                        joinAllocation.AllocationIdBytes,
+                        joinAllocation.Key,
+                        joinAllocation.ConnectionData,
+                        joinAllocation.HostConnectionData
+                    );
+
+                NetworkManager.Singleton.StartClient();
+                
+                Debug.Log("Joined relay: " + joinCode);
             }
             catch (Exception ex)
             {
