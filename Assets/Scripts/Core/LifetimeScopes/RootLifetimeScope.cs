@@ -19,7 +19,7 @@ namespace Core.LifetimeScopes
         }
         private void InstallNetworking(IContainerBuilder builder)
         {
-            builder.Register<RelayService>(Lifetime.Singleton).As<IRelayService>();
+            builder.RegisterEntryPoint<RelayController>().As<IRelayController>();
         }
     }
 }

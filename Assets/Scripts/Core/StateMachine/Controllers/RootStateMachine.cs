@@ -22,7 +22,6 @@ namespace Core.StateMachine.Controllers
 
             var networkInitializationState = new NetworkInitializationState<RootStates>()
                 .ConnectToSoStateMachine(this, RootStates.NetworkInitialization)
-                .WithTransitionOnCompleteTo(RootStates.Initialization)
                 .WithTransitionOnFailureTo(RootStates.NetworkInitializationFailure);
 
             var networkInitializationFailureState = new NetworkInitializationFailureState<RootStates>()
