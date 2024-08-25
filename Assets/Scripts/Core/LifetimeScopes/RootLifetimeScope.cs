@@ -1,4 +1,5 @@
 using Core.Networking.RelayService;
+using Core.SaveSystem.System;
 using Core.SceneManagement;
 using Core.StateMachine.Controllers;
 using SickDev.DevConsole;
@@ -14,7 +15,7 @@ namespace Core.LifetimeScopes
         {
             InstallStateMachines(builder);
             InstallNetworking(builder);
-            InstallTools(builder);
+            InstallCoreSystems(builder);
         }
         
         private void InstallStateMachines(IContainerBuilder builder)
@@ -28,10 +29,11 @@ namespace Core.LifetimeScopes
             GetComponent<NetworkManager>().SetSingleton();
             builder.RegisterInstance(NetworkManager.Singleton);
         }
-        private void InstallTools(IContainerBuilder builder)
+        private void InstallCoreSystems(IContainerBuilder builder)
         {
             builder.RegisterInstance(DevConsole.singleton);
             builder.RegisterEntryPoint<SceneLoader>().As<ISceneLoader>();
+            builder.Register<SaveSystem.System.SaveSystem>(Lifetime.Singleton).As<ISaveSystem>();
         }
     }
 }
