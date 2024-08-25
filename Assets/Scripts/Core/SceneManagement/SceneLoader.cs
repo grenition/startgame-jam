@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
 using VContainer;
@@ -14,9 +15,9 @@ namespace Core.SceneManagement
             _networkManager = networkManager;
         }
         
-        public bool TryLoadOnlineScene(string sceneKey)
+        public async UniTask<bool> TryLoadOnlineScene(string sceneKey)
         {
-            if (_networkManager.IsClient)
+            if (_networkManager.IsClient && !_networkManager.IsServer)
                 return false;
             
             if (!_networkManager.IsClient && !_networkManager.IsServer)
@@ -30,7 +31,7 @@ namespace Core.SceneManagement
 
             return false;
         }
-        public bool TryLoadOfflineScene(string sceneKey)
+        public async UniTask<bool> TryLoadOfflineScene(string sceneKey)
         {
             SceneManager.LoadScene(sceneKey);
             return true;

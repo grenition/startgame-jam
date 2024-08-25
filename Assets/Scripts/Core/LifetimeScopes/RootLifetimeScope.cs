@@ -2,6 +2,7 @@ using Core.Networking.RelayService;
 using Core.SaveSystem.System;
 using Core.SceneManagement;
 using Core.StateMachine.Controllers;
+using Gameplay.Player.Service;
 using SickDev.DevConsole;
 using Unity.Netcode;
 using VContainer;
@@ -16,6 +17,7 @@ namespace Core.LifetimeScopes
             InstallStateMachines(builder);
             InstallNetworking(builder);
             InstallCoreSystems(builder);
+            InstallPlayerServices(builder);
         }
         
         private void InstallStateMachines(IContainerBuilder builder)
@@ -34,6 +36,10 @@ namespace Core.LifetimeScopes
             builder.RegisterInstance(DevConsole.singleton);
             builder.RegisterEntryPoint<SceneLoader>().As<ISceneLoader>();
             builder.Register<SaveSystem.System.SaveSystem>(Lifetime.Singleton).As<ISaveSystem>();
+        }
+        private void InstallPlayerServices(IContainerBuilder builder)
+        {
+            builder.RegisterEntryPoint<PlayerService>().As<IPlayerService>();
         }
     }
 }
