@@ -1,4 +1,5 @@
 using Core.Networking.RelayService;
+using Core.SceneManagement;
 using Core.StateMachine.Controllers;
 using SickDev.DevConsole;
 using Unity.Netcode;
@@ -30,6 +31,7 @@ namespace Core.LifetimeScopes
         private void InstallTools(IContainerBuilder builder)
         {
             builder.RegisterInstance(DevConsole.singleton);
+            builder.RegisterEntryPoint<SceneLoader>().As<ISceneLoader>();
         }
     }
 }

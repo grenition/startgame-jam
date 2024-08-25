@@ -1,3 +1,4 @@
+using Core.SceneManagement;
 using Core.StateMachine.Abstract.CreatableState;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
@@ -9,11 +10,13 @@ namespace Core.StateMachine.States
     public class OfflineState<TStateId> : State<TStateId>
     {
         private NetworkManager _networkManager;
+        private ISceneLoader _sceneLoader;
         
         [Inject]
-        private void Construct(NetworkManager networkManager)
+        private void Construct(NetworkManager networkManager, ISceneLoader sceneLoader)
         {
             _networkManager = networkManager;
+            _sceneLoader = sceneLoader;
         }
         
         protected async override UniTask OnEnter()
@@ -25,8 +28,9 @@ namespace Core.StateMachine.States
                 CompleteState();
                 return;
             }
-
+            
             _networkManager.OnClientStarted += CompleteState;
+            _sceneLoader.TryLoadOfflineScene("OfflneScene");
         }
         protected async override UniTask OnExit()
         {
