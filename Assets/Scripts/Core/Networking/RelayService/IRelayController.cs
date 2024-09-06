@@ -6,6 +6,7 @@ namespace Core.Networking.RelayService
 {
     public interface IRelayController
     {
+        public string ConnectionPayload { get; set; }
         public ReadOnlyReactiveProperty<string> JoinCode { get; }
         
         public void CreateRelay();

@@ -7,10 +7,10 @@ namespace Gameplay.Player.Service
         playerYounger
     }
     
-    public interface IPlayerService
+    public interface ILocalDataService
     {
         public PlayerType CurrentPlayerType { get; }
 
-        public void ChoosePlayer(PlayerType playerType);
+        public void ChoosePlayerType(PlayerType playerType);
     }
 }

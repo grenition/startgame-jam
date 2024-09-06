@@ -1,3 +1,4 @@
+using Core.Networking.Authentificator;
 using Core.Networking.NetworkObjectsService;
 using Core.Networking.RelayService;
 using Core.SaveSystem.System;
@@ -31,6 +32,7 @@ namespace Core.LifetimeScopes
             
             GetComponent<NetworkManager>().SetSingleton();
             builder.RegisterInstance(NetworkManager.Singleton);
+            builder.RegisterEntryPoint<NetworkAuthentificator>();
         }
         private void InstallCoreSystems(IContainerBuilder builder)
         {
@@ -41,7 +43,7 @@ namespace Core.LifetimeScopes
         }
         private void InstallPlayerServices(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<PlayerService>().As<IPlayerService>();
+            builder.RegisterEntryPoint<LocalDataService>().As<ILocalDataService>();
         }
     }
 }

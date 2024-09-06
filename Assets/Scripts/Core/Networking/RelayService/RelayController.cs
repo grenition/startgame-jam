@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using SickDev.CommandSystem;
 using UniRx;
 using Unity.Netcode;
@@ -11,9 +12,10 @@ using DevConsole = SickDev.DevConsole.DevConsole;
 
 namespace Core.Networking.RelayService
 {
-    public class RelayController : IRelayController, IInitializable
+    public class RelayController : IRelayController, IInitializable, IDisposable
     {
         public const int MaxConnections = 2;
+        public string ConnectionPayload { get; set; } = null;
         public ReadOnlyReactiveProperty<string> JoinCode => _joinCode.ToReadOnlyReactiveProperty();
         
         private ReactiveProperty<string> _joinCode = new();
@@ -31,8 +33,14 @@ namespace Core.Networking.RelayService
         {
             _devConsole.AddCommand(new ActionCommand(CreateRelay));
             _devConsole.AddCommand(new ActionCommand<string>(JoinRelay));
+            
+            _networkManager.OnClientDisconnectCallback += OnClientDisconnect;
         }
-        
+        public void Dispose()
+        {
+            _networkManager.OnClientDisconnectCallback -= OnClientDisconnect;
+        }
+
         public async void CreateRelay()
         {
             try
@@ -61,6 +69,7 @@ namespace Core.Networking.RelayService
                 Debug.LogError("Failed to create relay! \n" + ex);
             }
         }
+        
         public async void JoinRelay(string joinCode)
         {
             try
@@ -78,6 +87,9 @@ namespace Core.Networking.RelayService
                         joinAllocation.HostConnectionData
                     );
 
+                var payload = Encoding.UTF8.GetBytes(ConnectionPayload);
+                _networkManager.NetworkConfig.ConnectionData = payload;
+                
                 _networkManager.StartClient();
                 
                 Debug.Log("Joined relay: " + joinCode);
@@ -85,6 +97,16 @@ namespace Core.Networking.RelayService
             catch (Exception ex)
             {
                 Debug.LogError("Failed to join relay! \n" + ex);
+            }
+        }
+        
+        private void OnClientDisconnect(ulong clientId)
+        {
+            if (clientId == _networkManager.LocalClientId)
+            {
+                string errorMessage = _networkManager.DisconnectReason;
+                Debug.Log($"Disconnected from server. Reason: {errorMessage}");
+                _networkManager.Shutdown();
             }
         }
     }
