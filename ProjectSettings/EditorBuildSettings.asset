@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/OfflneScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/OnlineScene_HUB.unity
+    path: Assets/Scenes/NetworkScene.unity
     guid: 7921e24dc9a76453ba5854fcce11242c
   m_configObjects: {}

@@ -1,3 +1,4 @@
+using Core.Networking.NetworkObjectsService;
 using Core.Networking.RelayService;
 using Core.SaveSystem.System;
 using Core.SceneManagement;
@@ -36,6 +37,7 @@ namespace Core.LifetimeScopes
             builder.RegisterInstance(DevConsole.singleton);
             builder.RegisterEntryPoint<SceneLoader>().As<ISceneLoader>();
             builder.Register<SaveSystem.System.SaveSystem>(Lifetime.Singleton).As<ISaveSystem>();
+            builder.Register<NetworkObjectsService>(Lifetime.Singleton).As<INetworkObjectsService>();
         }
         private void InstallPlayerServices(IContainerBuilder builder)
         {

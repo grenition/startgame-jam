@@ -15,7 +15,7 @@ namespace Core.SceneManagement
             _networkManager = networkManager;
         }
         
-        public async UniTask<bool> TryLoadOnlineScene(string sceneKey)
+        public async UniTask<bool> TryLoadOnlineScene(string sceneKey, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             if (_networkManager.IsClient && !_networkManager.IsServer)
                 return false;
@@ -25,15 +25,15 @@ namespace Core.SceneManagement
 
             if (_networkManager.IsServer)
             {
-                _networkManager.SceneManager.LoadScene(sceneKey, LoadSceneMode.Single);
+                _networkManager.SceneManager.LoadScene(sceneKey, loadSceneMode);
                 return true;
             }
 
             return false;
         }
-        public async UniTask<bool> TryLoadOfflineScene(string sceneKey)
+        public async UniTask<bool> TryLoadOfflineScene(string sceneKey, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
-            SceneManager.LoadScene(sceneKey);
+            SceneManager.LoadScene(sceneKey, loadSceneMode);
             return true;
         }
     }

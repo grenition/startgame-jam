@@ -30,7 +30,7 @@ namespace Core.StateMachine.States
             }
 
             _networkManager.OnClientStopped += CompleteState;
-            _sceneLoader.TryLoadOnlineScene("OnlineScene_HUB");
+            _sceneLoader.TryLoadOnlineScene("NetworkScene");
         }
         protected async override UniTask OnExit()
         {
