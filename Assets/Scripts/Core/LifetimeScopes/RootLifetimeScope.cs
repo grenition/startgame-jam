@@ -20,7 +20,6 @@ namespace Core.LifetimeScopes
             InstallStateMachines(builder);
             InstallCoreSystems(builder);
             InstallNetworking(builder);
-            InstallPlayerServices(builder);
         }
         
         private void InstallStateMachines(IContainerBuilder builder)
@@ -42,10 +41,6 @@ namespace Core.LifetimeScopes
             builder.RegisterEntryPoint<SceneLoader>().As<ISceneLoader>();
             builder.Register<SaveSystem.System.SaveSystem>(Lifetime.Singleton).As<ISaveSystem>();
             builder.RegisterEntryPoint<ResourcesService>(Lifetime.Singleton).AsSelf();
-        }
-        private void InstallPlayerServices(IContainerBuilder builder)
-        {
-            builder.RegisterEntryPoint<LocalDataService>().As<ILocalDataService>();
         }
     }
 }

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Core.Gameplay.Player;
+using Gameplay.Player;
 
 namespace Core.Networking.NetworkPlayersService
 {

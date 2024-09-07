@@ -1,9 +1,10 @@
 using System;
 using Core.Networking.Settings;
+using Gameplay.Server;
 using Unity.Netcode;
 using VContainer;
 using VContainer.Unity;
-using NetworkPlayer = Core.Gameplay.Player.NetworkPlayer;
+using NetworkPlayer = Gameplay.Player.NetworkPlayer;
 
 namespace Core.Networking.NetworkObjectsFactory
 {
@@ -60,6 +61,19 @@ namespace Core.Networking.NetworkObjectsFactory
             networkPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
             
             return networkPlayer;
+        }
+
+        public ServerPlayer SpawnServerPlayer()
+        {
+            var prefab = _resources.NetworkSettings.ServerPlayer;
+            
+            if (!_networkManager.IsServer || prefab == null) return null;
+            
+            var player = GetContainer().Instantiate(prefab);
+            player.name = $"ServerPlayer";
+            player.GetComponent<NetworkObject>().SpawnAsPlayerObject(NetworkManager.ServerClientId);
+            
+            return player;
         }
 
         private IObjectResolver GetContainer()

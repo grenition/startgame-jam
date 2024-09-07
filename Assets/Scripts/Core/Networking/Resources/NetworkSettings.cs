@@ -1,5 +1,6 @@
+using Gameplay.Server;
 using UnityEngine;
-using NetworkPlayer = Core.Gameplay.Player.NetworkPlayer;
+using NetworkPlayer = Gameplay.Player.NetworkPlayer;
 
 namespace Core.Networking.Settings
 {
@@ -7,5 +8,6 @@ namespace Core.Networking.Settings
     public class NetworkSettings : ScriptableObject
     {
         [field: SerializeField] public NetworkPlayer Player { get; private set; }
+        [field: SerializeField] public ServerPlayer ServerPlayer { get; private set; }
     }
 }

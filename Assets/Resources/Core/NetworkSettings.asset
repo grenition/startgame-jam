@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Player>k__BackingField: {fileID: 6508452110536216074, guid: d39296c1b1a3841588073899515f4da1,
     type: 3}
+  <ServerPlayer>k__BackingField: {fileID: 6722034945504217020, guid: 0f81c1b1ee61b4076a5e643c907b3fe7,
+    type: 3}

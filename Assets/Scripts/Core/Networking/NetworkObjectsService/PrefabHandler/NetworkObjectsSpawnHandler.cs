@@ -1,9 +1,10 @@
 using System;
+using Gameplay.Server;
 using Unity.Netcode;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using NetworkPlayer = Core.Gameplay.Player.NetworkPlayer;
+using NetworkPlayer = Gameplay.Player.NetworkPlayer;
 using Object = UnityEngine.Object;
 
 namespace Core.Networking.NetworkObjectsFactory
@@ -28,6 +29,9 @@ namespace Core.Networking.NetworkObjectsFactory
             
             if(instance.TryGetComponent(out NetworkPlayer networkPlayer))
                 networkPlayer.name = $"NetworkPlayer: owner {ownerClientId}";
+            
+            if(instance.TryGetComponent(out ServerPlayer serverPlayer))
+                serverPlayer.name = $"ServerPlayer";
             
             return instance.GetComponent<NetworkObject>();
         }

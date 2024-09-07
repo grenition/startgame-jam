@@ -16,7 +16,7 @@ namespace Core.Networking.RelayService
     public class RelayController : IRelayController, IInitializable, IDisposable
     {
         public const int MaxConnections = 2;
-        public string ConnectionPayload { get; set; } = null;
+        public string ConnectionPayload { get; set; } = string.Empty;
         public ReadOnlyReactiveProperty<string> JoinCode => _joinCode.ToReadOnlyReactiveProperty();
         
         private ReactiveProperty<string> _joinCode = new();

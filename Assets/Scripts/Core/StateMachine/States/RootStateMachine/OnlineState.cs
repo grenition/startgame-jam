@@ -57,6 +57,15 @@ namespace Core.StateMachine.States
             if(scenename == "NetworkScene")
                 SpawnPlayer(clientid);
         }
-        private void SpawnPlayer(ulong clientId) => _networkObjectsFactory.SpawnNetworkPlayer(clientId);
+        private void SpawnPlayer(ulong clientId)
+        {
+            if (clientId == NetworkManager.ServerClientId)
+            {
+                _networkObjectsFactory.SpawnServerPlayer();
+                return;
+            }
+            
+            _networkObjectsFactory.SpawnNetworkPlayer(clientId); 
+        }
     }
 }
