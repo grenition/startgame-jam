@@ -1,8 +1,10 @@
+using Core.Networking.NetworkObjectsFactory;
 using Core.SceneManagement;
 using Core.StateMachine.Abstract.CreatableState;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 
 namespace Core.StateMachine.States
@@ -11,12 +13,17 @@ namespace Core.StateMachine.States
     {
         private NetworkManager _networkManager;
         private ISceneLoader _sceneLoader;
+        private INetworkObjectsFactory _networkObjectsFactory;
         
         [Inject]
-        private void Construct(NetworkManager networkManager, ISceneLoader sceneLoader)
+        private void Construct(
+            NetworkManager networkManager, 
+            ISceneLoader sceneLoader,
+            INetworkObjectsFactory networkObjectsFactory)
         {
             _networkManager = networkManager;
             _sceneLoader = sceneLoader;
+            _networkObjectsFactory = networkObjectsFactory;
         }
         
         protected async override UniTask OnEnter()
@@ -30,16 +37,26 @@ namespace Core.StateMachine.States
             }
 
             _networkManager.OnClientStopped += CompleteState;
+            _networkManager.SceneManager.OnLoadComplete += OnNetworkSceneLoad;
             _sceneLoader.TryLoadOnlineScene("NetworkScene");
         }
         protected async override UniTask OnExit()
         {
             _networkManager.OnClientStopped -= CompleteState;
+            _networkManager.SceneManager.OnLoadComplete -= OnNetworkSceneLoad;
         }
         private void CompleteState(bool hostStop)
         {
             Debug.Log($"{GetType().Name} state completed!");
             IsCompleted = true;
         }
+        private async void OnNetworkSceneLoad(ulong clientid, string scenename, LoadSceneMode loadscenemode)
+        {
+            await UniTask.NextFrame();
+            
+            if(scenename == "NetworkScene")
+                SpawnPlayer(clientid);
+        }
+        private void SpawnPlayer(ulong clientId) => _networkObjectsFactory.SpawnNetworkPlayer(clientId);
     }
 }

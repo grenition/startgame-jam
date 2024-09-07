@@ -21,11 +21,11 @@ namespace Core.Networking.Authentificator
 
         public void Initialize()
         {
-            _networkManager.ConnectionApprovalCallback += ApproveConnection;
+            //_networkManager.ConnectionApprovalCallback += ApproveConnection;
         }
         public void Dispose()
         {
-            _networkManager.ConnectionApprovalCallback -= ApproveConnection;
+            //_networkManager.ConnectionApprovalCallback -= ApproveConnection;
         }
         
         private void ApproveConnection(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
@@ -33,7 +33,7 @@ namespace Core.Networking.Authentificator
             var clientAuthData = request.Payload;
             string receivedToken = Encoding.UTF8.GetString(clientAuthData);
 
-            if (AllowedTokens.Contains(receivedToken))
+            if (AllowedTokens == null || !AllowedTokens.Contains(receivedToken))
             {
                 response.Reason = "Bad auth request";
                 response.Approved = false;
@@ -42,7 +42,6 @@ namespace Core.Networking.Authentificator
             else
             {
                 response.Approved = true;
-                response.CreatePlayerObject = true;
             }
         }
     }

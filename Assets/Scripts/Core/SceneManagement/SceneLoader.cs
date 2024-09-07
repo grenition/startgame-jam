@@ -28,7 +28,7 @@ namespace Core.SceneManagement
                 _networkManager.SceneManager.LoadScene(sceneKey, loadSceneMode);
                 return true;
             }
-
+            
             return false;
         }
         public async UniTask<bool> TryLoadOfflineScene(string sceneKey, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
