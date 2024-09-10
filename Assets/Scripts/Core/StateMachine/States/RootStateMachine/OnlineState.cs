@@ -13,13 +13,13 @@ namespace Core.StateMachine.States
     {
         private NetworkManager _networkManager;
         private ISceneLoader _sceneLoader;
-        private INetworkObjectsFactory _networkObjectsFactory;
+        private IObjectsFactory _networkObjectsFactory;
         
         [Inject]
         private void Construct(
             NetworkManager networkManager, 
             ISceneLoader sceneLoader,
-            INetworkObjectsFactory networkObjectsFactory)
+            IObjectsFactory networkObjectsFactory)
         {
             _networkManager = networkManager;
             _sceneLoader = sceneLoader;

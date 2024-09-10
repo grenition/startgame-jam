@@ -1,3 +1,4 @@
+using Core.Networking.NetworkObjectsFactory;
 using SickDev.DevConsole;
 using System;
 using System.Linq;
@@ -7,17 +8,21 @@ using VContainer;
 
 public class ControllerNetworkBus : NetworkBehaviour
 {
+    [SerializeField] private GameObject _controllerScenePrefab;
     [SerializeField] private ActivityInfo[] _infos;
 
     private ClientController _controller;
     private DevConsole _devConsole;
+    private IObjectsFactory _factory;
 
     [Inject]
-    private void Construct(ClientController controller, DevConsole devConsole)
+    private void Construct(DevConsole devConsole, IObjectsFactory factory)
     {
-        _controller = controller;
         _devConsole = devConsole;
+        _factory = factory;
 
+        //var scene = _factory.SpawnLocalObject(_controllerScenePrefab);
+        //scene.TryGetComponent(out _controller);
         devConsole.AddCommand(new(new Action(ShowTestActivity)));
     }
 
@@ -51,7 +56,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         }
 
         var info = _infos[index];
-        _controller.ShowActivity(info);
+        _controller?.ShowActivity(info);
     }
     #endregion
 
