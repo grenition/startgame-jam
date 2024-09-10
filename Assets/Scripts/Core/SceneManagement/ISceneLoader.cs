@@ -7,5 +7,6 @@ namespace Core.SceneManagement
     {
         public UniTask<bool> TryLoadOnlineScene(string sceneKey, LoadSceneMode loadSceneMode = LoadSceneMode.Single);
         public UniTask<bool> TryLoadOfflineScene(string sceneKey, LoadSceneMode loadSceneMode = LoadSceneMode.Single);
+        public UniTask<bool> TryUnloadOfflineScene(string sceneKey);
     }
 }

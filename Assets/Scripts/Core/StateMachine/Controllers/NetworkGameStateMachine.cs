@@ -30,8 +30,8 @@ namespace Core.StateMachine.Controllers
         
         private void Initialize()
         {
-            FSM.SetStartState(NetworkGameState.AwaitingPlayers);
-            FSM.Init();
+            //FSM.SetStartState(NetworkGameState.AwaitingPlayers);
+            //FSM.Init();
         }
         
         public void ResolveState<T>(IState<T> state)

@@ -7,7 +7,13 @@ using DevConsole = SickDev.DevConsole.DevConsole;
 
 namespace Gameplay.Player.Service
 {
-    public class LocalDataService : ILocalDataService, IInitializable
+    public enum PlayerType
+    {
+        playerOlder,
+        playerYounger
+    }
+    
+    public class RolesService : IInitializable
     {
         public PlayerType CurrentPlayerType { get; private set; }
 
@@ -23,14 +29,16 @@ namespace Gameplay.Player.Service
         
         public void Initialize()
         {
-            _devConsole.AddCommand(new ActionCommand<PlayerType>(ChoosePlayerType));
+            _devConsole.AddCommand(new FuncCommand<PlayerType, bool>(ChoosePlayerType));
             _relayController.ConnectionPayload = CurrentPlayerType.ToString();
         }
-        public void ChoosePlayerType(PlayerType playerType)
+        public bool ChoosePlayerType(PlayerType playerType)
         {
             CurrentPlayerType = playerType;
             _relayController.ConnectionPayload = CurrentPlayerType.ToString();
             Debug.Log($"Selected player type: {playerType}");
+
+            return true;
         }
     }
 }

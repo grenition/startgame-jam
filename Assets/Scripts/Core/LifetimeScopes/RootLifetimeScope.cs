@@ -1,6 +1,7 @@
 using Core.Networking.Authentificator;
-using Core.Networking.NetworkObjectsService;
+using Core.Networking.NetworkObjectsFactory;
 using Core.Networking.RelayService;
+using Core.Networking.Settings;
 using Core.SaveSystem.System;
 using Core.SceneManagement;
 using Core.StateMachine.Controllers;
@@ -17,9 +18,8 @@ namespace Core.LifetimeScopes
         protected override void Configure(IContainerBuilder builder)
         {
             InstallStateMachines(builder);
-            InstallNetworking(builder);
             InstallCoreSystems(builder);
-            InstallPlayerServices(builder);
+            InstallNetworking(builder);
         }
         
         private void InstallStateMachines(IContainerBuilder builder)
@@ -33,17 +33,14 @@ namespace Core.LifetimeScopes
             GetComponent<NetworkManager>().SetSingleton();
             builder.RegisterInstance(NetworkManager.Singleton);
             builder.RegisterEntryPoint<NetworkAuthentificator>();
+            builder.RegisterEntryPoint<NetworkObjectsFactory>().As<INetworkObjectsFactory>();
         }
         private void InstallCoreSystems(IContainerBuilder builder)
         {
             builder.RegisterInstance(DevConsole.singleton);
             builder.RegisterEntryPoint<SceneLoader>().As<ISceneLoader>();
             builder.Register<SaveSystem.System.SaveSystem>(Lifetime.Singleton).As<ISaveSystem>();
-            builder.Register<NetworkObjectsService>(Lifetime.Singleton).As<INetworkObjectsService>();
-        }
-        private void InstallPlayerServices(IContainerBuilder builder)
-        {
-            builder.RegisterEntryPoint<LocalDataService>().As<ILocalDataService>();
+            builder.RegisterEntryPoint<ResourcesService>(Lifetime.Singleton).AsSelf();
         }
     }
 }

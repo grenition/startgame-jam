@@ -4,6 +4,7 @@ using SickDev.CommandSystem;
 using UniRx;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Networking.Transport.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 using VContainer;
@@ -15,7 +16,7 @@ namespace Core.Networking.RelayService
     public class RelayController : IRelayController, IInitializable, IDisposable
     {
         public const int MaxConnections = 2;
-        public string ConnectionPayload { get; set; } = null;
+        public string ConnectionPayload { get; set; } = string.Empty;
         public ReadOnlyReactiveProperty<string> JoinCode => _joinCode.ToReadOnlyReactiveProperty();
         
         private ReactiveProperty<string> _joinCode = new();
@@ -47,18 +48,13 @@ namespace Core.Networking.RelayService
             {
                 Allocation allocation = await Unity.Services.Relay.RelayService.Instance
                     .CreateAllocationAsync(MaxConnections);
-
+                
                 _joinCode.Value = await Unity.Services.Relay.RelayService.Instance
                     .GetJoinCodeAsync(allocation.AllocationId);
+
+                var relayServerData = new RelayServerData(allocation, "dtls");
                 
-                _networkManager.GetComponent<UnityTransport>()
-                    .SetHostRelayData(
-                        allocation.RelayServer.IpV4,
-                        (ushort)allocation.RelayServer.Port,
-                        allocation.AllocationIdBytes,
-                        allocation.Key,
-                        allocation.ConnectionData
-                    );
+                _networkManager.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
                 _networkManager.StartHost();
                 
@@ -77,15 +73,10 @@ namespace Core.Networking.RelayService
                 var joinAllocation = await Unity.Services.Relay.RelayService.Instance
                     .JoinAllocationAsync(joinCode);
                 
-                _networkManager.GetComponent<UnityTransport>()
-                    .SetClientRelayData(
-                        joinAllocation.RelayServer.IpV4,
-                        (ushort)joinAllocation.RelayServer.Port,
-                        joinAllocation.AllocationIdBytes,
-                        joinAllocation.Key,
-                        joinAllocation.ConnectionData,
-                        joinAllocation.HostConnectionData
-                    );
+                var relayServerData = new RelayServerData(joinAllocation, "dtls");
+                
+                _networkManager.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+
 
                 var payload = Encoding.UTF8.GetBytes(ConnectionPayload);
                 _networkManager.NetworkConfig.ConnectionData = payload;
@@ -105,7 +96,7 @@ namespace Core.Networking.RelayService
             if (clientId == _networkManager.LocalClientId)
             {
                 string errorMessage = _networkManager.DisconnectReason;
-                Debug.Log($"Disconnected from server. Reason: {errorMessage}");
+                Debug.Log($"Disconnected from server.");
                 _networkManager.Shutdown();
             }
         }
