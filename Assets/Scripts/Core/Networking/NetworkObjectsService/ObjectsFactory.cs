@@ -2,13 +2,14 @@ using System;
 using Core.Networking.Settings;
 using Gameplay.Server;
 using Unity.Netcode;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using NetworkPlayer = Gameplay.Player.NetworkPlayer;
 
 namespace Core.Networking.NetworkObjectsFactory
 {
-    public class NetworkObjectsFactory : INetworkObjectsFactory, IInitializable
+    public class ObjectsFactory : IObjectsFactory, IInitializable
     {
         public Func<IObjectResolver> OvveridedContainer { get; set; }
 
@@ -17,7 +18,7 @@ namespace Core.Networking.NetworkObjectsFactory
         private IObjectResolver _objectResolver;
         
         [Inject]
-        public NetworkObjectsFactory(
+        public ObjectsFactory(
             NetworkManager networkManager,
             ResourcesService resources,
             IObjectResolver objectResolver)
@@ -74,6 +75,24 @@ namespace Core.Networking.NetworkObjectsFactory
             player.GetComponent<NetworkObject>().SpawnAsPlayerObject(NetworkManager.ServerClientId);
             
             return player;
+        }
+
+        public T SpawnLocalObject<T>(T prefab) where T : MonoBehaviour
+        {
+            if (prefab == null) return null;
+
+            var obj = UnityEngine.Object.Instantiate(prefab);
+            GetContainer().Inject(obj);
+            return obj;
+        }
+
+        public GameObject SpawnLocalObject(GameObject prefab)
+        {
+            if (prefab == null) return null;
+
+            var obj = UnityEngine.Object.Instantiate(prefab);
+            GetContainer().Inject(obj);
+            return obj;
         }
 
         private IObjectResolver GetContainer()

@@ -14,6 +14,7 @@ namespace Core.LifetimeScopes
         private static NetworkSceneLifetimeScope instance = null;
         
         [SerializeField] private NetworkGameStateMachine _stateMachine;
+        [SerializeField] private ControllerNetworkBus _controllerBus;
         
         protected override void Configure(IContainerBuilder builder)
         {
@@ -22,6 +23,7 @@ namespace Core.LifetimeScopes
             
             builder.Register<NetworkPlayersService>(Lifetime.Singleton).As<INetworkPlayersService>();
             builder.RegisterEntryPoint<FactoryContainerOverrider>();
+            builder.RegisterInstance(_controllerBus);
         }
     }
 }

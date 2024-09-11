@@ -6,12 +6,12 @@ namespace Core.Networking.NetworkObjectsFactory
     public class FactoryContainerOverrider : IInitializable
     {
         private IObjectResolver _objectResolver;
-        private INetworkObjectsFactory _networkObjectsFactory;
+        private IObjectsFactory _networkObjectsFactory;
         
         [Inject]
         public FactoryContainerOverrider(
             IObjectResolver objectResolver,
-            INetworkObjectsFactory networkObjectsFactory)
+            IObjectsFactory networkObjectsFactory)
         {
             _objectResolver = objectResolver;
             _networkObjectsFactory = networkObjectsFactory;
