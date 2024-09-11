@@ -11,6 +11,8 @@ namespace Core.StateMachine.States
 {
     public class OnlineState<TStateId> : State<TStateId>
     {
+        public const string NetworkScene = "NetworkScene";
+        
         private NetworkManager _networkManager;
         private ISceneLoader _sceneLoader;
         private INetworkObjectsFactory _networkObjectsFactory;
@@ -24,24 +26,21 @@ namespace Core.StateMachine.States
             _networkManager = networkManager;
             _sceneLoader = sceneLoader;
             _networkObjectsFactory = networkObjectsFactory;
+
         }
         
         protected async override UniTask OnEnter()
         {
             Debug.Log($"Entered state: {GetType().Name}");
 
-            if (!_networkManager.IsConnectedClient)
-            {
-                CompleteState(false);
-                return;
-            }
-
+            SceneManager.sceneLoaded += OnSceneLoad;
             _networkManager.OnClientStopped += CompleteState;
             _networkManager.SceneManager.OnLoadComplete += OnNetworkSceneLoad;
-            _sceneLoader.TryLoadOnlineScene("NetworkScene");
+            _sceneLoader.TryLoadOnlineScene(NetworkScene);
         }
         protected async override UniTask OnExit()
         {
+            SceneManager.sceneLoaded -= OnSceneLoad;
             _networkManager.OnClientStopped -= CompleteState;
             _networkManager.SceneManager.OnLoadComplete -= OnNetworkSceneLoad;
         }
@@ -54,8 +53,15 @@ namespace Core.StateMachine.States
         {
             await UniTask.NextFrame();
             
-            if(scenename == "NetworkScene")
+            if(scenename == NetworkScene)
                 SpawnPlayer(clientid);
+        }
+        private async void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
+        {
+            await UniTask.NextFrame();
+                
+            if (scene.name != NetworkScene && !_networkManager.IsServer)
+                SceneManager.UnloadSceneAsync(scene.buildIndex);
         }
         private void SpawnPlayer(ulong clientId)
         {

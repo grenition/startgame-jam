@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
@@ -14,7 +15,7 @@ namespace Core.SceneManagement
         {
             _networkManager = networkManager;
         }
-        
+
         public async UniTask<bool> TryLoadOnlineScene(string sceneKey, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             if (!_networkManager.NetworkConfig.EnableSceneManagement)
