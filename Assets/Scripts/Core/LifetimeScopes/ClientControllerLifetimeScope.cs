@@ -1,3 +1,4 @@
+using Core.Networking.NetworkObjectsFactory;
 using VContainer;
 using VContainer.Unity;
 using UnityEngine;
@@ -11,6 +12,6 @@ public class ClientControllerLifetimeScope : LifetimeScope
     {
         builder.RegisterInstance(_controller);
         builder.RegisterInstance(_inventory);
-        builder.RegisterEntryPoint<ClientControllerLifetimeScope>(Lifetime.Singleton).AsSelf();
+        builder.RegisterEntryPoint<ObjectsFactory>(Lifetime.Scoped).As<IObjectsFactory>();
     }
 }

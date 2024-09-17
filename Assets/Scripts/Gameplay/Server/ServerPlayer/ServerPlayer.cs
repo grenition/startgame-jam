@@ -1,4 +1,5 @@
 using System;
+using Core.Networking.NetworkPlayersService;
 using Core.Networking.Settings;
 using Core.SceneManagement;
 using Unity.Netcode;
@@ -13,16 +14,19 @@ namespace Gameplay.Server
         private ResourcesService _resourcesService;
         private ISceneLoader _sceneLoader;
         private NetworkManager _networkManager;
+        private ClientIdentification _clientIdentification;
         
         [Inject]
         private void Construct(
             ResourcesService resourcesService,
             ISceneLoader sceneLoader,
-            NetworkManager networkManager)
+            NetworkManager networkManager,
+            ClientIdentification clientIdentification)
         {
             _resourcesService = resourcesService;
             _sceneLoader = sceneLoader;
             _networkManager = networkManager;
+            _clientIdentification = clientIdentification;
         }
         
         #region OnNetworkSpawn/Despawn callbacks
@@ -32,6 +36,8 @@ namespace Gameplay.Server
             
             _networkManager.OnClientConnectedCallback += OnClientConnected;
             _networkManager.OnClientDisconnectCallback += OnClientDisconnected;
+
+            _clientIdentification.SetPlayerType(PlayerTypes.Host);
         }
         public override void OnNetworkDespawn()
         {

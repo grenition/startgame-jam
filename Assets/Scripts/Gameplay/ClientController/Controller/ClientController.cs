@@ -24,13 +24,25 @@ public class ClientController : MonoBehaviour
     public Inventory InventoryModel { get; private set; }
 
     [Inject]
-    private void Construct(IObjectsFactory factory, ControllerNetworkBus bus, Inventory inventory,
+    private void Construct(
+        IObjectsFactory factory, 
+        ControllerNetworkBus bus, 
+        Inventory inventory,
         IObjectResolver container)
     {
         _factory = factory;
         _bus = bus;
         InventoryModel = inventory;
         container.Inject(inventory);
+    }
+
+    private void Awake()
+    {
+        _bus.SetClientController(this);
+    }
+    private void OnDestroy()
+    {
+        _bus.ResetClientController();
     }
 
     private void Start()

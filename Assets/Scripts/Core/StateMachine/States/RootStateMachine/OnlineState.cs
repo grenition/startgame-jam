@@ -26,7 +26,6 @@ namespace Core.StateMachine.States
             _networkManager = networkManager;
             _sceneLoader = sceneLoader;
             _networkObjectsFactory = networkObjectsFactory;
-
         }
         
         protected async override UniTask OnEnter()

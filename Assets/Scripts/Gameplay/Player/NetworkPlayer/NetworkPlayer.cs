@@ -1,3 +1,4 @@
+using Core.Networking.NetworkObjectsFactory;
 using Unity.Netcode;
 using UnityEngine;
 using VContainer;
@@ -6,12 +7,33 @@ namespace Gameplay.Player
 {
     public class NetworkPlayer : NetworkBehaviour
     {
-        private IObjectResolver _objectResolver;
-
+        [SerializeField] private GameObject _controllerScenePrefab;
+        
+        private IObjectsFactory _objectsFactory;
+        private ClientIdentification _clientIdentification;
+        private GameObject _controllerScene;
+        
         [Inject]
-        private void Construct(IObjectResolver objectResolver)
+        private void Construct(
+            IObjectsFactory objectsFactory,
+            ClientIdentification clientIdentification)
         {
-            _objectResolver = objectResolver;
+            _objectsFactory = objectsFactory;
+            _clientIdentification = clientIdentification;
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            if(!IsLocalPlayer) return;
+            
+            _controllerScene = _objectsFactory.SpawnLocalObject(_controllerScenePrefab);
+            _clientIdentification.SetPlayerType(PlayerTypes.Big);
+        }
+        public override void OnNetworkDespawn()
+        {
+            if(!IsLocalPlayer) return;
+
+            if (_controllerScene != null) Destroy(_controllerScene);
         }
     }
 }
