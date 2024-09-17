@@ -1,0 +1,65 @@
+using System;
+using UniRx;
+using UnityEngine;
+
+[Serializable]
+public class InventoryModelView
+{
+    [SerializeField] private InventoryView _view;
+
+    public Inventory Model { get; private set; }
+    public InventoryView View => _view;
+
+    public InventoryItem[] Items { get; private set; } = new InventoryItem[Inventory.MaxItems];
+    public event Action<InventoryItem[]> ItemsChanged;
+
+    public ReactiveProperty<int> ChoosenItemIndex { get; private set; } = new(-1);
+
+    public void Initialize(Inventory model)
+    {
+        Model = model;
+        Model.InventoryChanged += UpdateInventoryGrid;
+        View.Initialize(this);
+    }
+
+    public void UpdateInventoryGrid()
+    {
+        var items = Model.GetCopy();
+        for(int i = 0; i < Inventory.MaxItems; i++)
+        {
+            Items[i] = items[i];
+        }
+        ItemsChanged?.Invoke(Items);
+    }
+
+    public void SlotClicked(int index)
+    {
+        if (Items[index] != null)
+        {
+            ChoosenItemIndex.Value = index;
+        }
+        else
+        {
+            ChoosenItemIndex.Value = -1;
+        }
+    }
+
+    public void JoinItem()
+    {
+
+    }
+
+    public void GiveToFriend()
+    {
+        if(ChoosenItemIndex.Value >= 0 && Model.GetItem(ChoosenItemIndex.Value) != null)
+        {
+            Model.GiveToAnotherPlayer(Model.GetItem(ChoosenItemIndex.Value));
+            ChoosenItemIndex.Value = -1;
+        }
+    }
+
+    public void CancelActionList()
+    {
+        ChoosenItemIndex.Value = -1;
+    }
+}
