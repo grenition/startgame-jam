@@ -9,7 +9,6 @@ using VContainer;
 
 public class ControllerNetworkBus : NetworkBehaviour
 {
-    [SerializeField] private GameObject _controllerScenePrefab;
     [SerializeField] private ActivityInfo[] _infos;
 
     private ClientController _controller;
@@ -23,14 +22,15 @@ public class ControllerNetworkBus : NetworkBehaviour
     public event Action<string, ControllerBusMessage> SpecialDataTransmitted;
 
     [Inject]
-    private void Construct(DevConsole devConsole, IObjectsFactory factory, ClientIdentification identification)
+    private void Construct(
+        DevConsole devConsole, 
+        IObjectsFactory factory, 
+        ClientIdentification identification)
     {
         _devConsole = devConsole;
         _factory = factory;
         _identification = identification;
 
-        var scene = _factory.SpawnLocalObject(_controllerScenePrefab);
-        _controller = scene.GetComponentInChildren<ClientController>();
         _showTestActivity = new(new Action(ShowTestActivity));
         _hideActivity = new(new Action(HideTestActivity));
         _finishActivity = new(new Action(FinishTestActivity));
@@ -70,7 +70,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         ShowActivityServerRpc(index, (int)type);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void ShowActivityServerRpc(int index, int type)
     {
         ShowActivityClientRpc(index, type);
@@ -101,7 +101,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         HideActivityServerRpc((int)type);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void HideActivityServerRpc(int type)
     {
         HideActivityClientRpc(type);
@@ -123,7 +123,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         FinishActivityServerRpc((int)type);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void FinishActivityServerRpc(int type)
     {
         FinishActivityClientRpc(type);
@@ -143,6 +143,11 @@ public class ControllerNetworkBus : NetworkBehaviour
 
     }
 
+    public void SetClientController(ClientController clientController)
+        => _controller ??= clientController;
+
+    public void ResetClientController() => _controller = null;
+
     #region WaitForTeammate
     public void WaitForTeammateForMiniGame(ActivityInfo info)
     {
@@ -150,7 +155,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         WaitForTeammateServerRpc(index);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void WaitForTeammateServerRpc(int index)
     {
         //TODO: Check distance between players
@@ -177,7 +182,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         SpecialDataTransmitServerRpc(id, data, (int)receivers);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void SpecialDataTransmitServerRpc(string id, ControllerBusMessage data, int receivers)
     {
         if(_identification.IsMyType((PlayerTypes)receivers))
@@ -202,7 +207,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         GiveInventoryItemServerRpc(item.Id, (int)receiver);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void GiveInventoryItemServerRpc(int id, int type)
     {
         GiveInventoryItemClientRpc(id, type);

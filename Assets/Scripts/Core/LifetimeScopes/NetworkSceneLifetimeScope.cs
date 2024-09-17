@@ -25,11 +25,12 @@ namespace Core.LifetimeScopes
             builder.RegisterInstance(_stateMachine);
             
             builder.Register<NetworkPlayersService>(Lifetime.Singleton).As<INetworkPlayersService>();
-            builder.RegisterEntryPoint<FactoryContainerOverrider>();
             builder.RegisterInstance(_controllerBus);
 
             _clientIdentification = new();
             builder.RegisterInstance(_clientIdentification);
+            
+            builder.RegisterEntryPoint<FactoryContainerOverrider>();
         }
     }
 }
