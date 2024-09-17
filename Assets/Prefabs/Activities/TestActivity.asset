@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: TestActivity
   m_EditorClassIdentifier: 
   _image: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  _miniGamePrefab: {fileID: 2282115789173452077, guid: 42b6f3b5240f67e43a31a8908d79c0fe,
+    type: 3}
+  _singlePlayer: 0

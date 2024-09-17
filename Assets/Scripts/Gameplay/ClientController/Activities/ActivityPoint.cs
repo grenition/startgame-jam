@@ -20,12 +20,12 @@ public abstract class ActivityPoint : MonoBehaviour
 
     public void ShowActivity()
     {
-        _bus.ShowActivity(Info);
+        _bus.ShowActivity(Info, PlayerTypes.Small);
     }
 
     public void HideActivity()
     {
-        _bus.HideActivity();
+        _bus.HideActivity(PlayerTypes.Small);
     }
 
     public void Interact()

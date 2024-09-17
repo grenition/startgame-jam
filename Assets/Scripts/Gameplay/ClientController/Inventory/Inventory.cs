@@ -1,0 +1,99 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using VContainer;
+
+[Serializable]
+public class Inventory
+{
+    public const int MaxItems = 5;
+
+    [SerializeField] private InventoryItem[] _allItems;
+    [SerializeField] private InventoryItemNames _names;
+    [SerializeField] private InventoryModelView _modelView;
+
+    private ControllerNetworkBus _bus;
+    private ClientIdentification _identification;
+
+    public event Action InventoryChanged;
+
+    public InventoryItem[] AllItems => _allItems;
+    public InventoryItemNames Names => _names;
+
+    private readonly List<InventoryItem> Items = new(MaxItems);
+
+    [Inject]
+    private void Construct(ControllerNetworkBus bus, ClientIdentification identification)
+    {
+        for (int i = 0; i < _allItems.Length; i++)
+        {
+            _allItems[i].Id = i;
+        }
+        _bus = bus;
+        _identification = identification;
+        _modelView.Initialize(this);
+    }
+
+    public void AddItem(InventoryItem item)
+    {
+        Items.Add(item);
+        InventoryChanged?.Invoke();
+    }
+
+    public void AddItemFromStorage(string name)
+    {
+        AddItem(GetItemFromStorage(name));
+    }
+
+    public void RemoveItem(InventoryItem item)
+    {
+        Items.Remove(item);
+        InventoryChanged?.Invoke();
+    }
+
+    public List<InventoryItem> GetCopy()
+    {
+        return new List<InventoryItem>(Items);
+    }
+
+    public bool HasItem(InventoryItem item)
+    {
+        return Items.Contains(item);
+    }
+
+    public InventoryItem GetItem(int index)
+    {
+        return Items[index];
+    }
+
+    public void GiveToAnotherPlayer(InventoryItem item)
+    {
+        if(Items.Contains(item))
+        {
+            Items.Remove(item);
+            _bus.GiveInventoryItem(item, _identification.PlayerType is PlayerTypes.Small ?
+                PlayerTypes.Big : PlayerTypes.Small);
+            InventoryChanged?.Invoke();
+        }
+    }
+
+    public InventoryItem GetItemFromStorage(string name)
+    {
+        foreach(var item in _allItems)
+        {
+            if(item.Name == name)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+}
+
+[Serializable]
+public class InventoryItemNames
+{
+    [SerializeField] private string _key;
+
+    public string Key => _key;
+}
