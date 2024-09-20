@@ -1,10 +1,12 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using VContainer;
 
 public abstract class ActivityStarter : MonoBehaviour
 {
     public ControllerNetworkBus Bus { get; private set; }
+    public ClientIdentification Identification { get; private set; }
 
     public void Initialize(Image screen, ControllerNetworkBus bus)
     {
@@ -12,12 +14,18 @@ public abstract class ActivityStarter : MonoBehaviour
         OnInitialize(screen);
     }
 
+    [Inject]
+    private void Construct(ClientIdentification identification)
+    {
+        Identification = identification;
+    }
+
     protected abstract void OnInitialize(Image screen);
 
     public abstract RectTransform GetScreenChild();
-    protected void Finish()
+    protected void Finish(bool singlePlayer = false)
     {
-        Bus.FinishActivity(PlayerTypes.Small);
+        Bus.FinishActivity(singlePlayer ? Identification.PlayerType : PlayerTypes.LocalPlayers);
     }
 
     public abstract UniTask OnFinish();

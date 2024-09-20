@@ -1,35 +1,44 @@
 using UnityEngine;
 using VContainer;
 
-public abstract class ActivityPoint : MonoBehaviour
+public class ActivityPoint : MonoBehaviour
 {
     [SerializeField] private ActivityInfo _info;
+    [SerializeField] private bool _destroyAfterStartingActivity;
 
     private ControllerNetworkBus _bus;
-
-    public enum State {  Idle, Playing, Finished }
-
-    public State CurState { get; private set; } = State.Idle;
     public ActivityInfo Info => _info;
 
     [Inject]
     private void Construct(ControllerNetworkBus bus)
     {
         _bus = bus;
+        if (_destroyAfterStartingActivity)
+            _bus.ActivityStarted += OnActivityStarted;
     }
 
-    public void ShowActivity()
+    public void ShowActivity(PlayerTypes type)
     {
-        _bus.ShowActivity(Info, PlayerTypes.Small);
+        _bus.ShowActivity(Info, type);
     }
 
-    public void HideActivity()
+    public void HideActivity(PlayerTypes type)
     {
-        _bus.HideActivity(PlayerTypes.Small);
+        _bus.HideActivity(type);
     }
 
-    public void Interact()
+    private void OnActivityStarted(ActivityInfo info)
     {
-        _bus.Interact(this);
+        Debug.Log(info == _info);
+        if(info == _info)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if(_destroyAfterStartingActivity)
+            _bus.ActivityStarted -= OnActivityStarted;
     }
 }

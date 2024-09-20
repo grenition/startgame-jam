@@ -77,7 +77,7 @@ public class KeysStarter : ActivityStarter
     private IEnumerator WinAnimation()
     {
         _keys[_missingKeyIndex].transform.DOScale(Vector3.one * 1.3f, .3f);
-        yield return new WaitForSeconds(.3f);
-        Bus.FinishActivity(PlayerTypes.All);
+        yield return new WaitForSeconds(1f);
+        Finish(false);
     }
 }

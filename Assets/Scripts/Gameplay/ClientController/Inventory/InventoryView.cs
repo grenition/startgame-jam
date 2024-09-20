@@ -60,10 +60,14 @@ public class InventoryView
         else
         {
             _actionList.gameObject.SetActive(true);
+            _actionList.transform.localScale = Vector3.one;
+            _actionList.transform.position = new Vector3(
+                _slots[index].transform.position.x,
+                _actionList.transform.position.y,
+                0);
+
             _actionList.transform.localScale = Vector3.zero;
             _actionList.transform.DOScale(Vector3.one, .3f);
-            _actionList.transform.position = _slots[index].transform.position -
-                _slots[index].image.rectTransform.lossyScale;
             _glow.gameObject.SetActive(true);
             _glow.transform.position = _slots[index].transform.position;
             _actionListItemName.text = ModelView.Items[index].Name;

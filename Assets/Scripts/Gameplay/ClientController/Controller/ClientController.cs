@@ -7,15 +7,19 @@ using VContainer;
 
 public class ClientController : MonoBehaviour
 {
+    public const float DeathZoneForJoystick = .05f;
+
     [SerializeField] private Button _interactBtn, _screenBtn;
     [SerializeField] private Image _screen;
     [SerializeField] private Sprite _defaultScreen;
+    [SerializeField] private Joystick _moveJoy;
 
     public enum States { Nothing, SimpleSprite, WaitCallback, OnMiniGame }
 
     private IObjectsFactory _factory;
     private ControllerNetworkBus _bus;
     private ActivityInfo _showedInfo = null;
+    private Vector3 _prevMoveDirection = Vector3.zero;
 
     public event Action Interacted;
 
@@ -85,6 +89,7 @@ public class ClientController : MonoBehaviour
         }
 
         State = States.WaitCallback;
+        _bus.InvokeActivityStarted(_showedInfo);
         if(_showedInfo.SinglePlayer)
         {
             SpawnMiniGame(_showedInfo);
@@ -115,6 +120,7 @@ public class ClientController : MonoBehaviour
                 screenChild.SetParent(_screen.transform);
                 screenChild.offsetMin = Vector2.zero;
                 screenChild.offsetMax = Vector2.zero;
+                screenChild.localScale = Vector3.one;
             }
 
             obj.Initialize(_screen, _bus);
@@ -136,5 +142,15 @@ public class ClientController : MonoBehaviour
             PlayingMiniGame = null;
         }
         HideActivity();
+    }
+
+    private void Update()
+    {
+        var direction = new Vector3(_moveJoy.Horizontal, 0, _moveJoy.Vertical);
+        if(Vector3.Distance(direction, _prevMoveDirection) > DeathZoneForJoystick)
+        {
+            _prevMoveDirection = direction;
+            _bus.SetMoveDirection(direction);
+        }
     }
 }
