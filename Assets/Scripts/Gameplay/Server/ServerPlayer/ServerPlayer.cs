@@ -15,23 +15,27 @@ namespace Gameplay.Server
         private ISceneLoader _sceneLoader;
         private NetworkManager _networkManager;
         private ClientIdentification _clientIdentification;
+        private INetworkPlayersService _playersService;
         
         [Inject]
         private void Construct(
             ResourcesService resourcesService,
             ISceneLoader sceneLoader,
             NetworkManager networkManager,
-            ClientIdentification clientIdentification)
+            ClientIdentification clientIdentification,
+            INetworkPlayersService playersService)
         {
             _resourcesService = resourcesService;
             _sceneLoader = sceneLoader;
             _networkManager = networkManager;
             _clientIdentification = clientIdentification;
+            _playersService = playersService;
         }
         
         #region OnNetworkSpawn/Despawn callbacks
         public override void OnNetworkSpawn()
         {
+            _playersService.RegisterServerPlayer(this);
             if(!IsLocalPlayer) return;
             
             _networkManager.OnClientConnectedCallback += OnClientConnected;
@@ -41,6 +45,7 @@ namespace Gameplay.Server
         }
         public override void OnNetworkDespawn()
         {
+            _playersService.UnregisterServerPlayer(this);
             if(!IsLocalPlayer) return;
 
             _networkManager.OnClientConnectedCallback -= OnClientConnected;

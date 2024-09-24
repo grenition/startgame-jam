@@ -46,9 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: 
+    TypeName: Core.LifetimeScopes.RootLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
+  _stateMachine: {fileID: 0}
+  _controllerBus: {fileID: 0}
 --- !u!114 &1714641226935249126
 MonoBehaviour:
   m_ObjectHideFlags: 0
