@@ -9,17 +9,19 @@ namespace Gameplay.Player
     public class NetworkPlayer : NetworkBehaviour
     {
         public PlayerTypes PlayerType => _syncPlayerType.Value;
-        
+
         [SerializeField] private GameObject _controllerScenePrefab;
-        
+        [SerializeField] private PlayerObject _playerPrefab;
+
         private IObjectsFactory _objectsFactory;
         private ClientIdentification _clientIdentification;
         private GameObject _controllerScene;
         private INetworkPlayersService _playersService;
 
-        private NetworkVariable<PlayerTypes> _syncPlayerType = new(PlayerTypes.Big, 
+        private NetworkVariable<PlayerTypes> _syncPlayerType = new(PlayerTypes.Big,
             NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        
+        private PlayerObject _player;
+
         [Inject]
         private void Construct(
             IObjectsFactory objectsFactory,
@@ -34,7 +36,14 @@ namespace Gameplay.Player
         public override void OnNetworkSpawn()
         {
             _playersService.RegisterNetworkPlayer(this);
-            if(!IsLocalPlayer) return;
+            if (IsServer)
+            {
+                _player = _objectsFactory.SpawnLocalObject(_playerPrefab);
+                _player.transform.position += Vector3.up * .5f;
+                _player.SetPlayerType(PlayerTypes.Big);
+            }
+
+            if (!IsLocalPlayer) return;
 
             _controllerScene = _objectsFactory.SpawnLocalObject(_controllerScenePrefab);
             SelectPlayerType(PlayerTypes.Big);
@@ -42,7 +51,12 @@ namespace Gameplay.Player
         public override void OnNetworkDespawn()
         {
             _playersService.UnregisterNetworkPlayer(this);
-            if(!IsLocalPlayer) return;
+            if (IsServer && _player != null)
+            {
+                Destroy(_player.gameObject);
+            }
+
+            if (!IsLocalPlayer) return;
 
             if (_controllerScene != null) Destroy(_controllerScene);
         }

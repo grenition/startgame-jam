@@ -27,7 +27,14 @@ public class InventoryModelView
         var items = Model.GetCopy();
         for(int i = 0; i < Inventory.MaxItems; i++)
         {
-            Items[i] = items[i];
+            if(i < items.Count)
+            {
+                Items[i] = items[i];
+            }
+            else
+            {
+                Items[i] = null;
+            }
         }
         ItemsChanged?.Invoke(Items);
     }

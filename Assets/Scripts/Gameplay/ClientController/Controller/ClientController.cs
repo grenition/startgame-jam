@@ -7,17 +7,24 @@ using VContainer;
 
 public class ClientController : MonoBehaviour
 {
+    public const float DeathZoneForJoystick = .05f;
+
     [SerializeField] private Button _interactBtn, _screenBtn;
     [SerializeField] private Image _screen;
-    [SerializeField] private Sprite _defaultScreen;
+    [SerializeField] private Transform _miniGameParent;
+    [SerializeField] private Joystick _moveJoy;
 
     public enum States { Nothing, SimpleSprite, WaitCallback, OnMiniGame }
 
     private IObjectsFactory _factory;
     private ControllerNetworkBus _bus;
     private ActivityInfo _showedInfo = null;
+    private IObjectResolver _container;
+    private Vector3 _prevMoveDirection = Vector3.zero;
 
     public event Action Interacted;
+    public event Action MiniGameSpawned;
+    public event Action ActivityHided;
 
     public States State { get; private set; } = States.Nothing;
     public ActivityStarter PlayingMiniGame { get; private set; } = null;
@@ -34,6 +41,7 @@ public class ClientController : MonoBehaviour
         _bus = bus;
         InventoryModel = inventory;
         container.Inject(inventory);
+        _container = container;
     }
 
     private void Awake()
@@ -54,16 +62,27 @@ public class ClientController : MonoBehaviour
 
     public void ShowActivity(ActivityInfo info)
     {
+        if (State is not States.Nothing)
+            return;
+
         _screen.sprite = info.Image;
+        _screen.color = Color.white;
         _showedInfo = info;
         State = States.SimpleSprite;
     }
 
     public void HideActivity()
     {
-        _screen.sprite = _defaultScreen;
+        _screen.color = new(0, 0, 0, 0);
+        _screen.sprite = null;
         _showedInfo = null;
         State = States.Nothing;
+        if(PlayingMiniGame != null)
+        {
+            Destroy(PlayingMiniGame.gameObject);
+            PlayingMiniGame = null;
+        }
+        ActivityHided?.Invoke();
     }
 
     public void OnScreenTouched()
@@ -73,18 +92,22 @@ public class ClientController : MonoBehaviour
 
     public void Interact()
     {
+        Interacted?.Invoke();
+
         if (State is not States.SimpleSprite)
             return;
 
         if (_showedInfo == null || _showedInfo.MiniGamePrefab == null)
             return;
 
+        _container.Inject(_showedInfo);
         if(!_showedInfo.CanInteract(out var reason))
         {
             ShowMessage(reason);
         }
 
         State = States.WaitCallback;
+        _bus.InvokeActivityStarted(_showedInfo);
         if(_showedInfo.SinglePlayer)
         {
             SpawnMiniGame(_showedInfo);
@@ -112,14 +135,15 @@ public class ClientController : MonoBehaviour
 
             if (screenChild != null)
             {
-                screenChild.SetParent(_screen.transform);
+                screenChild.SetParent(_miniGameParent);
                 screenChild.offsetMin = Vector2.zero;
                 screenChild.offsetMax = Vector2.zero;
+                screenChild.localScale = Vector3.one;
             }
 
             obj.Initialize(_screen, _bus);
 
-            Interacted?.Invoke();
+            MiniGameSpawned?.Invoke();
         }
         else
         {
@@ -136,5 +160,15 @@ public class ClientController : MonoBehaviour
             PlayingMiniGame = null;
         }
         HideActivity();
+    }
+
+    private void Update()
+    {
+        var direction = new Vector3(_moveJoy.Horizontal, 0, _moveJoy.Vertical);
+        if(Vector3.Distance(direction, _prevMoveDirection) > DeathZoneForJoystick)
+        {
+            _prevMoveDirection = direction;
+            _bus.SetMoveDirection(direction);
+        }
     }
 }

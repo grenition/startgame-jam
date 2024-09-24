@@ -1,5 +1,3 @@
-using Core.Networking.NetworkObjectsFactory;
-using Cysharp.Threading.Tasks;
 using SickDev.DevConsole;
 using System;
 using System.Linq;
@@ -10,41 +8,49 @@ using VContainer;
 public class ControllerNetworkBus : NetworkBehaviour
 {
     [SerializeField] private ActivityInfo[] _infos;
+    [SerializeField] private ClientControllerTester _tester;
 
     private ClientController _controller;
-    private DevConsole _devConsole;
-    private IObjectsFactory _factory;
     private ClientIdentification _identification;
+    private int _moveDirectionIndex = 0;
 
-    private SickDev.CommandSystem.Command _showTestActivity, _hideActivity, _finishActivity,
-        _setPlayerType;
+    public const string ResourcesPath = "Activities";
 
-    public event Action<string, ControllerBusMessage> SpecialDataTransmitted;
+    public event Action<string, int[]> SpecialDataTransmitted;
+    public event Action<ActivityInfo> ActivityStarted, ActivityFinished;
+    public PlayerObject BigPlayer { get; set; }
+    public PlayerObject SmallPlayer { get; set; }
 
     [Inject]
     private void Construct(
-        DevConsole devConsole, 
-        IObjectsFactory factory, 
-        ClientIdentification identification)
+        ClientIdentification identification,
+        IObjectResolver resolver)
     {
-        _devConsole = devConsole;
-        _factory = factory;
         _identification = identification;
-
-        _showTestActivity = new(new Action(ShowTestActivity));
-        _hideActivity = new(new Action(HideTestActivity));
-        _finishActivity = new(new Action(FinishTestActivity));
-        _setPlayerType = new(new Action<int>(SetPlayerType));
-        devConsole.AddCommand(_showTestActivity);
-        devConsole.AddCommand(_hideActivity);
-        devConsole.AddCommand(_finishActivity);
-        devConsole.AddCommand(_setPlayerType);
+        resolver.Inject(_tester);
     }
+
+    private void Start()
+    {
+        _infos = Resources.LoadAll<ActivityInfo>(ResourcesPath);
+    }
+
+    #region SetClientController
+    public void SetClientController(ClientController clientController)
+        => _controller ??= clientController;
+
+    public void ResetClientController() => _controller = null;
+    #endregion
 
     #region DevConsoleCommands
     public void ShowTestActivity()
     {
         ShowActivity(_infos[0], _identification.PlayerType);
+    }
+
+    public void ShowActivity(int index)
+    {
+        ShowActivity(_infos[index], _identification.PlayerType);
     }
 
     public void HideTestActivity()
@@ -55,11 +61,6 @@ public class ControllerNetworkBus : NetworkBehaviour
     public void FinishTestActivity()
     {
         FinishActivity(_identification.PlayerType);
-    }
-
-    public void SetPlayerType(int type)
-    {
-        _identification.ForceSetPlayerType((PlayerTypes)type);
     }
     #endregion
 
@@ -126,6 +127,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void FinishActivityServerRpc(int type)
     {
+        ActivityFinished?.Invoke(_infos[type]);
         FinishActivityClientRpc(type);
     }
 
@@ -137,16 +139,6 @@ public class ControllerNetworkBus : NetworkBehaviour
         }
     }
     #endregion
-
-    public void Interact(ActivityPoint point)
-    {
-
-    }
-
-    public void SetClientController(ClientController clientController)
-        => _controller ??= clientController;
-
-    public void ResetClientController() => _controller = null;
 
     #region WaitForTeammate
     public void WaitForTeammateForMiniGame(ActivityInfo info)
@@ -171,32 +163,36 @@ public class ControllerNetworkBus : NetworkBehaviour
             return;
         }
 
+        if (_identification.PlayerType is PlayerTypes.Host)
+            return;
+
         var info = _infos[index];
         _controller.SpawnMiniGame(info);
     }
     #endregion
 
     #region SpecialData
-    public void SpecialDataTransmit(string id, ControllerBusMessage data, PlayerTypes receivers)
+    public void SendBusMessage(string id, int[] data, PlayerTypes receivers)
     {
-        SpecialDataTransmitServerRpc(id, data, (int)receivers);
+        SendBusMessageServerRpc(id, new(data), (int)receivers);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SpecialDataTransmitServerRpc(string id, ControllerBusMessage data, int receivers)
+    private void SendBusMessageServerRpc(string id, ControllerBusMessage mess, int receivers)
     {
         if(_identification.IsMyType((PlayerTypes)receivers))
         {
-            SpecialDataTransmitted?.Invoke(id, data);
+            SpecialDataTransmitted?.Invoke(id, mess.Data);
         }
-        SpecialDataTransmitClientRpc(id, data, receivers);
+        SendBusMessageClientRpc(id, mess, receivers);
     }
 
-    [ClientRpc]
-    private void SpecialDataTransmitClientRpc(string id, ControllerBusMessage data, int receivers)
+    [ClientRpc(RequireOwnership = false)]
+    private void SendBusMessageClientRpc(string id, ControllerBusMessage mess, int receivers)
     {
-        if(_identification.IsMyType((PlayerTypes)receivers)) {
-            SpecialDataTransmitted?.Invoke(id, data);
+        if(_identification.IsMyType((PlayerTypes)receivers))
+        {
+            SpecialDataTransmitted?.Invoke(id, mess.Data);
         }
     }
     #endregion
@@ -225,12 +221,42 @@ public class ControllerNetworkBus : NetworkBehaviour
     }
     #endregion
 
+    #region SetMoveDirection
+    public void SetMoveDirection(Vector3 direction)
+    {
+        SetMoveDirectionServerRpc(direction, _moveDirectionIndex++, (int)_identification.PlayerType);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetMoveDirectionServerRpc(Vector3 direction, int index, int type)
+    {
+        var player = SmallPlayer;
+        if((PlayerTypes)type is PlayerTypes.Big)
+        {
+            player = BigPlayer;
+        }
+
+        player?.SetMoveDirection(direction, index);
+    }
+    #endregion
+
+    #region ActivityStartedInvoke
+    public void InvokeActivityStarted(ActivityInfo info)
+    {
+        int index = _infos.ToList().IndexOf(info);
+        InvokeActivityStartedServerRpc(index);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void InvokeActivityStartedServerRpc(int index)
+    {
+        ActivityStarted?.Invoke(_infos[index]);
+    }
+    #endregion
+
     public override void OnDestroy()
     {
+        _tester.OnDestroy();
         base.OnDestroy();
-        _devConsole.RemoveCommand(_showTestActivity);
-        _devConsole.RemoveCommand(_hideActivity);
-        _devConsole.RemoveCommand(_finishActivity);
-        _devConsole.RemoveCommand(_setPlayerType);
     }
 }
