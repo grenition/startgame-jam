@@ -41,13 +41,13 @@ namespace Debugging
         [Button]
         private void TestServerOnly()
         {
-            _interactionService.DoAction(new TestAction(), InteractionSendTo.ServerOnly);
+            _interactionService.DoAction(new TestAction(), InteractionSendTo.Server);
         }
         
         [Button]
         private void TestPlayersOnly()
         {
-            _interactionService.DoAction(new TestAction(), InteractionSendTo.PlayersOnly);
+            _interactionService.DoAction(new TestAction(), InteractionSendTo.Players);
         }
         
         [Button]
@@ -65,13 +65,13 @@ namespace Debugging
         [Button]
         private void TestBigPlayer()
         {
-            _interactionService.DoAction(new TestAction(), InteractionSendTo.BigPlayerOnly);
+            _interactionService.DoAction(new TestAction(), InteractionSendTo.BigPlayer);
         }
         
         [Button]
         private void TestSmallPlayer()
         {
-            _interactionService.DoAction(new TestAction(), InteractionSendTo.SmallPlayerOnly);
+            _interactionService.DoAction(new TestAction(), InteractionSendTo.SmallPlayer);
         }
     }
 }

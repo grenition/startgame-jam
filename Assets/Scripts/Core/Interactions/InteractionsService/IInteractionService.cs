@@ -4,10 +4,10 @@ namespace Core.Interactions
 {
     public enum InteractionSendTo
     {
-        ServerOnly,
-        BigPlayerOnly,
-        SmallPlayerOnly,
-        PlayersOnly,
+        Server,
+        BigPlayer,
+        SmallPlayer,
+        Players,
         ServerAndBigPlayer,
         ServerAndSmallPlayer,
         Everyone

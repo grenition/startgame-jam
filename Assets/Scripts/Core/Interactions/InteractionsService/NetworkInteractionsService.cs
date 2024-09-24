@@ -42,20 +42,20 @@ namespace Core.Interactions
 
             switch (sendTo)
             {
-                case InteractionSendTo.ServerOnly:
+                case InteractionSendTo.Server:
                     InjectAndExecuteAction(action);
                     break;
                 
-                case InteractionSendTo.PlayersOnly:
+                case InteractionSendTo.Players:
                     DoActionRpc(serializedAction, RpcTarget.NotServer);
                     break;
                 
-                case InteractionSendTo.BigPlayerOnly:
+                case InteractionSendTo.BigPlayer:
                     if (_playersService.BigPlayer != null)
                         DoActionRpc(serializedAction, RpcTarget.Single(_playersService.BigPlayer.OwnerClientId, RpcTargetUse.Temp));
                     break;
                 
-                case InteractionSendTo.SmallPlayerOnly:
+                case InteractionSendTo.SmallPlayer:
                     if (_playersService.SmallPlayer != null)
                         DoActionRpc(serializedAction, RpcTarget.Single(_playersService.SmallPlayer.OwnerClientId, RpcTargetUse.Temp));
                     break;
