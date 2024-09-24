@@ -12,7 +12,7 @@ namespace Gameplay.QuestSystem
     [Serializable]
     public class ActionWrapper
     {
-        public InteractionSendTo SendTo;
+        public InteractionSendTo sendTo;
         [SerializeReference] public GameAction action;
     }
     
@@ -86,7 +86,7 @@ namespace Gameplay.QuestSystem
                 foreach (var actionWrapper in _actions)
                 {
                     if (actionWrapper.action != null)
-                        _interactionService.DoAction(actionWrapper.action);
+                        _interactionService.DoAction(actionWrapper.action, actionWrapper.sendTo);
                 }
             }
         }

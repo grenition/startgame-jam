@@ -17,7 +17,7 @@ namespace Core.LifetimeScopes
             base.Awake();
 
             foreach (var interactionPoint in FindObjectsOfType<InteractionPoint>(true))
-                Container.Inject(interactionPoint);
+                Container?.InjectGameObject(interactionPoint.gameObject);
         }
     }
 }
