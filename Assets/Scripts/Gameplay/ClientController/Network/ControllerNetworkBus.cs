@@ -14,7 +14,9 @@ public class ControllerNetworkBus : NetworkBehaviour
     private ClientIdentification _identification;
     private int _moveDirectionIndex = 0;
 
-    public event Action<string, ControllerBusMessage> SpecialDataTransmitted;
+    public const string ResourcesPath = "Activities";
+
+    public event Action<string, int[]> SpecialDataTransmitted;
     public event Action<ActivityInfo> ActivityStarted, ActivityFinished;
     public PlayerObject BigPlayer { get; set; }
     public PlayerObject SmallPlayer { get; set; }
@@ -28,6 +30,11 @@ public class ControllerNetworkBus : NetworkBehaviour
         resolver.Inject(_tester);
     }
 
+    private void Start()
+    {
+        _infos = Resources.LoadAll<ActivityInfo>(ResourcesPath);
+    }
+
     #region SetClientController
     public void SetClientController(ClientController clientController)
         => _controller ??= clientController;
@@ -39,6 +46,11 @@ public class ControllerNetworkBus : NetworkBehaviour
     public void ShowTestActivity()
     {
         ShowActivity(_infos[0], _identification.PlayerType);
+    }
+
+    public void ShowActivity(int index)
+    {
+        ShowActivity(_infos[index], _identification.PlayerType);
     }
 
     public void HideTestActivity()
@@ -160,26 +172,27 @@ public class ControllerNetworkBus : NetworkBehaviour
     #endregion
 
     #region SpecialData
-    public void SpecialDataTransmit(string id, ControllerBusMessage data, PlayerTypes receivers)
+    public void SendBusMessage(string id, int[] data, PlayerTypes receivers)
     {
-        SpecialDataTransmitServerRpc(id, data, (int)receivers);
+        SendBusMessageServerRpc(id, new(data), (int)receivers);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SpecialDataTransmitServerRpc(string id, ControllerBusMessage data, int receivers)
+    private void SendBusMessageServerRpc(string id, ControllerBusMessage mess, int receivers)
     {
         if(_identification.IsMyType((PlayerTypes)receivers))
         {
-            SpecialDataTransmitted?.Invoke(id, data);
+            SpecialDataTransmitted?.Invoke(id, mess.Data);
         }
-        SpecialDataTransmitClientRpc(id, data, receivers);
+        SendBusMessageClientRpc(id, mess, receivers);
     }
 
-    [ClientRpc]
-    private void SpecialDataTransmitClientRpc(string id, ControllerBusMessage data, int receivers)
+    [ClientRpc(RequireOwnership = false)]
+    private void SendBusMessageClientRpc(string id, ControllerBusMessage mess, int receivers)
     {
-        if(_identification.IsMyType((PlayerTypes)receivers)) {
-            SpecialDataTransmitted?.Invoke(id, data);
+        if(_identification.IsMyType((PlayerTypes)receivers))
+        {
+            SpecialDataTransmitted?.Invoke(id, mess.Data);
         }
     }
     #endregion

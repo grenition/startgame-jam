@@ -29,7 +29,6 @@ public class ActivityPoint : MonoBehaviour
 
     private void OnActivityStarted(ActivityInfo info)
     {
-        Debug.Log(info == _info);
         if(info == _info)
         {
             Destroy(gameObject);

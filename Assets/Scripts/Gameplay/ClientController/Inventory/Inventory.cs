@@ -61,9 +61,28 @@ public class Inventory
         return Items.Contains(item);
     }
 
+    public bool HasItemByName(string name)
+    {
+        return Items.Exists(x => x.Name == name);
+    }
+
     public InventoryItem GetItem(int index)
     {
         return Items[index];
+    }
+
+    public bool RemoveItemByName(string name)
+    {
+        foreach(var item in Items)
+        {
+            if(item.Name == name)
+            {
+                Items.Remove(item);
+                InventoryChanged?.Invoke();
+                return true;
+            }
+        }
+        return false;
     }
 
     public void GiveToAnotherPlayer(InventoryItem item)
@@ -93,7 +112,11 @@ public class Inventory
 [Serializable]
 public class InventoryItemNames
 {
-    [SerializeField] private string _key;
+    [SerializeField] private string _key, _basket, _light, _stone, _pruner;
 
     public string Key => _key;
+    public string Basket => _basket;
+    public string Light => _light;
+    public string Stone => _stone;
+    public string Pruner => _pruner;
 }

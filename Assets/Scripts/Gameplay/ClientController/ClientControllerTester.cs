@@ -31,6 +31,7 @@ public class ClientControllerTester
         _factory = factory;
 
         AddCommand(new(new Action(_bus.ShowTestActivity)));
+        AddCommand(new(new Action<int>(_bus.ShowActivity)));
         AddCommand(new(new Action(_bus.HideTestActivity)));
         AddCommand(new(new Action(_bus.FinishTestActivity)));
         AddCommand(new(new Action<int>(SetPlayerType)));

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ActivityInfo", menuName = "Activity")]
+[CreateAssetMenu(fileName = "ActivityInfo", menuName = "Activity/Default")]
 public class ActivityInfo : ScriptableObject
 {
     [SerializeField] private Sprite _image;

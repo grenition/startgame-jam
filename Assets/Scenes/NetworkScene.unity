@@ -313,6 +313,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _infos:
   - {fileID: 11400000, guid: 0388340244364e84aad5bfd8854e7086, type: 2}
+  - {fileID: 11400000, guid: 82cf60087cd9b9346b27f3092cf3a514, type: 2}
+  - {fileID: 11400000, guid: 9e379cc9d0243e141b4059e20c03c89c, type: 2}
+  - {fileID: 11400000, guid: 4ac79471b8d1bbf4188de866509e7d00, type: 2}
   _tester:
     _clientControllerPrefab: {fileID: 1160261483463539620, guid: 92c13eb1b43c82e42bb117fe9e40cdce,
       type: 3}
