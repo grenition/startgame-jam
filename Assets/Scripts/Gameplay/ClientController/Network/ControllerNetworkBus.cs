@@ -7,12 +7,12 @@ using VContainer;
 
 public class ControllerNetworkBus : NetworkBehaviour
 {
-    [SerializeField] private ActivityInfo[] _infos;
     [SerializeField] private ClientControllerTester _tester;
 
     private ClientController _controller;
     private ClientIdentification _identification;
     private int _moveDirectionIndex = 0;
+    private ActivityInfo[] _infos;
 
     public const string ResourcesPath = "Activities";
 
@@ -174,25 +174,29 @@ public class ControllerNetworkBus : NetworkBehaviour
     #region SpecialData
     public void SendBusMessage(string id, int[] data, PlayerTypes receivers)
     {
-        SendBusMessageServerRpc(id, new(data), (int)receivers);
+        int data0 = data.Length > 0 ? data[0] : 0;
+        int data1 = data.Length > 1 ? data[1] : 0;
+        int data2 = data.Length > 2 ? data[2] : 0;
+        int data3 = data.Length > 3 ? data[3] : 0;
+        SendBusMessageServerRpc(id, data0, data1, data2, data3, (int)receivers);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SendBusMessageServerRpc(string id, ControllerBusMessage mess, int receivers)
+    private void SendBusMessageServerRpc(string id, int data0, int data1, int data2, int data3, int receivers)
     {
         if(_identification.IsMyType((PlayerTypes)receivers))
         {
-            SpecialDataTransmitted?.Invoke(id, mess.Data);
+            SpecialDataTransmitted?.Invoke(id, new int[] { data0, data1, data2, data3 });
         }
-        SendBusMessageClientRpc(id, mess, receivers);
+        SendBusMessageClientRpc(id, data0, data1, data2, data3, receivers);
     }
 
     [ClientRpc(RequireOwnership = false)]
-    private void SendBusMessageClientRpc(string id, ControllerBusMessage mess, int receivers)
+    private void SendBusMessageClientRpc(string id, int data0, int data1, int data2, int data3, int receivers)
     {
         if(_identification.IsMyType((PlayerTypes)receivers))
         {
-            SpecialDataTransmitted?.Invoke(id, mess.Data);
+            SpecialDataTransmitted?.Invoke(id, new int[] { data0, data1, data2, data3 });
         }
     }
     #endregion

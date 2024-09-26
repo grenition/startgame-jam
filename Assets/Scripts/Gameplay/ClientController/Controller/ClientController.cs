@@ -13,6 +13,7 @@ public class ClientController : MonoBehaviour
     [SerializeField] private Image _screen;
     [SerializeField] private Transform _miniGameParent;
     [SerializeField] private Joystick _moveJoy;
+    [SerializeField] private ClientControllerPainter _painter;
 
     public enum States { Nothing, SimpleSprite, WaitCallback, OnMiniGame }
 
@@ -20,6 +21,7 @@ public class ClientController : MonoBehaviour
     private ControllerNetworkBus _bus;
     private ActivityInfo _showedInfo = null;
     private IObjectResolver _container;
+    private ClientIdentification _identification;
     private Vector3 _prevMoveDirection = Vector3.zero;
 
     public event Action Interacted;
@@ -35,18 +37,22 @@ public class ClientController : MonoBehaviour
         IObjectsFactory factory, 
         ControllerNetworkBus bus, 
         Inventory inventory,
-        IObjectResolver container)
+        IObjectResolver container,
+        ClientIdentification identification)
     {
         _factory = factory;
         _bus = bus;
         InventoryModel = inventory;
         container.Inject(inventory);
         _container = container;
+        _identification = identification;
     }
 
     private void Awake()
     {
         _bus.SetClientController(this);
+        _painter.Paint(_identification.PlayerType);
+
     }
     private void OnDestroy()
     {
@@ -104,6 +110,7 @@ public class ClientController : MonoBehaviour
         if(!_showedInfo.CanInteract(out var reason))
         {
             ShowMessage(reason);
+            return;
         }
 
         State = States.WaitCallback;

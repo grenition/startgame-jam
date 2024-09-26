@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks.Triggers;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using System;
 using TMPro;
@@ -15,6 +15,7 @@ public class InventoryView
     [SerializeField] private Image _actionList;
     [SerializeField] private Button _joinItemBtn, _giveItemBtn, _cancelActionListBtn;
     [SerializeField] private TMP_Text _actionListItemName;
+    [SerializeField] private Image _removedItemIcon;
 
     public InventoryModelView ModelView { get; private set; }
 
@@ -31,6 +32,24 @@ public class InventoryView
         _joinItemBtn.onClick.AddListener(new(ModelView.JoinItem));
         _giveItemBtn.onClick.AddListener(new(ModelView.GiveToFriend));
         _cancelActionListBtn.onClick.AddListener(new(ModelView.CancelActionList));
+        ModelView.ItemRemoved += RemoveItemAnimation;
+    }
+
+    public void RemoveItemAnimation(InventoryItem item)
+    {
+        RemoveItemAsync(item);
+    }
+
+    private async UniTask RemoveItemAsync(InventoryItem item)
+    {
+        _removedItemIcon.sprite = item.Icon;
+        _removedItemIcon.gameObject.SetActive(true);
+        _removedItemIcon.transform.position = _slots[_slots.Length / 2].transform.position;
+        _removedItemIcon.transform.DOMove(Vector3.zero, .5f);
+
+        await UniTask.WaitForSeconds(1);
+
+        _removedItemIcon.gameObject.SetActive(false);
     }
 
     public void UpdateGrid(InventoryItem[] items)

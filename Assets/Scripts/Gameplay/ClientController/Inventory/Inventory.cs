@@ -6,7 +6,7 @@ using VContainer;
 [Serializable]
 public class Inventory
 {
-    public const int MaxItems = 5;
+    public const int MaxItems = 6;
 
     [SerializeField] private InventoryItem[] _allItems;
     [SerializeField] private InventoryItemNames _names;
@@ -16,6 +16,7 @@ public class Inventory
     private ClientIdentification _identification;
 
     public event Action InventoryChanged;
+    public event Action<InventoryItem> ItemRemoved;
 
     public InventoryItem[] AllItems => _allItems;
     public InventoryItemNames Names => _names;
@@ -49,6 +50,7 @@ public class Inventory
     {
         Items.Remove(item);
         InventoryChanged?.Invoke();
+        ItemRemoved?.Invoke(item);
     }
 
     public List<InventoryItem> GetCopy()
@@ -77,8 +79,7 @@ public class Inventory
         {
             if(item.Name == name)
             {
-                Items.Remove(item);
-                InventoryChanged?.Invoke();
+                RemoveItem(item);
                 return true;
             }
         }
@@ -112,11 +113,12 @@ public class Inventory
 [Serializable]
 public class InventoryItemNames
 {
-    [SerializeField] private string _key, _basket, _light, _stone, _pruner;
+    [SerializeField] private string _key, _basket, _light, _stone, _pruner, _toy;
 
     public string Key => _key;
     public string Basket => _basket;
     public string Light => _light;
     public string Stone => _stone;
     public string Pruner => _pruner;
+    public string Toy => _toy;
 }

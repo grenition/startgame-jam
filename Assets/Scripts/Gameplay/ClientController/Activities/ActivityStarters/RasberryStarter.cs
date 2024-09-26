@@ -52,7 +52,6 @@ public class RasberryStarter : ActivityStarter
 
     private void ReceiveData(string receiverId, int[] data)
     {
-        Debug.Log($"Data received with id: {receiverId}");
         if(receiverId == WinMessageId)
         {
             var type = (PlayerTypes)data[0];
@@ -67,6 +66,7 @@ public class RasberryStarter : ActivityStarter
 
             if(Identification.PlayerType is PlayerTypes.Big && _smallWinned && _bigWinned)
             {
+                Bus.SpecialDataTransmitted -= ReceiveData;
                 Finish();
             }
         }

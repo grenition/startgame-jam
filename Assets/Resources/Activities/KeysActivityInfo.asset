@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 651b42452b53c4244a395f1d432b0732, type: 3}
   m_Name: KeysActivityInfo
   m_EditorClassIdentifier: 
-  _image: {fileID: 21300000, guid: b0b20a191c4697d4fbf65e5e2a0c69a9, type: 3}
+  _image: {fileID: 21300000, guid: 35ce3105687bbe8498b1b95d40075a89, type: 3}
   _miniGamePrefab: {fileID: 2282115789173452077, guid: 42b6f3b5240f67e43a31a8908d79c0fe,
     type: 3}
   _singlePlayer: 0

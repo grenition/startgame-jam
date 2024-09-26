@@ -12,6 +12,7 @@ public class InventoryModelView
 
     public InventoryItem[] Items { get; private set; } = new InventoryItem[Inventory.MaxItems];
     public event Action<InventoryItem[]> ItemsChanged;
+    public event Action<InventoryItem> ItemRemoved;
 
     public ReactiveProperty<int> ChoosenItemIndex { get; private set; } = new(-1);
 
@@ -19,6 +20,7 @@ public class InventoryModelView
     {
         Model = model;
         Model.InventoryChanged += UpdateInventoryGrid;
+        Model.ItemRemoved += i => ItemRemoved?.Invoke(i);
         View.Initialize(this);
     }
 

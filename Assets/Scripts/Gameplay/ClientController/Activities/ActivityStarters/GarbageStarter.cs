@@ -6,7 +6,6 @@ using VContainer;
 public class GarbageStarter : ActivityStarter
 {
     [SerializeField] private RectTransform _parent;
-    [SerializeField] private ActivityInfo _nextActivity;
     [SerializeField] private DragNDropElement[] _firstGarbage, _secondGarbage, _thirdGarbage;
     [SerializeField] private RectTransform[] _containers;
     [SerializeField] private Button _item;
@@ -33,19 +32,9 @@ public class GarbageStarter : ActivityStarter
     public override async UniTask OnFinish()
     {
         Bus.SpecialDataTransmitted -= OnReceiveMessage;
+        Debug.Log("Good bye");
         await UniTask.Yield();
         return;
-    }
-
-    private void OnActivityHided()
-    {
-        _controller.ActivityHided -= OnActivityHided;
-
-        if(Identification.PlayerType is PlayerTypes.Small)
-        {
-            _controller.ShowActivity(_nextActivity);
-            _controller.Interact();
-        }
     }
 
     private void OnDrop(DragNDropElement drop, int index)
@@ -78,6 +67,7 @@ public class GarbageStarter : ActivityStarter
             {
                 _item.gameObject.SetActive(true);
                 _item.onClick.AddListener(new(OnTakeItem));
+                Bus.SpecialDataTransmitted -= OnReceiveMessage;
             }
         }
     }
@@ -90,9 +80,8 @@ public class GarbageStarter : ActivityStarter
 
     protected override void OnInitialize(Image screen)
     {
+        Debug.Log("Hello?");
         _item.gameObject.SetActive(false);
-
-        _controller.ActivityHided += OnActivityHided;
         Bus.SpecialDataTransmitted += OnReceiveMessage;
 
         var drops = new DragNDropElement[][] { _firstGarbage, _secondGarbage, _thirdGarbage };
