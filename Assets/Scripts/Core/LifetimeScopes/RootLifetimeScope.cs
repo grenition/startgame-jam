@@ -1,11 +1,13 @@
+using Core.Interactions;
 using Core.Networking.Authentificator;
 using Core.Networking.NetworkObjectsFactory;
 using Core.Networking.RelayService;
 using Core.Networking.Settings;
 using Core.SaveSystem.System;
 using Core.SceneManagement;
+using Core.Serialization;
+using Core.Serialization.Json;
 using Core.StateMachine.Controllers;
-using Gameplay.Player.Service;
 using SickDev.DevConsole;
 using Unity.Netcode;
 using VContainer;
@@ -41,6 +43,8 @@ namespace Core.LifetimeScopes
             builder.RegisterEntryPoint<SceneLoader>().As<ISceneLoader>();
             builder.Register<SaveSystem.System.SaveSystem>(Lifetime.Singleton).As<ISaveSystem>();
             builder.RegisterEntryPoint<ResourcesService>(Lifetime.Singleton).AsSelf();
+            builder.Register<JsonDataSerializer>(Lifetime.Singleton).As<IDataSerializer>();
+            builder.Register<InteractionService>(Lifetime.Singleton).As<IInteractionService>();
         }
     }
 }

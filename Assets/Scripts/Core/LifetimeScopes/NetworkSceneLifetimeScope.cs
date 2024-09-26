@@ -1,3 +1,4 @@
+using Core.Interactions;
 using Core.Networking.NetworkObjectsFactory;
 using Core.Networking.NetworkPlayersService;
 using Core.StateMachine.Controllers;
@@ -14,21 +15,29 @@ namespace Core.LifetimeScopes
         
         [SerializeField] private NetworkGameStateMachine _stateMachine;
         [SerializeField] private ControllerNetworkBus _controllerBus;
+        [SerializeField] private NetworkInteractionsService _interactionsService;
 
         private ClientIdentification _clientIdentification;
         
         protected override void Configure(IContainerBuilder builder)
         {
             instance ??= this;
+            
             builder.RegisterInstance(_stateMachine);
+            autoInjectGameObjects.Add(_stateMachine.gameObject);
             
             builder.Register<NetworkPlayersService>(Lifetime.Singleton).As<INetworkPlayersService>();
+            
             builder.RegisterInstance(_controllerBus);
-
+            autoInjectGameObjects.Add(_controllerBus.gameObject);
+            
             _clientIdentification = new();
             builder.RegisterInstance(_clientIdentification);
             
             builder.RegisterEntryPoint<FactoryContainerOverrider>();
+            
+            builder.RegisterInstance(_interactionsService).As<IInteractionService>();
+            autoInjectGameObjects.Add(_interactionsService.gameObject);
         }
     }
 }
