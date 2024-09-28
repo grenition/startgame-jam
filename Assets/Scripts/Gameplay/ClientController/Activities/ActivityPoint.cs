@@ -1,7 +1,8 @@
+using Gameplay.QuestSystem;
 using UnityEngine;
 using VContainer;
 
-public class ActivityPoint : MonoBehaviour
+public class ActivityPoint : InteractionPoint
 {
     [SerializeField] private ActivityInfo _info;
     [SerializeField] private bool _destroyAfterStartingActivity;
@@ -19,7 +20,10 @@ public class ActivityPoint : MonoBehaviour
 
     public void ShowActivity(PlayerTypes type)
     {
-        _bus.ShowActivity(Info, type);
+        if(CheckConditions())
+        {
+            _bus.ShowActivity(Info, type);
+        }
     }
 
     public void HideActivity(PlayerTypes type)

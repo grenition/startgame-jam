@@ -39,7 +39,6 @@ public class ToolsCollectStarter : ActivityStarter
 
         _light.onClick.AddListener(new(TakeLight));
         _stone.onClick.AddListener(new(TakeStone));
-        _inventory.RemoveItemByName(_inventory.Names.Key);
     }
 
     public void ChangeObjectsSize()

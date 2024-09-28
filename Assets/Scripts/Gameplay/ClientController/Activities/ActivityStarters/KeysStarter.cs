@@ -13,12 +13,14 @@ public class KeysStarter : ActivityStarter
     [SerializeField] private int _missingKeyIndex;
 
     private ClientController _controller;
+    private Inventory _inventory;
     private bool _isEnd = false;
 
     [Inject]
-    private void Construct(ClientController controller)
+    private void Construct(ClientController controller, Inventory inventory)
     {
         _controller = controller;
+        _inventory = inventory;
     }
 
     public override RectTransform GetScreenChild()
@@ -28,6 +30,7 @@ public class KeysStarter : ActivityStarter
 
     public override async UniTask OnFinish()
     {
+        _controller.ActivityHided += ActivityHided;
         await UniTask.Yield();
         return;
     }
@@ -44,7 +47,11 @@ public class KeysStarter : ActivityStarter
 
     protected override void OnInitialize(Image screen)
     {
-        _controller.ActivityHided += ActivityHided;
+        if(_inventory.HasItemByName(_inventory.Names.Key))
+        {
+            _inventory.RemoveItemByName(_inventory.Names.Key);
+        }
+
         if(Identification.PlayerType is PlayerTypes.Big)
         {
             Destroy(_keys[_missingKeyIndex].gameObject);

@@ -48,39 +48,44 @@ namespace Gameplay.QuestSystem
         {
             _interactionService = interactionService;
         }
-        
+
+        public bool CheckConditions()
+        {
+            return CheckConditions(_conditions);
+        }
+
+        public bool CheckConditions(ConditionsSet conditionsSet)
+        {
+            var result = false;
+
+            switch (conditionsSet.connection)
+            {
+                case ConditionConnection.And:
+                    result = conditionsSet.conditions
+                        .Where(x => x != null && x.condition != null)
+                        .All(x => _interactionService.GetCondition(x.condition));
+
+                    if (conditionsSet.dependentConditionsSet.Count != 0 && result)
+                        result = conditionsSet.dependentConditionsSet.All(x => CheckConditions(x));
+
+                    break;
+                case ConditionConnection.Or:
+                    result = conditionsSet.conditions
+                        .Where(x => x != null && x.condition != null)
+                        .Any(x => _interactionService.GetCondition(x.condition));
+
+                    if (conditionsSet.dependentConditionsSet.Count != 0 && !result)
+                        result = conditionsSet.dependentConditionsSet.Any(x => CheckConditions(x));
+
+                    break;
+            }
+
+            return result;
+        }
+
         [Button]
         public void Interact()
         {
-            bool CheckConditions(ConditionsSet conditionsSet)
-            {
-                var result = false;
-                
-                switch (conditionsSet.connection)
-                {
-                    case ConditionConnection.And:
-                        result = conditionsSet.conditions
-                            .Where(x => x != null && x.condition != null)
-                            .All(x => _interactionService.GetCondition(x.condition));
-
-                        if (conditionsSet.dependentConditionsSet.Count != 0 && result)
-                            result = conditionsSet.dependentConditionsSet.All(x => CheckConditions(x));
-                        
-                        break;
-                    case ConditionConnection.Or:
-                        result = conditionsSet.conditions
-                            .Where(x => x != null && x.condition != null)
-                            .Any(x => _interactionService.GetCondition(x.condition));
-                        
-                        if (conditionsSet.dependentConditionsSet.Count != 0 && !result)
-                            result = conditionsSet.dependentConditionsSet.Any(x => CheckConditions(x));
-                        
-                        break;
-                }
-
-                return result;
-            }
-
             if (CheckConditions(_conditions))
             {
                 foreach (var actionWrapper in _actions)

@@ -1,6 +1,9 @@
 using Core.Networking.NetworkObjectsFactory;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
@@ -15,6 +18,9 @@ public class ClientController : MonoBehaviour
     [SerializeField] private Joystick _moveJoy;
     [SerializeField] private ClientControllerPainter _painter;
 
+    [SerializeField] private Image _infoImage;
+    [SerializeField] private TMP_Text _infoText;
+
     public enum States { Nothing, SimpleSprite, WaitCallback, OnMiniGame }
 
     private IObjectsFactory _factory;
@@ -22,7 +28,10 @@ public class ClientController : MonoBehaviour
     private ActivityInfo _showedInfo = null;
     private IObjectResolver _container;
     private ClientIdentification _identification;
+    private CompletedTasks _tasks;
     private Vector3 _prevMoveDirection = Vector3.zero;
+
+    private Coroutine _infoAnimCor;
 
     public event Action Interacted;
     public event Action MiniGameSpawned;
@@ -38,7 +47,8 @@ public class ClientController : MonoBehaviour
         ControllerNetworkBus bus, 
         Inventory inventory,
         IObjectResolver container,
-        ClientIdentification identification)
+        ClientIdentification identification,
+        CompletedTasks tasks)
     {
         _factory = factory;
         _bus = bus;
@@ -46,6 +56,7 @@ public class ClientController : MonoBehaviour
         container.Inject(inventory);
         _container = container;
         _identification = identification;
+        _tasks = tasks;
     }
 
     private void Awake()
@@ -127,7 +138,37 @@ public class ClientController : MonoBehaviour
 
     public void ShowMessage(string mess)
     {
-        //TODO: Message
+        if (_infoAnimCor != null)
+            StopCoroutine(_infoAnimCor);
+        _infoAnimCor = StartCoroutine(ShowMessageAnim(mess));
+    }
+
+    private IEnumerator ShowMessageAnim(string mess)
+    {
+        _infoImage.gameObject.SetActive(true);
+        var clr = _infoImage.color;
+        clr.a = 0;
+        _infoImage.color = clr;
+        var txtClr = _infoText.color;
+        txtClr.a = 0;
+        _infoText.color = clr;
+        clr.a = .8f;
+        txtClr.a = 1;
+
+        _infoImage.DOColor(clr, .5f);
+        _infoText.DOColor(txtClr, .5f);
+        _infoText.text = mess;
+
+        yield return new WaitForSeconds(3);
+
+        clr.a = 0;
+        txtClr.a = 0;
+        _infoText.DOColor(txtClr, .5f);
+        _infoImage.DOColor(clr, .5f);
+
+        yield return new WaitForSeconds(.5f);
+
+        _infoImage.gameObject.SetActive(false);
     }
 
     public void SpawnMiniGame(ActivityInfo info)
@@ -160,6 +201,11 @@ public class ClientController : MonoBehaviour
 
     public async UniTask FinishActivity()
     {
+        if(_showedInfo != null && !_tasks.Tasks.Contains(_showedInfo))
+        {
+            _tasks.Tasks.Add(_showedInfo);
+        }
+
         if(PlayingMiniGame != null)
         {
             await PlayingMiniGame.OnFinish();

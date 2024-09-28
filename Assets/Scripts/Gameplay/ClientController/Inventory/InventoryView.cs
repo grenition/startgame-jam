@@ -45,7 +45,7 @@ public class InventoryView
         _removedItemIcon.sprite = item.Icon;
         _removedItemIcon.gameObject.SetActive(true);
         _removedItemIcon.transform.position = _slots[_slots.Length / 2].transform.position;
-        _removedItemIcon.transform.DOMove(Vector3.zero, .5f);
+        _removedItemIcon.transform.DOMove(new Vector3(Screen.width / 2, Screen.height / 2), .5f);
 
         await UniTask.WaitForSeconds(1);
 

@@ -267,7 +267,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1151176674}
-  - component: {fileID: 1151176673}
   - component: {fileID: 1151176675}
   m_Layer: 7
   m_Name: KeysActivity
@@ -276,24 +275,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1151176673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1151176672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eee834e4e4a9c414b90a48489aaea6c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _info: {fileID: 11400000, guid: 0388340244364e84aad5bfd8854e7086, type: 2}
-  _destroyAfterStartingActivity: 1
-  _actionsOnEnd: []
-  references:
-    version: 2
-    RefIds: []
 --- !u!4 &1151176674
 Transform:
   m_ObjectHideFlags: 0
@@ -309,27 +290,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &1151176675
-SphereCollider:
+--- !u!114 &1151176675
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1151176672}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 2
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eee834e4e4a9c414b90a48489aaea6c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions:
+    dependentConditionsSet: []
+    conditions: []
+    connection: 0
+  _actions: []
+  _info: {fileID: 0}
+  _destroyAfterStartingActivity: 0
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &1674853181
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,11 +363,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed5b7a7bc24efe84ea2be319b90af537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _infos:
-  - {fileID: 11400000, guid: 0388340244364e84aad5bfd8854e7086, type: 2}
-  - {fileID: 11400000, guid: 82cf60087cd9b9346b27f3092cf3a514, type: 2}
-  - {fileID: 11400000, guid: 9e379cc9d0243e141b4059e20c03c89c, type: 2}
-  - {fileID: 11400000, guid: 4ac79471b8d1bbf4188de866509e7d00, type: 2}
   _tester:
     _clientControllerPrefab: {fileID: 1160261483463539620, guid: 92c13eb1b43c82e42bb117fe9e40cdce,
       type: 3}

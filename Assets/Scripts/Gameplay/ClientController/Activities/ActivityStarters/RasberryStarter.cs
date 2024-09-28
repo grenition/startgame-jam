@@ -11,17 +11,20 @@ public class RasberryStarter : ActivityStarter
     [SerializeField] private Sprite _smallBG, _bigBG;
     [SerializeField] private Transform _smallRasberries, _bigRasberries;
     [SerializeField] private RectTransform _smallBasket, _bigBasket;
+    [SerializeField] private ActivityInfo _rasberyInfo;
 
     private RectTransform _curBucket;
     private int _maxBerries = 0, _curBerries = 0;
     private bool _smallWinned = false, _bigWinned = false;
 
     private Inventory _inventory;
+    private ClientController _controller;
 
     [Inject]
-    private void Construct(Inventory inventory)
+    private void Construct(Inventory inventory, ClientController controller)
     {
         _inventory = inventory;
+        _controller = controller;
     }
 
     public override RectTransform GetScreenChild()
@@ -31,9 +34,18 @@ public class RasberryStarter : ActivityStarter
 
     public override async UniTask OnFinish()
     {
-        _inventory.AddItemFromStorage(_inventory.Names.Basket);
+        _inventory.RemoveItemByName(_inventory.Names.Basket);
+        _inventory.AddItemFromStorage(_inventory.Names.FullBasket);
+        _controller.ActivityHided += OnHideActivity;
         await UniTask.Yield();
         return;
+    }
+
+    private void OnHideActivity()
+    {
+        _controller.ActivityHided -= OnHideActivity;
+        _controller.ShowActivity(_rasberyInfo);
+        _controller.Interact();
     }
 
     protected override void OnInitialize(Image screen)

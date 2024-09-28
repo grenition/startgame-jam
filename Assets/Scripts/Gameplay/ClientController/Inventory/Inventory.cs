@@ -113,10 +113,11 @@ public class Inventory
 [Serializable]
 public class InventoryItemNames
 {
-    [SerializeField] private string _key, _basket, _light, _stone, _pruner, _toy;
+    [SerializeField] private string _key, _basket, _fullBasket, _light, _stone, _pruner, _toy;
 
     public string Key => _key;
     public string Basket => _basket;
+    public string FullBasket => _fullBasket;
     public string Light => _light;
     public string Stone => _stone;
     public string Pruner => _pruner;

@@ -18,6 +18,7 @@ namespace Core.LifetimeScopes
         [SerializeField] private NetworkInteractionsService _interactionsService;
 
         private ClientIdentification _clientIdentification;
+        private CompletedTasks _tasks;
         
         protected override void Configure(IContainerBuilder builder)
         {
@@ -33,6 +34,8 @@ namespace Core.LifetimeScopes
             
             _clientIdentification = new();
             builder.RegisterInstance(_clientIdentification);
+            _tasks = new();
+            builder.RegisterInstance(_tasks);
             
             builder.RegisterEntryPoint<FactoryContainerOverrider>();
             

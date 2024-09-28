@@ -32,7 +32,6 @@ public class GarbageStarter : ActivityStarter
     public override async UniTask OnFinish()
     {
         Bus.SpecialDataTransmitted -= OnReceiveMessage;
-        Debug.Log("Good bye");
         await UniTask.Yield();
         return;
     }

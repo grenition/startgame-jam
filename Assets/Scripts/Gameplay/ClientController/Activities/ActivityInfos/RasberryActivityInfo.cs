@@ -5,18 +5,32 @@ using VContainer;
 public class RasberryActivityInfo : ActivityInfo
 {
     [SerializeField] private RasberryStarter _rasberryStarter;
+    [SerializeField] private ActivityInfo _keysInfo;
+    [SerializeField] private string _nothingHere;
 
     private Inventory _inventory;
+    private CompletedTasks _tasks;
 
     [Inject]
-    private void Construct(Inventory inventory)
+    private void Construct(Inventory inventory, CompletedTasks tasks)
     {
         _inventory = inventory;
+        _tasks = tasks;
+    }
+
+    public override bool CanInteract(out string reason)
+    {
+        if(!_tasks.Tasks.Contains(_keysInfo))
+        {
+            reason = _nothingHere;
+            return false;
+        }
+        return base.CanInteract(out reason);
     }
 
     public override ActivityStarter GetActivityStarter()
     {
-        if(!_inventory.HasItemByName(_inventory.Names.Basket))
+        if(_inventory.HasItemByName(_inventory.Names.Basket))
         {
             return _rasberryStarter;
         }
