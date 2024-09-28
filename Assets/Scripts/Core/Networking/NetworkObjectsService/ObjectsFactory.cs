@@ -1,16 +1,21 @@
 using System;
+using Core.Networking.NetworkPlayersService;
 using Core.Networking.Settings;
 using Gameplay.Server;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 using NetworkPlayer = Gameplay.Player.NetworkPlayer;
+using Object = UnityEngine.Object;
 
 namespace Core.Networking.NetworkObjectsFactory
 {
     public class ObjectsFactory : IObjectsFactory, IInitializable
     {
+        public const string NetworkScene = "NetworkScene";
+
         public Func<IObjectResolver> OvveridedContainer { get; set; }
 
         private NetworkManager _networkManager;
@@ -59,8 +64,9 @@ namespace Core.Networking.NetworkObjectsFactory
             
             var networkPlayer = GetContainer().Instantiate(prefab);
             networkPlayer.name = $"NetworkPlayer: owner {clientId}";
+            SceneManager.MoveGameObjectToScene(networkPlayer.gameObject, SceneManager.GetSceneByName(NetworkScene));
             networkPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
-            
+
             return networkPlayer;
         }
 
@@ -72,26 +78,48 @@ namespace Core.Networking.NetworkObjectsFactory
             
             var player = GetContainer().Instantiate(prefab);
             player.name = $"ServerPlayer";
+            SceneManager.MoveGameObjectToScene(player.gameObject, SceneManager.GetSceneByName(NetworkScene));
             player.GetComponent<NetworkObject>().SpawnAsPlayerObject(NetworkManager.ServerClientId);
-            
+
             return player;
         }
 
-        public T SpawnLocalObject<T>(T prefab) where T : MonoBehaviour
+        public T SpawnLocalObject<T>(T prefab, TargetScene targetScene, bool inject = true) where T : Component
         {
-            if (prefab == null) return null;
+            if (!prefab) return null;
 
-            var obj = UnityEngine.Object.Instantiate(prefab);
-            GetContainer().Inject(obj);
+            var obj = inject ? GetContainer().Instantiate(prefab) : Object.Instantiate(prefab);
+            
+            switch (targetScene)
+            {
+                case TargetScene.NetworkScene:
+                    SceneManager.MoveGameObjectToScene(obj.gameObject, SceneManager.GetSceneByName(NetworkScene));
+                    break;
+                case TargetScene.GameScene:
+                    var serverSceneMover = new ServerSceneMover(obj.gameObject);
+                    GetContainer().Inject(serverSceneMover);
+                    serverSceneMover.TryMove();
+                    break;
+            }
             return obj;
         }
-
-        public GameObject SpawnLocalObject(GameObject prefab)
+        public GameObject SpawnLocalObject(GameObject prefab, TargetScene targetScene, bool inject = true)
         {
-            if (prefab == null) return null;
+            if (!prefab) return null;
 
-            var obj = UnityEngine.Object.Instantiate(prefab);
-            GetContainer().Inject(obj);
+            var obj = inject ? GetContainer().Instantiate(prefab) : Object.Instantiate(prefab);
+            
+            switch (targetScene)
+            {
+                case TargetScene.NetworkScene:
+                    SceneManager.MoveGameObjectToScene(obj.gameObject, SceneManager.GetSceneByName(NetworkScene));
+                    break;
+                case TargetScene.GameScene:
+                    var serverSceneMover = new ServerSceneMover(obj.gameObject);
+                    GetContainer().Inject(serverSceneMover);
+                    serverSceneMover.TryMove();
+                    break;
+            }
             return obj;
         }
 
@@ -100,6 +128,42 @@ namespace Core.Networking.NetworkObjectsFactory
             var resolver = OvveridedContainer?.Invoke();
 
             return resolver ?? _objectResolver;
+        }
+
+    }
+    public class ServerSceneMover
+    {
+        private INetworkPlayersService _networkPlayersService;
+        private GameObject obj;
+
+        [Inject]
+        public void Construct(INetworkPlayersService networkPlayersService)
+        {
+            _networkPlayersService = networkPlayersService;
+        }
+
+        public ServerSceneMover(GameObject obj) => this.obj = obj;
+
+        public bool TryMove()
+        {
+            if (_networkPlayersService == null || _networkPlayersService.ServerPlayer == null)
+                return false;
+            var serverPlayer = _networkPlayersService.ServerPlayer;
+
+            var sceneLoaded = false;
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                if (SceneManager.GetSceneAt(i).name == _networkPlayersService.ServerPlayer.CurrentData.activeScene)
+                {
+                    sceneLoaded = true;
+                    break;
+                }
+            }
+
+            if (!sceneLoaded) return false;
+            
+            SceneManager.MoveGameObjectToScene(obj.gameObject, SceneManager.GetSceneByName(serverPlayer.CurrentData.activeScene));
+            return true;
         }
     }
 }

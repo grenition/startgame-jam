@@ -476,14 +476,14 @@ MonoBehaviour:
   _actions:
   - sendTo: 0
     action:
-      rid: 2429195662749335557
+      rid: 2429195662749335556
   references:
     version: 2
     RefIds:
-    - rid: 2429195662749335557
+    - rid: 2429195662749335556
       type: {class: LoadServerSceneAction, ns: Gameplay.Server, asm: Assembly-CSharp}
       data:
-        sceneKey: ServerScene_Test
+        sceneKey: ServerScene_HUB
 --- !u!4 &1293840603
 Transform:
   m_ObjectHideFlags: 0

@@ -38,14 +38,14 @@ namespace Gameplay.Player
             _playersService.RegisterNetworkPlayer(this);
             if (IsServer)
             {
-                _player = _objectsFactory.SpawnLocalObject(_playerPrefab);
+                _player = _objectsFactory.SpawnLocalObject(_playerPrefab, TargetScene.GameScene);
                 _player.transform.position += Vector3.up * .5f;
                 _player.SetPlayerType(PlayerTypes.Big);
             }
 
             if (!IsLocalPlayer) return;
 
-            _controllerScene = _objectsFactory.SpawnLocalObject(_controllerScenePrefab);
+            _controllerScene = _objectsFactory.SpawnLocalObject(_controllerScenePrefab, TargetScene.NetworkScene, false);
             SelectPlayerType(PlayerTypes.Big);
         }
         public override void OnNetworkDespawn()

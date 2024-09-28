@@ -5,9 +5,16 @@ using Unity.Netcode;
 using UnityEngine;
 using VContainer;
 using NetworkPlayer = Gameplay.Player.NetworkPlayer;
+using Object = UnityEngine.Object;
 
 namespace Core.Networking.NetworkObjectsFactory
 {
+    public enum TargetScene
+    {
+        NetworkScene,
+        GameScene,
+        None
+    }
     public interface IObjectsFactory
     {
         public Func<IObjectResolver> OvveridedContainer { get; set; }
@@ -15,7 +22,7 @@ namespace Core.Networking.NetworkObjectsFactory
         public NetworkObject SpawnNetworkObject(NetworkObject prefab);
         public NetworkPlayer SpawnNetworkPlayer(ulong clientId);
         public ServerPlayer SpawnServerPlayer();
-        public T SpawnLocalObject<T>(T prefab) where T : MonoBehaviour;
-        public GameObject SpawnLocalObject(GameObject prefab);
+        public T SpawnLocalObject<T>(T prefab, TargetScene targetScene, bool inject = true) where T : Component;
+        public GameObject SpawnLocalObject(GameObject prefab, TargetScene targetScene, bool inject = true);
     }
 }

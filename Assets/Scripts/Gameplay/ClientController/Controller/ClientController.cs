@@ -177,7 +177,7 @@ public class ClientController : MonoBehaviour
         {
             State = States.OnMiniGame;
 
-            var obj = _factory.SpawnLocalObject(info.MiniGamePrefab);
+            var obj = _factory.SpawnLocalObject(info.MiniGamePrefab, TargetScene.None);
             PlayingMiniGame = obj;
             var screenChild = obj.GetScreenChild();
 
