@@ -1,4 +1,5 @@
 using Core.Networking.NetworkObjectsFactory;
+using Core.SaveSystem.System;
 using Core.SceneManagement;
 using Core.StateMachine.Abstract.CreatableState;
 using Cysharp.Threading.Tasks;
@@ -16,22 +17,25 @@ namespace Core.StateMachine.States
         private NetworkManager _networkManager;
         private ISceneLoader _sceneLoader;
         private IObjectsFactory _networkObjectsFactory;
+        private ISaveSystem _saveSystem;
         
         [Inject]
         private void Construct(
             NetworkManager networkManager, 
             ISceneLoader sceneLoader,
-            IObjectsFactory networkObjectsFactory)
+            IObjectsFactory networkObjectsFactory,
+            ISaveSystem saveSystem)
         {
             _networkManager = networkManager;
             _sceneLoader = sceneLoader;
             _networkObjectsFactory = networkObjectsFactory;
+            _saveSystem = saveSystem;
         }
         
         protected async override UniTask OnEnter()
         {
             Debug.Log($"Entered state: {GetType().Name}");
-
+            
             SceneManager.sceneLoaded += OnSceneLoad;
             _networkManager.OnClientStopped += CompleteState;
             _networkManager.SceneManager.OnLoadComplete += OnNetworkSceneLoad;
@@ -39,6 +43,7 @@ namespace Core.StateMachine.States
         }
         protected async override UniTask OnExit()
         {
+            _saveSystem.SaveData();
             SceneManager.sceneLoaded -= OnSceneLoad;
             _networkManager.OnClientStopped -= CompleteState;
             _networkManager.SceneManager.OnLoadComplete -= OnNetworkSceneLoad;
@@ -51,9 +56,14 @@ namespace Core.StateMachine.States
         private async void OnNetworkSceneLoad(ulong clientid, string scenename, LoadSceneMode loadscenemode)
         {
             await UniTask.NextFrame();
-            
-            if(scenename == NetworkScene)
+
+            if (scenename == NetworkScene)
+            {
+                if (clientid == NetworkManager.ServerClientId)
+                    _saveSystem.LoadData();
+                
                 SpawnPlayer(clientid);
+            }
         }
         private async void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
         {

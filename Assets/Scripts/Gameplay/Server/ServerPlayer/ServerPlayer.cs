@@ -1,21 +1,35 @@
 using System;
 using Core.Networking.NetworkPlayersService;
 using Core.Networking.Settings;
+using Core.SaveSystem.Savable;
+using Core.SaveSystem.System;
 using Core.SceneManagement;
 using Unity.Netcode;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
 namespace Gameplay.Server
 {
-    public class ServerPlayer : NetworkBehaviour
+    public class ServerPlayer : NetworkBehaviour, ISavable<ServerPlayer.Data>
     {
+        [Serializable]
+        public class Data
+        {
+            public string activeScene;
+
+            public Data() { }
+            public Data(string activeScene) => this.activeScene = activeScene;
+        }
+
+        public Data CurrentData => _data;
+        
+        private Data _data = new();
         private ResourcesService _resourcesService;
         private ISceneLoader _sceneLoader;
         private NetworkManager _networkManager;
         private ClientIdentification _clientIdentification;
         private INetworkPlayersService _playersService;
+        private ISaveSystem _saveSystem;
         
         [Inject]
         private void Construct(
@@ -23,13 +37,15 @@ namespace Gameplay.Server
             ISceneLoader sceneLoader,
             NetworkManager networkManager,
             ClientIdentification clientIdentification,
-            INetworkPlayersService playersService)
+            INetworkPlayersService playersService,
+            ISaveSystem saveSystem)
         {
             _resourcesService = resourcesService;
             _sceneLoader = sceneLoader;
             _networkManager = networkManager;
             _clientIdentification = clientIdentification;
             _playersService = playersService;
+            _saveSystem = saveSystem;
         }
         
         #region OnNetworkSpawn/Despawn callbacks
@@ -42,6 +58,9 @@ namespace Gameplay.Server
             _networkManager.OnClientDisconnectCallback += OnClientDisconnected;
 
             _clientIdentification.SetPlayerType(PlayerTypes.Host);
+            
+            _saveSystem.RegisterSavable(this);
+            _saveSystem.LoadDataTo(this);
         }
         public override void OnNetworkDespawn()
         {
@@ -50,6 +69,9 @@ namespace Gameplay.Server
 
             _networkManager.OnClientConnectedCallback -= OnClientConnected;
             _networkManager.OnClientDisconnectCallback -= OnClientDisconnected;
+            
+            _saveSystem.SaveDataFrom(this);
+            _saveSystem.UnregisterSavable(this);
         }
         #endregion
         
@@ -70,13 +92,45 @@ namespace Gameplay.Server
         #region OnAllClientsConnected/AnyClientDisconnected events
         private void OnAllClientsConnected()
         {
-            _sceneLoader.TryLoadOfflineScene(
-                _resourcesService.SceneTransitions.HUBScene.Scene, LoadSceneMode.Additive);
+            LoadServerScene(_data.activeScene);
         }
         private void OnAnyClientDisconnected()
         {
-            _sceneLoader.TryUnloadOfflineScene(
-                _resourcesService.SceneTransitions.HUBScene.Scene);
+            UnloadCurrentServerScene();
+        }
+        #endregion
+
+        #region Interactions
+
+        public void LoadServerScene(string sceneName)
+        {
+            if (sceneName != _data.activeScene)
+                UnloadCurrentServerScene();
+
+            _data.activeScene = sceneName;
+            _sceneLoader.TryLoadOfflineScene(_data.activeScene, LoadSceneMode.Additive);
+        }
+
+        public void UnloadCurrentServerScene()
+        {
+            _sceneLoader.TryUnloadOfflineScene(_data.activeScene);
+        }
+
+        #endregion
+        
+        #region Save system
+        public string Key => nameof(ServerPlayer);
+        public void ApplyData(Data data)
+        {
+            _data = data;
+        }
+        public Data GetData()
+        {
+            return _data;
+        }
+        public Data GetDefaultData()
+        {
+            return new Data(_resourcesService.SceneTransitions.HUBScene.Scene);
         }
         #endregion
     }

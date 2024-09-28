@@ -52,7 +52,7 @@ public class ClientControllerTester
     {
         SetPlayerType(1);
         await UniTask.Yield();
-        _factory.SpawnLocalObject(_clientControllerPrefab);
+        _factory.SpawnLocalObject(_clientControllerPrefab, TargetScene.NetworkScene, false);
         await UniTask.Yield();
         _bus.ShowTestActivity();
     }

@@ -1,7 +1,9 @@
 using System;
+using Core.StateMachine.States;
 using Gameplay.Server;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 using NetworkPlayer = Gameplay.Player.NetworkPlayer;
@@ -32,6 +34,8 @@ namespace Core.Networking.NetworkObjectsFactory
             
             if(instance.TryGetComponent(out ServerPlayer serverPlayer))
                 serverPlayer.name = $"ServerPlayer";
+
+            SceneManager.MoveGameObjectToScene(instance.gameObject, SceneManager.GetSceneByName("NetworkScene"));
             
             return instance.GetComponent<NetworkObject>();
         }

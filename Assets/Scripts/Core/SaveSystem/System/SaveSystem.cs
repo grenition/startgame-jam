@@ -23,7 +23,7 @@ namespace Core.SaveSystem.System
             
             _savables.Add(savable, new SavableActions()
             {
-                LoadAction = () => savable.ApplyData(DataSerializer.Load<TData>(savable.Key)),
+                LoadAction = () => savable.ApplyData(DataSerializer.Load<TData>(savable.Key) ?? savable.GetDefaultData()),
                 SaveAction = () => DataSerializer.Save(savable.Key, savable.GetData()),
                 ResetAction = () => DataSerializer.Save(savable.Key, savable.GetDefaultData())
             });
@@ -49,8 +49,24 @@ namespace Core.SaveSystem.System
         }
         public void ResetData()
         {
+            DataSerializer.DeleteAll();
             foreach(var savable in _savables)
                 savable.Value.ResetAction.Invoke();
+        }
+        public void SaveDataFrom<TData>(ISavable<TData> savable)
+        {
+            if(!_savables.ContainsKey(savable)) return;
+            _savables[savable].SaveAction.Invoke();
+        }
+        public void LoadDataTo<TData>(ISavable<TData> savable)
+        {
+            if(!_savables.ContainsKey(savable)) return;
+            _savables[savable].LoadAction.Invoke();
+        }
+        public void ResetDataIn<TData>(ISavable<TData> savable)
+        {
+            if(!_savables.ContainsKey(savable)) return;
+            _savables[savable].ResetAction.Invoke();
         }
         public void SetSlot(int slotId)
         {
