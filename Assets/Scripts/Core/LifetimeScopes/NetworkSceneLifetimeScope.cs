@@ -2,8 +2,6 @@ using Core.Interactions;
 using Core.Networking.NetworkObjectsFactory;
 using Core.Networking.NetworkPlayersService;
 using Core.StateMachine.Controllers;
-using Gameplay.Player.Service;
-using UnityEditor.MPE;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
