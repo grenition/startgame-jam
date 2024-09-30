@@ -1,0 +1,44 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UniRx;
+using UnityEngine;
+using UnityEngine.UI;
+
+[Serializable]
+public class SettingsView
+{
+    [SerializeField] private GameObject _parent;
+    [SerializeField] private Slider _soundSlider;
+    [SerializeField] private TMP_Dropdown _qualityDropdown;
+    [SerializeField] private Button _applyBtn, _quitBtn;
+
+    private SettingsModelView _viewModel;
+
+    public event Action SettingsAplied, QuitPressed;
+    public event Action<int> QualityChanged;
+
+    public void Initialize(SettingsModelView modelView)
+    {
+        _viewModel = modelView;
+
+        _qualityDropdown.ClearOptions();
+        _qualityDropdown.AddOptions(new List<string>(_viewModel.Levels.Select(x => x.Name)));
+        _qualityDropdown.SetValueWithoutNotify(_viewModel.QualityIndex.Value);
+        _applyBtn.onClick.AddListener(new(() => SettingsAplied?.Invoke()));
+        _quitBtn.onClick.AddListener(new(OnQuitPress));
+        _qualityDropdown.onValueChanged.AddListener(new(i => QualityChanged?.Invoke(i)));
+    }
+
+    private void OnQuitPress()
+    {
+        _parent.SetActive(false);
+        QuitPressed?.Invoke();
+    }
+
+    public void Open()
+    {
+        _parent.SetActive(true);
+    }
+}

@@ -1,3 +1,5 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using VContainer;
 
@@ -6,10 +8,16 @@ public class PlayerObject : MonoBehaviour
 {
     public const float Speed = 5f;
 
+    [SerializeField] private GameObject _dialogue;
+    [SerializeField] private TMP_Text _dialogueText;
+
     private CharacterController _controller;
     private Vector3 _moveDirection = Vector3.zero;
     private int _prevIndex = -1;
     private ControllerNetworkBus _bus;
+    private ActivityPoint _nearlyPoint;
+
+    private Coroutine _dialogueCor;
 
     public bool CanControl { get; private set; } = true;
     public PlayerTypes PlayerType { get; private set; }
@@ -50,10 +58,26 @@ public class PlayerObject : MonoBehaviour
         }
     }
 
+    public void ShowMessage(string mess)
+    {
+        if (_dialogueCor != null)
+            StopCoroutine(_dialogueCor);
+        _dialogueCor = StartCoroutine(ShowMessageIE(mess));
+    }
+
+    private IEnumerator ShowMessageIE(string mess)
+    {
+        _dialogue.SetActive(true);
+        _dialogueText.text = mess;
+        yield return new WaitForSeconds(3);
+        _dialogue.SetActive(false);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.TryGetComponent<ActivityPoint>(out var point))
         {
+            _nearlyPoint = point;
             point.ShowActivity(PlayerType);
         }
     }
@@ -62,7 +86,22 @@ public class PlayerObject : MonoBehaviour
     {
         if(other.TryGetComponent<ActivityPoint>(out var point))
         {
+            _nearlyPoint = null;
             point.HideActivity(PlayerType);
         }
+    }
+
+    public void ActivateNearlyPoint()
+    {
+        if(_nearlyPoint != null)
+        {
+            _nearlyPoint.Interact();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (PlayerType is PlayerTypes.Small) _bus.SmallPlayer = null;
+        else _bus.BigPlayer = null;
     }
 }

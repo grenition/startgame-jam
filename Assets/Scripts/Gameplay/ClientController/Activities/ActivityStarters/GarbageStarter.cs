@@ -6,11 +6,12 @@ using VContainer;
 public class GarbageStarter : ActivityStarter
 {
     [SerializeField] private RectTransform _parent;
+    [SerializeField] private Image _backgroundImage;
+    [SerializeField] private Sprite _backgroundSprite;
     [SerializeField] private DragNDropElement[] _firstGarbage, _secondGarbage, _thirdGarbage;
     [SerializeField] private RectTransform[] _containers;
     [SerializeField] private Button _item;
 
-    private ClientController _controller;
     private Inventory _inventory;
     private int _maxItems = 0, _curItems = 0;
     private bool _smallWin = false, _bigWin = false;
@@ -18,9 +19,8 @@ public class GarbageStarter : ActivityStarter
     public const string MessageID = "GrbgeCollctrWin";
 
     [Inject]
-    private void Construct(ClientController controller, Inventory inventory)
+    private void Construct(Inventory inventory)
     {
-        _controller = controller;
         _inventory = inventory;
     }
 
@@ -64,6 +64,7 @@ public class GarbageStarter : ActivityStarter
 
             if(Identification.PlayerType is PlayerTypes.Small && _smallWin && _bigWin)
             {
+                _backgroundImage.sprite = _backgroundSprite;
                 _item.gameObject.SetActive(true);
                 _item.onClick.AddListener(new(OnTakeItem));
                 Bus.SpecialDataTransmitted -= OnReceiveMessage;
@@ -79,7 +80,6 @@ public class GarbageStarter : ActivityStarter
 
     protected override void OnInitialize(Image screen)
     {
-        Debug.Log("Hello?");
         _item.gameObject.SetActive(false);
         Bus.SpecialDataTransmitted += OnReceiveMessage;
 

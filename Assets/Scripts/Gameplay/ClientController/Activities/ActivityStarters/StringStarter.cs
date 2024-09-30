@@ -10,21 +10,22 @@ using VContainer;
 public class StringStarter : ActivityStarter
 {
     [SerializeField] private RectTransform _parent;
+    [SerializeField] private Image _finalBackground, _stringsBackground;
     [SerializeField] private DragNDropElement[] _smallObjects, _bigObjects;
     [SerializeField] private GameObject _smallParent, _bigParent;
-    [SerializeField] private UILine _line;
+    [SerializeField] private ImageLine _line;
     [SerializeField] private Transform _linesParent;
     [SerializeField] private Image _grassToInactive;
 
-    [SerializeField] private Material _default;
-    [SerializeField] private Material _wrong;
+    [SerializeField] private Color _default;
+    [SerializeField] private Color _wrong;
 
     public static readonly Vector2 ScreenSize = new Vector2(1280, 720);
     public const float FloatCalculationsInaccuracy = .000001f;
     public const string MessageID = "StringStarterWin";
 
     private readonly List<KeyValuePair<int, int>> _connections = new();
-    private readonly List<UILine> _lines = new();
+    private readonly List<ImageLine> _lines = new();
     private readonly List<List<int>> _itemToItem = new();
     private readonly List<List<int>> _itemToLine = new();
     private RectTransform[] _objects;
@@ -61,11 +62,25 @@ public class StringStarter : ActivityStarter
             else if(type is PlayerTypes.Big)
                 _bigWin = true;
 
-            if(type is PlayerTypes.Big && _smallWin && _bigWin)
+            if(_smallWin && _bigWin)
             {
                 Bus.SpecialDataTransmitted -= OnReceiveMessage;
-                Finish();
+                StartCoroutine(FinishIE(type));
             }
+        }
+    }
+
+    private IEnumerator FinishIE(PlayerTypes type)
+    {
+        _finalBackground.color = new(0, 0, 0, 0);
+        _finalBackground.gameObject.SetActive(true);
+        _finalBackground.DOColor(Color.white, .5f);
+
+        yield return new WaitForSeconds(1);
+
+        if(type is PlayerTypes.Big)
+        {
+            Finish();
         }
     }
 
@@ -91,7 +106,7 @@ public class StringStarter : ActivityStarter
         else
         {
             _objects = _bigObjects.Select(el => el.GetComponent<RectTransform>()).ToArray();
-            StartIE(_bigParent);
+            StartCoroutine(StartIE(_bigParent));
             _connections.AddRange(new KeyValuePair<int, int>[]
             {
                 new(0, 1), new(0, 2), new(0, 3), new(1, 4),
@@ -107,7 +122,12 @@ public class StringStarter : ActivityStarter
     {
         _grassToInactive.DOColor(new Color(1, 1, 1, 0), .3f);
         yield return new WaitForSeconds(.3f);
+
         active.SetActive(true);
+        _stringsBackground.DOColor(new(0, 0, 0, 0), .5f);
+        yield return new WaitForSeconds(.5f);
+
+        _stringsBackground.gameObject.SetActive(false);
     }
 
     private void CreateActions(DragNDropElement[] elements)
@@ -200,7 +220,7 @@ public class StringStarter : ActivityStarter
         }
         foreach (var line in _lines)
         {
-            line.SetAllDirty();
+            line.Calculate();
         }
     }
 
@@ -213,11 +233,11 @@ public class StringStarter : ActivityStarter
         }
     }
 
-    private void ColorAll(Material mat)
+    private void ColorAll(Color color)
     {
         foreach(var line in _lines)
         {
-            line.material = mat;
+            line.Image.color = color;
         }
     }
 
@@ -253,8 +273,8 @@ public class StringStarter : ActivityStarter
 
                 if(left1 > 0 && left1 < 1 && left2 > 0 && left2 < 1)
                 {
-                    line.material = _wrong;
-                    otherLine.material = _wrong;
+                    line.Image.color = _wrong;
+                    otherLine.Image.color = _wrong;
                     hasWrongStrings = true;
                 }
             }

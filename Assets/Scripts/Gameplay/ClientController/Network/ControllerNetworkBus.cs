@@ -1,4 +1,3 @@
-using SickDev.DevConsole;
 using System;
 using System.Linq;
 using Unity.Netcode;
@@ -8,6 +7,7 @@ using VContainer;
 public class ControllerNetworkBus : NetworkBehaviour
 {
     [SerializeField] private ClientControllerTester _tester;
+    [SerializeField] private string _playersTooFarMessage;
 
     private ClientController _controller;
     private ClientIdentification _identification;
@@ -18,6 +18,8 @@ public class ControllerNetworkBus : NetworkBehaviour
 
     public event Action<string, int[]> SpecialDataTransmitted;
     public event Action<ActivityInfo> ActivityStarted, ActivityFinished;
+
+    [field: SerializeField] public bool TestMode { get; private set; }
     public PlayerObject BigPlayer { get; set; }
     public PlayerObject SmallPlayer { get; set; }
 
@@ -150,8 +152,21 @@ public class ControllerNetworkBus : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void WaitForTeammateServerRpc(int index)
     {
-        //TODO: Check distance between players
-        WaitForTeammateClientRpc(index);
+        if(SmallPlayer != null && BigPlayer != null &&
+            Vector3.Distance(SmallPlayer.transform.position, BigPlayer.transform.position) <= 10f)
+        {
+            WaitForTeammateClientRpc(index);
+        }
+        else if(TestMode)
+        {
+            WaitForTeammateClientRpc(index);
+        }
+        else
+        {
+            var player = BigPlayer;
+            if (player == null) player = SmallPlayer;
+            player?.ShowMessage(_playersTooFarMessage);
+        }
     }
 
     [ClientRpc]

@@ -118,7 +118,7 @@ public class ClientController : MonoBehaviour
             return;
 
         _container.Inject(_showedInfo);
-        if(!_showedInfo.CanInteract(out var reason))
+        if(!_bus.TestMode && !_showedInfo.CanInteract(out var reason))
         {
             ShowMessage(reason);
             return;

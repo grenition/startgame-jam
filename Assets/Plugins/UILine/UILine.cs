@@ -36,4 +36,5 @@ public class UILine : Graphic
         vh.AddTriangle(0, 1, 2);
         vh.AddTriangle(1, 2, 3);
     }
+
 }
