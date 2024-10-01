@@ -120,8 +120,10 @@ public class StringStarter : ActivityStarter
 
     private IEnumerator StartIE(GameObject active)
     {
+        yield return new WaitForSeconds(1);
+
         _grassToInactive.DOColor(new Color(1, 1, 1, 0), .3f);
-        yield return new WaitForSeconds(.3f);
+        yield return new WaitForSeconds(.5f);
 
         active.SetActive(true);
         _stringsBackground.DOColor(new(0, 0, 0, 0), .5f);

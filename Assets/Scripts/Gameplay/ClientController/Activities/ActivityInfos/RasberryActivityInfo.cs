@@ -16,7 +16,6 @@ public class RasberryActivityInfo : ActivityInfo
     {
         _inventory = inventory;
         _tasks = tasks;
-        Debug.Log("Inventory injected");
     }
 
     public override bool CanInteract(out string reason)
@@ -31,8 +30,7 @@ public class RasberryActivityInfo : ActivityInfo
 
     public override ActivityStarter GetActivityStarter()
     {
-        Debug.Log($"Inventory: {_inventory}");
-        if(_inventory.HasItemByName(_inventory.Names.Basket))
+        if(!_tasks.Tasks.Contains(this))
         {
             return _rasberryStarter;
         }

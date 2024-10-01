@@ -39,7 +39,7 @@ public class KeysStarter : ActivityStarter
     {
         _controller.ActivityHided -= ActivityHided;
 
-        if(Identification.PlayerType is PlayerTypes.Big)
+        if(Identification.PlayerType is PlayerTypes.Small)
         {
             _controller.SpawnMiniGame(_keysActivity);
         }
