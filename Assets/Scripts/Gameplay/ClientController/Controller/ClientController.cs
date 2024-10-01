@@ -59,12 +59,6 @@ public class ClientController : MonoBehaviour
         _tasks = tasks;
     }
 
-    private void Awake()
-    {
-        _bus.SetClientController(this);
-        _painter.Paint(_identification.PlayerType);
-
-    }
     private void OnDestroy()
     {
         _bus.ResetClientController();
@@ -72,6 +66,8 @@ public class ClientController : MonoBehaviour
 
     private void Start()
     {
+        _bus.SetClientController(this);
+        _painter.Paint(_identification.PlayerType);
         _interactBtn.onClick.AddListener(new(Interact));
         _screenBtn.onClick.AddListener(new(OnScreenTouched));
         HideActivity();
