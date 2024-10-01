@@ -57,6 +57,7 @@ public class ClientController : MonoBehaviour
         _container = container;
         _identification = identification;
         _tasks = tasks;
+        _bus.ResolveInfos(container);
     }
 
     private void OnDestroy()
@@ -67,7 +68,6 @@ public class ClientController : MonoBehaviour
     private void Start()
     {
         _bus.SetClientController(this);
-        _bus.ReInjectInfos();
         _painter.Paint(_identification.PlayerType);
         _interactBtn.onClick.AddListener(new(Interact));
         _screenBtn.onClick.AddListener(new(OnScreenTouched));
