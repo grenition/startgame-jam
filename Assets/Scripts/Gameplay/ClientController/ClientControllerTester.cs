@@ -15,6 +15,7 @@ public class ClientControllerTester
     private DevConsole _devConsole;
     private ClientIdentification _identification;
     private IObjectsFactory _factory;
+    private CompletedTasks _tasks;
 
     private readonly List<SickDev.CommandSystem.Command> _commands = new();
 
@@ -23,12 +24,14 @@ public class ClientControllerTester
         ControllerNetworkBus bus,
         DevConsole console,
         ClientIdentification identification,
-        IObjectsFactory factory)
+        IObjectsFactory factory,
+        CompletedTasks tasks)
     {
         _bus = bus;
         _devConsole = console;
         _identification = identification;
         _factory = factory;
+        _tasks = tasks;
 
         AddCommand(new(new Action(_bus.ShowTestActivity)));
         AddCommand(new(new Action<int>(_bus.ShowActivity)));
@@ -36,11 +39,20 @@ public class ClientControllerTester
         AddCommand(new(new Action(_bus.FinishTestActivity)));
         AddCommand(new(new Action<int>(SetPlayerType)));
         AddCommand(new(new Action(StartClientControllerTesting)));
+        AddCommand(new(new Action(PrintTasks)));
     }
 
     public void SetPlayerType(int type)
     {
         _identification.ForceSetPlayerType((PlayerTypes)type);
+    }
+
+    public void PrintTasks()
+    {
+        foreach(var task in _tasks.Tasks)
+        {
+            Debug.Log(task.name);
+        }
     }
 
     public void StartClientControllerTesting()
