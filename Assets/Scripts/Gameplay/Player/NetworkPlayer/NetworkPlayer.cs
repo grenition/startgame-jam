@@ -45,8 +45,8 @@ namespace Gameplay.Player
 
             if (!IsLocalPlayer) return;
 
+            SelectPlayerType((_playersService.BigPlayer == null) ? PlayerTypes.Big : PlayerTypes.Small);
             _controllerScene = _objectsFactory.SpawnLocalObject(_controllerScenePrefab, TargetScene.NetworkScene, false);
-            SelectPlayerType(PlayerTypes.Big);
         }
         public override void OnNetworkDespawn()
         {

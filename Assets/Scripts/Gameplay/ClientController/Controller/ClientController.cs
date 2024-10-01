@@ -107,6 +107,7 @@ public class ClientController : MonoBehaviour
     public void Interact()
     {
         Interacted?.Invoke();
+        _bus.InvokeInteractOnServer(_identification.PlayerType);
 
         if (State is not States.SimpleSprite)
             return;
