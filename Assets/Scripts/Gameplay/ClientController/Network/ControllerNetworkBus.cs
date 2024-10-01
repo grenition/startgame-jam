@@ -13,6 +13,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     private ClientIdentification _identification;
     private int _moveDirectionIndex = 0;
     private ActivityInfo[] _infos;
+    private IObjectResolver _resolver;
 
     public const string ResourcesPath = "Activities";
 
@@ -30,12 +31,17 @@ public class ControllerNetworkBus : NetworkBehaviour
         IObjectResolver resolver)
     {
         _identification = identification;
+        _resolver = resolver;
         resolver.Inject(_tester);
     }
 
     private void Start()
     {
         _infos = Resources.LoadAll<ActivityInfo>(ResourcesPath);
+        foreach(var info in _infos)
+        {
+            _resolver.Inject(info);
+        }
     }
 
     #region SetClientController
