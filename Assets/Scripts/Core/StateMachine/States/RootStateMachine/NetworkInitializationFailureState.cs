@@ -9,14 +9,14 @@ namespace Core.StateMachine.States
 {
     public class NetworkInitializationFailureState<TStateId> : State<TStateId>
     {
+        public override string Name => "NetworkInitializationFailureState";
         public const float ReinitializationDelay = 10f;
         protected async override UniTask OnEnter()
         {
             Debug.Log($"Reinitializing network services in {ReinitializationDelay} seconds");
             await UniTask.WaitForSeconds(ReinitializationDelay);
 
-            Debug.Log($"{GetType().Name} state completed!");
-            IsCompleted = true;
+            CompleteState();
         }
     }
 }

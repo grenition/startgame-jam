@@ -11,6 +11,8 @@ namespace Core.StateMachine.States
 {
     public class OfflineState<TStateId> : State<TStateId>
     {
+        public override string Name => "OfflineState";
+        
         private NetworkManager _networkManager;
         private ISceneLoader _sceneLoader;
         private ISaveSystem _saveSystem;
@@ -25,11 +27,9 @@ namespace Core.StateMachine.States
             _sceneLoader = sceneLoader;
             _saveSystem = saveSystem;
         }
-        
+
         protected async override UniTask OnEnter()
         {
-            Debug.Log($"Entered state: {GetType().Name}");
-
             if (_networkManager.IsConnectedClient)
             {
                 CompleteState();
@@ -37,17 +37,9 @@ namespace Core.StateMachine.States
             }
 
             _saveSystem.ResetData();
-            _networkManager.OnClientStarted += CompleteState;
             _sceneLoader.TryLoadOfflineScene("OfflneScene", LoadSceneMode.Single);
-        }
-        protected async override UniTask OnExit()
-        {
-            _networkManager.OnClientStarted -= CompleteState;
-        }
-        private void CompleteState()
-        {
-            Debug.Log($"{GetType().Name} state completed!");
-            IsCompleted = true;
+
+            CompleteState();
         }
     }
 }

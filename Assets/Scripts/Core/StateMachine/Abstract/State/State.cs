@@ -7,6 +7,8 @@ namespace Core.StateMachine.Abstract.CreatableState
 {
     public abstract class State<TStateId> : IState<TStateId>
     {
+        public abstract string Name { get; }
+        
         private bool _isCompleted = false;
         private bool _isFailed = false;
         private IStateMachineController<TStateId> _stateMachineController;
@@ -67,6 +69,7 @@ namespace Core.StateMachine.Abstract.CreatableState
                     _isCompleted = false;
                     _isFailed = false;
                     
+                    Debug.Log($"Entered state: {Name}");
                     SafeExecution(OnEnter());
                 },
                 onLogic: _ => SafeExecution(OnLogic()),
@@ -100,6 +103,12 @@ namespace Core.StateMachine.Abstract.CreatableState
             _onFailureStateId = stateId;
             
             return this;
+        }
+        
+        protected virtual void CompleteState()
+        {
+            Debug.Log($"{Name} state completed!");
+            IsCompleted = true;
         }
     }
 }

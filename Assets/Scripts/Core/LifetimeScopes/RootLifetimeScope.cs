@@ -32,7 +32,8 @@ namespace Core.LifetimeScopes
         }
         private void InstallNetworking(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<RelayController>().As<IRelayController>();
+            builder.RegisterEntryPoint<RelayControllerUnhandled>().As<IRelayController>();
+            builder.Register<RelayConnectionRequester>(Lifetime.Singleton).As<IRelayConnectionRequester>();
             
             GetComponent<NetworkManager>().SetSingleton();
             builder.RegisterInstance(NetworkManager.Singleton);

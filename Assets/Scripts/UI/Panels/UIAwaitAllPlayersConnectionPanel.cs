@@ -3,7 +3,7 @@ using Core.UI;
 using UniRx;
 using VContainer;
 
-namespace UI.ServerPlayer
+namespace UI.Panels
 {
     public class UIAwaitAllPlayersConnectionPanel : UIPanel
     {

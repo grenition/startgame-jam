@@ -992,7 +992,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 6768557563382981980}
   m_TextViewport: {fileID: 4204862815220997643}
   m_TextComponent: {fileID: 1265504647025524602}
@@ -1061,6 +1061,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4375234195368845959}
   - component: {fileID: 3919653844594355322}
+  - component: {fileID: 2403503515540041327}
   - component: {fileID: 248468009867090914}
   - component: {fileID: 529913175436848194}
   m_Layer: 0
@@ -1109,6 +1110,19 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _path: ServerPlayer/AwaitAllPlayersConnectionPanel
+--- !u!114 &2403503515540041327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6881665590516128027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b173858f807b4009816592c0f3a9f969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _closeAnimatorBoolean: Close
 --- !u!222 &248468009867090914
 CanvasRenderer:
   m_ObjectHideFlags: 0

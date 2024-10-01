@@ -9,13 +9,13 @@ namespace Core.StateMachine.States
 {
     public class NetworkInitializationState<TStateId> : State<TStateId>
     {
+        public override string Name => "NetworkInitializationState";
         protected async override UniTask OnEnter()
         {
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
-            Debug.Log($"{GetType().Name} state completed!");
-            IsCompleted = true;
+            CompleteState();
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Alchemy.Inspector;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using VContainer;
@@ -12,7 +13,10 @@ namespace Core.UI
     {
         public bool IsShown => gameObject.activeSelf;
         public string Path => _path;
-
+        
+        public Func<UniTask> ShowTransition = null;
+        public Func<UniTask> HideTransition = null;
+        
         [FoldoutGroup("Events")] public UnityEvent OnShow;
         [FoldoutGroup("Events")] public UnityEvent OnHide;
         
@@ -37,15 +41,23 @@ namespace Core.UI
             _uiPanelsRegistry.UnregisterPanel(this);
         }
 
-        public virtual void Show()
+        public async virtual void Show()
         {
-            gameObject.SetActive(true);
+            if (ShowTransition != null)
+                await ShowTransition.Invoke();
+            else
+                gameObject.SetActive(true);
+            
             OnShow?.Invoke();
         }
 
-        public virtual void Hide()
+        public async virtual void Hide()
         {
-            gameObject.SetActive(false);
+            if (HideTransition != null)
+                await HideTransition.Invoke();
+            else
+                gameObject.SetActive(false);
+            
             OnHide?.Invoke();
         }
 
