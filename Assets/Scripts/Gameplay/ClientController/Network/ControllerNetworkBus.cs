@@ -22,6 +22,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     [field: SerializeField] public bool TestMode { get; private set; }
     public PlayerObject BigPlayer { get; set; }
     public PlayerObject SmallPlayer { get; set; }
+    public ClientControllerTester Tester => _tester;
 
     [Inject]
     private void Construct(

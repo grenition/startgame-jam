@@ -48,6 +48,7 @@ public class HoleStarter : ActivityStarter
 
     public override async UniTask OnFinish()
     {
+        Bus.Tester.AutoWined -= OnAutoWin;
         await UniTask.Yield();
         return;
     }
@@ -161,8 +162,15 @@ public class HoleStarter : ActivityStarter
         }
     }
 
+    private void OnAutoWin()
+    {
+        OpenDoor();
+    }
+
     protected override void OnInitialize(Image screen)
     {
+        Bus.Tester.AutoWined += OnAutoWin;
+
         if(Identification.PlayerType is PlayerTypes.Small)
         {
             Bus.SpecialDataTransmitted += OnReceiveMessage;

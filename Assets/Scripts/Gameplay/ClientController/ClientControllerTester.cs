@@ -19,6 +19,8 @@ public class ClientControllerTester
 
     private readonly List<SickDev.CommandSystem.Command> _commands = new();
 
+    public event Action AutoWined;
+
     [Inject]
     private void Construct(
         ControllerNetworkBus bus,
@@ -40,6 +42,12 @@ public class ClientControllerTester
         AddCommand(new(new Action<int>(SetPlayerType)));
         AddCommand(new(new Action(StartClientControllerTesting)));
         AddCommand(new(new Action(PrintTasks)));
+        AddCommand(new(new Action(PleaseDaddyGiveMeAutoWin)));
+    }
+
+    public void PleaseDaddyGiveMeAutoWin()
+    {
+        AutoWined?.Invoke();
     }
 
     public void SetPlayerType(int type)
