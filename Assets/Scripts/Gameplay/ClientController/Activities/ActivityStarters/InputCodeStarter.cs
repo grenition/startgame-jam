@@ -11,6 +11,7 @@ public class InputCodeStarter : ActivityStarter
     [SerializeField] private Image _bg;
     [SerializeField] private Sprite _openedSprite;
     [SerializeField] private ActivityInfo _nextActivity;
+    [SerializeField] private AudioClip _unlockSound;
     [SerializeField] private Button[] _buttons;
     [SerializeField] private TMP_Text[] _buttonsTexts;
 
@@ -20,14 +21,16 @@ public class InputCodeStarter : ActivityStarter
     public const int CorrectCode = 7405;
 
     private ClientController _controller;
+    private AudioPool _audioPool;
     private int[] _curCode = new int[] { 0, 0, 0, 0 };
 
     private bool _isFinished = false;
 
     [Inject]
-    private void Construct(ClientController controller)
+    private void Construct(ClientController controller, AudioPool pool)
     {
         _controller = controller;
+        _audioPool = pool;
     }
 
     public override RectTransform GetScreenChild()
@@ -81,6 +84,7 @@ public class InputCodeStarter : ActivityStarter
 
     private IEnumerator FinishIE()
     {
+        _audioPool.PlaySound(_unlockSound);
         _isFinished = true;
         _bg.sprite = _openedSprite;
         foreach(var btn in _buttons)

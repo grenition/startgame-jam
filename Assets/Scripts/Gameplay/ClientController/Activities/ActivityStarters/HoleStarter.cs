@@ -7,6 +7,7 @@ public class HoleStarter : ActivityStarter
 {
     [SerializeField] private RectTransform _parent;
     [SerializeField] private GameObject _small, _big;
+    [SerializeField] private AudioClip _takeBookSound, _lightSound;
     //Small
     [SerializeField] private PointerElement _blueLayout, _greenLayout, _redLayout;
     [SerializeField] private BookHoleItem[] _books;
@@ -20,14 +21,17 @@ public class HoleStarter : ActivityStarter
     //Small
     private int _booksCount = 0;
     private Inventory _inventory;
+    private AudioPool _audioPool;
     public const float MinimumLightLevelForWork = .3f;
     private bool _cantWork = true;
     //Big
     public const float MaxLightLevel = 1f;
     public const float LightLevelSpeed = .1f;
     public const float SyncRate = .1f;
+    public const float LightCooldown = .25f;
+
     private Color _bgColor;
-    private float _lightLevel = 0f, _syncTime = 0f;
+    private float _lightLevel = 0f, _syncTime = 0f, _lightTime;
     private bool _isBigAnim = false;
     //Other
     private int _syncIndex = 0;
@@ -36,9 +40,10 @@ public class HoleStarter : ActivityStarter
     public const string SyncMessageID = "HoleStarterSync";
 
     [Inject]
-    private void Construct(Inventory inventory)
+    private void Construct(Inventory inventory, AudioPool pool)
     {
         _inventory = inventory;
+        _audioPool = pool;
     }
 
     public override RectTransform GetScreenChild()
@@ -61,6 +66,7 @@ public class HoleStarter : ActivityStarter
             return;
         }
 
+        _audioPool.PlaySound(_takeBookSound);
         el.GetComponent<Image>().raycastTarget = false;
     }
 
@@ -69,6 +75,7 @@ public class HoleStarter : ActivityStarter
         el.GetComponent<Image>().raycastTarget = true;
         if(el is BookHoleItem book && !_cantWork)
         {
+            _audioPool.PlaySound(_takeBookSound);
             PointerElement dropZone = _blueLayout;
             if (book.MyColor is BookHoleItem.Colors.Green) dropZone = _greenLayout;
             else if (book.MyColor is BookHoleItem.Colors.Red) dropZone = _redLayout;
@@ -108,14 +115,17 @@ public class HoleStarter : ActivityStarter
     {
         if(_isBigAnim)
         {
+            _lightTime -= Time.deltaTime;
             _lightLevel = Mathf.Clamp(_lightLevel - Time.deltaTime * LightLevelSpeed, 0, MaxLightLevel);
             _bgColor = _lightBGColor * (_lightLevel / MaxLightLevel) +
                 _noLightBGColor * ((MaxLightLevel - _lightLevel) / MaxLightLevel);
             _lightBG.color = _bgColor;
 
-            if(Input.acceleration.magnitude > 5f || Input.GetKeyDown(KeyCode.T))
+            if(Input.acceleration.magnitude > 5f && _lightTime <= 0f || Input.GetKeyDown(KeyCode.T))
             {
                 _lightLevel = Mathf.Clamp(_lightLevel + LightLevelSpeed, 0, MaxLightLevel);
+                _lightTime = LightCooldown;
+                _audioPool.PlaySound(_lightSound);
             }
 
             _syncTime += Time.deltaTime;

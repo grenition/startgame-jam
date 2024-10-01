@@ -11,17 +11,20 @@ public class GarbageStarter : ActivityStarter
     [SerializeField] private DragNDropElement[] _firstGarbage, _secondGarbage, _thirdGarbage;
     [SerializeField] private RectTransform[] _containers;
     [SerializeField] private Button _item;
+    [SerializeField] private AudioClip _takeGlassSound, _throwPaperSound;
 
     private Inventory _inventory;
+    private AudioPool _audioPool;
     private int _maxItems = 0, _curItems = 0;
     private bool _smallWin = false, _bigWin = false;
 
     public const string MessageID = "GrbgeCollctrWin";
 
     [Inject]
-    private void Construct(Inventory inventory)
+    private void Construct(Inventory inventory, AudioPool audioPool)
     {
         _inventory = inventory;
+        _audioPool = audioPool;
     }
 
     public override RectTransform GetScreenChild()
@@ -36,8 +39,21 @@ public class GarbageStarter : ActivityStarter
         return;
     }
 
+    private void OnStartDrag(DragNDropElement el, int index)
+    {
+        if (index == 2)
+            _audioPool.PlaySound(_takeGlassSound);
+        else
+            _audioPool.PlayTakeItemSound();
+    }
+
     private void OnDrop(DragNDropElement drop, int index)
     {
+        if (index == 1)
+            _audioPool.PlaySound(_throwPaperSound);
+        else
+            _audioPool.PlayTakeItemSound();
+
         var size = _containers[index].offsetMax - _containers[index].offsetMin;
         var dist = size.magnitude / 2f;
 
@@ -95,6 +111,7 @@ public class GarbageStarter : ActivityStarter
         foreach(var drop in drops)
         {
             drop.Droped += dr => OnDrop(dr, index);
+            drop.StartedDraging += dr => OnStartDrag(dr, index);
             _maxItems++;
         }
     }

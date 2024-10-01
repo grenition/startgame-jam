@@ -233,6 +233,8 @@ MonoBehaviour:
   - {fileID: 7490158115940843349}
   - {fileID: 441493739870893896}
   _item: {fileID: 8092359741144618139}
+  _takeGlassSound: {fileID: 8300000, guid: ff264fc5fad806e439b60dd63c237804, type: 3}
+  _throwPaperSound: {fileID: 8300000, guid: cd6e03edd425c1c4f9265deff8a757d6, type: 3}
 --- !u!1 &748068607620939121
 GameObject:
   m_ObjectHideFlags: 0

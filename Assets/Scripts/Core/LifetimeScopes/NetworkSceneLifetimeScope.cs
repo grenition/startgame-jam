@@ -16,6 +16,7 @@ namespace Core.LifetimeScopes
         [SerializeField] private NetworkGameStateMachine _stateMachine;
         [SerializeField] private ControllerNetworkBus _controllerBus;
         [SerializeField] private NetworkInteractionsService _interactionsService;
+        [SerializeField] private AudioPool _audioPool;
 
         private ClientIdentification _clientIdentification;
         private CompletedTasks _tasks;
@@ -28,6 +29,7 @@ namespace Core.LifetimeScopes
             autoInjectGameObjects.Add(_stateMachine.gameObject);
             
             builder.Register<NetworkPlayersService>(Lifetime.Singleton).As<INetworkPlayersService>();
+            builder.RegisterInstance(_audioPool);
             
             builder.RegisterInstance(_controllerBus);
             autoInjectGameObjects.Add(_controllerBus.gameObject);

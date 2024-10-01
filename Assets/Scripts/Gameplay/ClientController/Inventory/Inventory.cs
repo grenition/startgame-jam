@@ -14,6 +14,7 @@ public class Inventory
 
     private ControllerNetworkBus _bus;
     private ClientIdentification _identification;
+    private AudioPool _audioPool;
 
     public event Action InventoryChanged;
     public event Action<InventoryItem> ItemRemoved;
@@ -24,7 +25,10 @@ public class Inventory
     private readonly List<InventoryItem> Items = new(MaxItems);
 
     [Inject]
-    private void Construct(ControllerNetworkBus bus, ClientIdentification identification)
+    private void Construct(
+        ControllerNetworkBus bus,
+        ClientIdentification identification,
+        AudioPool audioPool)
     {
         for (int i = 0; i < _allItems.Length; i++)
         {
@@ -33,11 +37,13 @@ public class Inventory
         _bus = bus;
         _identification = identification;
         _modelView.Initialize(this);
+        _audioPool = audioPool;
     }
 
     public void AddItem(InventoryItem item)
     {
         Items.Add(item);
+        _audioPool.PlayTakeItemSound(item.TakeItemSound);
         InventoryChanged?.Invoke();
     }
 
@@ -48,6 +54,7 @@ public class Inventory
 
     public void RemoveItem(InventoryItem item)
     {
+        _audioPool.PlayTakeItemSound(item.TakeItemSound);
         Items.Remove(item);
         InventoryChanged?.Invoke();
         ItemRemoved?.Invoke(item);

@@ -94,6 +94,7 @@ MonoBehaviour:
   _bg: {fileID: 239780635848971328}
   _openedSprite: {fileID: 21300000, guid: efe84d262ad80804abf5066981830bba, type: 3}
   _nextActivity: {fileID: 11400000, guid: 4fef876b69af3e44e98b299317fbd701, type: 2}
+  _unlockSound: {fileID: 8300000, guid: 2074e7bc95252704483f27527b9a7636, type: 3}
   _buttons:
   - {fileID: 5714223243905815794}
   - {fileID: 5445299188621361220}
