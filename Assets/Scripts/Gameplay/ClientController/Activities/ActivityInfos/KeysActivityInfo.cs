@@ -19,9 +19,9 @@ public class KeysActivityInfo : ActivityInfo
         reason = "";
         if(_inventory.HasItemByName(_inventory.Names.Key))
         {
-            reason = _reason;
             return true;
         }
+        reason = _reason;
         return false;
     }
 }

@@ -1945,7 +1945,7 @@ MonoBehaviour:
   _controller: {fileID: 1942143980535690226}
   _inventory:
     _allItems:
-    - _icon: {fileID: 21300000, guid: c5511eb0c870f0e4fa4b07a5ceae33fe, type: 3}
+    - _icon: {fileID: 21300000, guid: b0b20a191c4697d4fbf65e5e2a0c69a9, type: 3}
       _name: "\u041A\u043B\u044E\u0447"
     - _icon: {fileID: 21300000, guid: 871276595c92a2340b62aaa51c9fed6d, type: 3}
       _name: "\u041A\u043E\u0440\u0437\u0438\u043D\u0430"

@@ -7,7 +7,7 @@ using VContainer;
 public class BearStarter : ActivityStarter
 {
     [SerializeField] private RectTransform _parent;
-    [SerializeField] private ActivityInfo _rasberyInfo;
+    [SerializeField] private ActivityInfo _rasberyInfo, _keysInfo;
     [SerializeField]
     private GameObject _wantsToyScreen, _wantsRasberryScreen,
                        _giveKeysScreen, _givesBaketScreen, _happyBearScreen;
@@ -63,9 +63,13 @@ public class BearStarter : ActivityStarter
         {
             return 4;
         }
-        else
+        else if(!_tasks.Tasks.Contains(_keysInfo))
         {
             return 2;
+        }
+        else
+        {
+            return 0;
         }
     }
 

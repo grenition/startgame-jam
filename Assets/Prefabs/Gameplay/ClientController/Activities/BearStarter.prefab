@@ -96,6 +96,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 7328081762842435865}
   _rasberyInfo: {fileID: 11400000, guid: 82cf60087cd9b9346b27f3092cf3a514, type: 2}
+  _keysInfo: {fileID: 11400000, guid: 8459c0a5685258f45af0654433099842, type: 2}
   _wantsToyScreen: {fileID: 9142530569486389609}
   _wantsRasberryScreen: {fileID: 8739185127985610910}
   _giveKeysScreen: {fileID: 1031658793394744209}
