@@ -665,6 +665,7 @@ MonoBehaviour:
       _soundSlider: {fileID: 1683598900}
       _qualityDropdown: {fileID: 1532537045}
       _applyBtn: {fileID: 1093211074}
+      _quitBtn: {fileID: 0}
     <Levels>k__BackingField:
     - Name: "\u041D\u0438\u0437\u043A\u0430\u044F"
       Index: 0
@@ -980,7 +981,7 @@ GameObject:
   - component: {fileID: 612126108}
   - component: {fileID: 612126107}
   - component: {fileID: 612126106}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: OpenSettingsPoint
   m_TagString: Untagged
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}

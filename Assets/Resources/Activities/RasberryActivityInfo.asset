@@ -15,7 +15,7 @@ MonoBehaviour:
   _image: {fileID: 21300000, guid: e93237ee72199014fa5c9b798c4cc513, type: 3}
   _miniGamePrefab: {fileID: 2238690767495579217, guid: b2f82336a67195e42b49c6bf01c71a46,
     type: 3}
-  _singlePlayer: 1
+  _singlePlayer: 0
   _rasberryStarter: {fileID: 4328797886012229461, guid: 0561fd594c7c8054885c5eba73f4f8d4,
     type: 3}
   _keysInfo: {fileID: 11400000, guid: 8459c0a5685258f45af0654433099842, type: 2}
