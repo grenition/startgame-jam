@@ -1032,7 +1032,7 @@ MonoBehaviour:
   - sendTo: 0
     action:
       rid: 1760364946536005632
-  _info: {fileID: 0}
+  _info: {fileID: 11400000, guid: f4829fff2c0adf74d85e4fec531ab7b0, type: 2}
   _destroyAfterStartingActivity: 0
   _activateInteractionWhenStart: 1
   references:
