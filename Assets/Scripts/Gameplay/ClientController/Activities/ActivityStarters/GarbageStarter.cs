@@ -60,7 +60,7 @@ public class GarbageStarter : ActivityStarter
         {
             var type = (PlayerTypes)data[0];
             if (type is PlayerTypes.Small) _smallWin = true;
-            else if (type is PlayerTypes.Big) _smallWin = true;
+            else if (type is PlayerTypes.Big) _bigWin = true;
 
             if(Identification.PlayerType is PlayerTypes.Small && _smallWin && _bigWin)
             {
