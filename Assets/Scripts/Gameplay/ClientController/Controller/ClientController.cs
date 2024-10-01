@@ -175,6 +175,7 @@ public class ClientController : MonoBehaviour
     {
         if (info != null && info.MiniGamePrefab != null)
         {
+            _showedInfo = info;
             State = States.OnMiniGame;
 
             var obj = _factory.SpawnLocalObject(info.MiniGamePrefab, TargetScene.None);
