@@ -290,10 +290,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _info: {fileID: 11400000, guid: 0388340244364e84aad5bfd8854e7086, type: 2}
   _destroyAfterStartingActivity: 1
-  _actionsOnEnd: []
-  references:
-    version: 2
-    RefIds: []
 --- !u!4 &1151176674
 Transform:
   m_ObjectHideFlags: 0

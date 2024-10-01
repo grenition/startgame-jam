@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using Core.Constants;
 using SickDev.CommandSystem;
 using UniRx;
 using Unity.Netcode;
@@ -15,7 +16,6 @@ namespace Core.Networking.RelayService
 {
     public class RelayController : IRelayController, IInitializable, IDisposable
     {
-        public const int MaxConnections = 2;
         public string ConnectionPayload { get; set; } = string.Empty;
         public ReadOnlyReactiveProperty<string> JoinCode => _joinCode.ToReadOnlyReactiveProperty();
         
@@ -47,7 +47,7 @@ namespace Core.Networking.RelayService
             try
             {
                 Allocation allocation = await Unity.Services.Relay.RelayService.Instance
-                    .CreateAllocationAsync(MaxConnections);
+                    .CreateAllocationAsync(GamePreferences.PlayersCount);
                 
                 _joinCode.Value = await Unity.Services.Relay.RelayService.Instance
                     .GetJoinCodeAsync(allocation.AllocationId);

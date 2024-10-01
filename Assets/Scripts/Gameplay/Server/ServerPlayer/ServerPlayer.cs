@@ -1,4 +1,5 @@
 using System;
+using Core.Constants;
 using Core.Networking.NetworkPlayersService;
 using Core.Networking.Settings;
 using Core.SaveSystem.Savable;
@@ -47,7 +48,7 @@ namespace Gameplay.Server
             _playersService = playersService;
             _saveSystem = saveSystem;
         }
-        
+
         #region OnNetworkSpawn/Despawn callbacks
         public override void OnNetworkSpawn()
         {
@@ -61,6 +62,8 @@ namespace Gameplay.Server
             
             _saveSystem.RegisterSavable(this);
             _saveSystem.LoadDataTo(this);
+            
+            LoadServerScene(_data.activeScene);
         }
         public override void OnNetworkDespawn()
         {
@@ -72,13 +75,15 @@ namespace Gameplay.Server
             
             _saveSystem.SaveDataFrom(this);
             _saveSystem.UnregisterSavable(this);
+            
+            UnloadCurrentServerScene();
         }
         #endregion
         
         #region OnClientConnected/Disconnected callback
         private void OnClientConnected(ulong clientId)
         {
-            if (_networkManager.ConnectedClients.Count == 2)
+            if (_networkManager.ConnectedClients.Count == GamePreferences.PlayersCount)
             {
                 OnAllClientsConnected();
             }   
@@ -92,11 +97,11 @@ namespace Gameplay.Server
         #region OnAllClientsConnected/AnyClientDisconnected events
         private void OnAllClientsConnected()
         {
-            LoadServerScene(_data.activeScene);
+            
         }
         private void OnAnyClientDisconnected()
         {
-            UnloadCurrentServerScene();
+            
         }
         #endregion
 

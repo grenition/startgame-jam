@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using Gameplay.Player;
 using Gameplay.Server;
+using UniRx;
 
 namespace Core.Networking.NetworkPlayersService
 {
     public interface INetworkPlayersService
     {
+        public ReactiveProperty<bool> AllPlayersConnected { get; }
+        
         public ServerPlayer ServerPlayer { get; }
         public NetworkPlayer BigPlayer { get; }
         public NetworkPlayer SmallPlayer { get; }

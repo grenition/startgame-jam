@@ -67,8 +67,8 @@ namespace Core.StateMachine.States
         }
         private async void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
         {
-            await UniTask.NextFrame();
-                
+            await UniTask.WaitForSeconds(1f);
+            
             if (scene.name != NetworkScene && !_networkManager.IsServer)
                 SceneManager.UnloadSceneAsync(scene.buildIndex);
         }
