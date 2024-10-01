@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
@@ -39,6 +40,12 @@ public class ControllerNetworkBus : NetworkBehaviour
 
     public void ReInjectInfos()
     {
+        StartCoroutine(ReInjectInfosDelay());
+    }
+
+    private IEnumerator ReInjectInfosDelay()
+    {
+        yield return new WaitForSeconds(.5f);
         foreach (var info in _infos)
         {
             _resolver.Inject(info);
