@@ -153,6 +153,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     public void WaitForTeammateForMiniGame(ActivityInfo info)
     {
         int index = _infos.ToList().IndexOf(info);
+        Debug.Log("CLIENT");
         WaitForTeammateServerRpc(index);
     }
 
@@ -166,6 +167,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         }
         else if(TestMode)
         {
+            Debug.Log("TEST MODE");
             WaitForTeammateClientRpc(index);
         }
         else
@@ -179,6 +181,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     [ClientRpc]
     private void WaitForTeammateClientRpc(int index)
     {
+        Debug.Log("CLIENT RPC");
         if(index < 0 || index >= _infos.Length)
         {
             Debug.LogError($"Error: can't find activityInfo with index {index}");
@@ -188,6 +191,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         if (_identification.PlayerType is PlayerTypes.Host)
             return;
 
+        Debug.Log("SPAWN MINI GAME");
         var info = _infos[index];
         _controller.SpawnMiniGame(info);
     }

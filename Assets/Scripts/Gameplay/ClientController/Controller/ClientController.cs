@@ -170,6 +170,8 @@ public class ClientController : MonoBehaviour
 
     public void SpawnMiniGame(ActivityInfo info)
     {
+        Debug.Log(info);
+        Debug.Log(info.MiniGamePrefab);
         if (info != null && info.MiniGamePrefab != null)
         {
             _showedInfo = info;
