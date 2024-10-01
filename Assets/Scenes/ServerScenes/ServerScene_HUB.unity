@@ -981,6 +981,7 @@ GameObject:
   - component: {fileID: 612126108}
   - component: {fileID: 612126107}
   - component: {fileID: 612126106}
+  - component: {fileID: 612126109}
   m_Layer: 7
   m_Name: OpenSettingsPoint
   m_TagString: Untagged
@@ -1021,26 +1022,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee834e4e4a9c414b90a48489aaea6c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _conditions:
-    dependentConditionsSet:
-    - dependentConditionsSet: []
-      conditions: []
-      connection: 0
-    conditions: []
-    connection: 0
-  _actions:
-  - sendTo: 0
-    action:
-      rid: 1760364946536005632
+  _interactionPoint: {fileID: 612126109}
   _info: {fileID: 11400000, guid: f4829fff2c0adf74d85e4fec531ab7b0, type: 2}
   _destroyAfterStartingActivity: 0
   _activateInteractionWhenStart: 1
-  references:
-    version: 2
-    RefIds:
-    - rid: 1760364946536005632
-      type: {class: OpenSettingsAction, ns: Gameplay.QuestSystem.Actions, asm: Assembly-CSharp}
-      data: 
 --- !u!4 &612126108
 Transform:
   m_ObjectHideFlags: 0
@@ -1056,6 +1041,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &612126109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612126105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4927d61e15f1458a83969f7d7b1d9c2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions:
+    dependentConditionsSet: []
+    conditions: []
+    connection: 0
+  _actions:
+  - sendTo: 0
+    action:
+      rid: 4886338561808269312
+  references:
+    version: 2
+    RefIds:
+    - rid: 4886338561808269312
+      type: {class: OpenSettingsAction, ns: Gameplay.QuestSystem.Actions, asm: Assembly-CSharp}
+      data: 
 --- !u!1 &615487949
 GameObject:
   m_ObjectHideFlags: 0
@@ -2113,33 +2124,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee834e4e4a9c414b90a48489aaea6c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _conditions:
-    dependentConditionsSet:
-    - dependentConditionsSet: []
-      conditions: []
-      connection: 0
-    conditions:
-    - condition:
-        rid: 1760364945040474112
-    connection: 0
-  _actions:
-  - sendTo: 0
-    action:
-      rid: 2429195662749335557
+  _interactionPoint: {fileID: 0}
   _info: {fileID: 0}
   _destroyAfterStartingActivity: 0
   _activateInteractionWhenStart: 1
-  references:
-    version: 2
-    RefIds:
-    - rid: 1760364945040474112
-      type: {class: AllPlayersConnectedCondition, ns: Gameplay.QuestSystem.Conditions,
-        asm: Assembly-CSharp}
-      data: 
-    - rid: 2429195662749335557
-      type: {class: LoadServerSceneAction, ns: Gameplay.Server, asm: Assembly-CSharp}
-      data:
-        sceneKey: ServerScene_Test
 --- !u!4 &1293840603
 Transform:
   m_ObjectHideFlags: 0

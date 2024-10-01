@@ -104,7 +104,7 @@ public class PlayerObject : MonoBehaviour
     {
         if(_nearlyPoint != null)
         {
-            _nearlyPoint.Interact();
+            _nearlyPoint.Interaction.Interact();
         }
     }
 

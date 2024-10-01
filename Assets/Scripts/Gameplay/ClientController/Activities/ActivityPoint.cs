@@ -2,8 +2,9 @@ using Gameplay.QuestSystem;
 using UnityEngine;
 using VContainer;
 
-public class ActivityPoint : InteractionPoint
+public class ActivityPoint : MonoBehaviour
 {
+    [SerializeField] private InteractionPoint _interactionPoint;
     [SerializeField] private ActivityInfo _info;
     [SerializeField] private bool _destroyAfterStartingActivity;
     [SerializeField] private bool _activateInteractionWhenStart;
@@ -11,6 +12,7 @@ public class ActivityPoint : InteractionPoint
     private ControllerNetworkBus _bus;
     public ActivityInfo Info => _info;
     public bool ActivateInteractionWhenStart => _activateInteractionWhenStart;
+    public InteractionPoint Interaction => _interactionPoint;
 
     [Inject]
     private void Construct(ControllerNetworkBus bus)
@@ -21,7 +23,7 @@ public class ActivityPoint : InteractionPoint
 
     public void ShowActivity(PlayerTypes type)
     {
-        if(CheckConditions())
+        if(Interaction.CheckConditions())
         {
             _bus.ShowActivity(Info, type);
         }
