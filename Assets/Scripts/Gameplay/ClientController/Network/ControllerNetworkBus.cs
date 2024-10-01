@@ -20,6 +20,7 @@ public class ControllerNetworkBus : NetworkBehaviour
 
     public event Action<string, int[]> SpecialDataTransmitted;
     public event Action<ActivityInfo> ActivityStarted, ActivityFinished;
+    public event Action<PlayerTypes> InteractedOnServer;
 
     [field: SerializeField] public bool TestMode { get; private set; }
     public PlayerObject BigPlayer { get; set; }
@@ -153,7 +154,6 @@ public class ControllerNetworkBus : NetworkBehaviour
     public void WaitForTeammateForMiniGame(ActivityInfo info)
     {
         int index = _infos.ToList().IndexOf(info);
-        Debug.Log("CLIENT");
         WaitForTeammateServerRpc(index);
     }
 
@@ -167,7 +167,6 @@ public class ControllerNetworkBus : NetworkBehaviour
         }
         else if(TestMode)
         {
-            Debug.Log("TEST MODE");
             WaitForTeammateClientRpc(index);
         }
         else
@@ -181,7 +180,6 @@ public class ControllerNetworkBus : NetworkBehaviour
     [ClientRpc]
     private void WaitForTeammateClientRpc(int index)
     {
-        Debug.Log("CLIENT RPC");
         if(index < 0 || index >= _infos.Length)
         {
             Debug.LogError($"Error: can't find activityInfo with index {index}");
@@ -191,7 +189,6 @@ public class ControllerNetworkBus : NetworkBehaviour
         if (_identification.PlayerType is PlayerTypes.Host)
             return;
 
-        Debug.Log("SPAWN MINI GAME");
         var info = _infos[index];
         _controller.SpawnMiniGame(info);
     }
@@ -281,6 +278,19 @@ public class ControllerNetworkBus : NetworkBehaviour
     private void InvokeActivityStartedServerRpc(int index)
     {
         ActivityStarted?.Invoke(_infos[index]);
+    }
+    #endregion
+
+    #region InteractOnServerInvoke
+    public void InvokeInteractOnServer(PlayerTypes type)
+    {
+        InvokeInteractServerRpc((int)type);
+    }
+
+    [ServerRpc]
+    private void InvokeInteractServerRpc(int type)
+    {
+        InteractedOnServer?.Invoke((PlayerTypes)type);
     }
     #endregion
 

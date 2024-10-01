@@ -23,10 +23,19 @@ public class PlayerObject : MonoBehaviour
     public PlayerTypes PlayerType { get; private set; }
 
     [Inject]
-    private void Construct(ControllerNetworkBus bus, ClientIdentification identification)
+    private void Construct(ControllerNetworkBus bus)
     {
         _bus = bus;
         _controller = GetComponent<CharacterController>();
+        _bus.InteractedOnServer += OnPlayerInteracted;
+    }
+
+    private void OnPlayerInteracted(PlayerTypes type)
+    {
+        if (type == PlayerType)
+        {
+            ActivateNearlyPoint();
+        }
     }
 
     public void SetPlayerType(PlayerTypes type)

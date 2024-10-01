@@ -9,14 +9,13 @@ public class ActivityPoint : InteractionPoint
     [SerializeField] private bool _activateInteractionWhenStart;
 
     private ControllerNetworkBus _bus;
-    private ClientIdentification _identification;
     public ActivityInfo Info => _info;
+    public bool ActivateInteractionWhenStart => _activateInteractionWhenStart;
 
     [Inject]
-    private void Construct(ControllerNetworkBus bus, ClientIdentification identification)
+    private void Construct(ControllerNetworkBus bus)
     {
         _bus = bus;
-        _identification = identification;
         _bus.ActivityStarted += OnActivityStarted;
     }
 
@@ -38,14 +37,6 @@ public class ActivityPoint : InteractionPoint
         if(info == _info && _destroyAfterStartingActivity)
         {
             Destroy(gameObject);
-        }
-        if(_activateInteractionWhenStart)
-        {
-            var player = _bus.SmallPlayer;
-            if (_identification.PlayerType is PlayerTypes.Big)
-                player = _bus.BigPlayer;
-
-            player.ActivateNearlyPoint();
         }
     }
 
