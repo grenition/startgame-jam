@@ -171,6 +171,11 @@ public class HoleStarter : ActivityStarter
     {
         Bus.Tester.AutoWined += OnAutoWin;
 
+        if(_inventory.HasItemByName(_inventory.Names.Light))
+        {
+            _inventory.RemoveItemByName(_inventory.Names.Light);
+        }
+
         if(Identification.PlayerType is PlayerTypes.Small)
         {
             Bus.SpecialDataTransmitted += OnReceiveMessage;

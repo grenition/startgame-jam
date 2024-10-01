@@ -102,6 +102,15 @@ public class BearStarter : ActivityStarter
         };
 
         _scenarioIndex = GetScenarioIndex();
+        if(_scenarioIndex == 3 && _inventory.HasItemByName(_inventory.Names.Toy))
+        {
+            _inventory.RemoveItemByName(_inventory.Names.Toy);
+        }
+        else if(_scenarioIndex == 4 && _inventory.HasItemByName(_inventory.Names.FullBasket))
+        {
+            _inventory.RemoveItemByName(_inventory.Names.FullBasket);
+        }
+
         _scenarioScreens[_scenarioIndex].SetActive(true);
         if (_scenarioItems[_scenarioIndex] == null)
         {
