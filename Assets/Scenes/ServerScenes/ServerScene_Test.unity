@@ -4168,9 +4168,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91d33cfe167ab9749aac7653f82acdea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 0}
+  _camera: {fileID: 1796923639}
   _followObjects: []
-  _offset: 0
+  _offset: 20
 --- !u!4 &2042225804 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5532956648044660194, guid: 1da2f212db28a45af89b9456ba249a88,
