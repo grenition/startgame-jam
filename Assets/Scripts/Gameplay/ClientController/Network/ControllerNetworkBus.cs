@@ -287,7 +287,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         InvokeInteractServerRpc((int)type);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void InvokeInteractServerRpc(int type)
     {
         InteractedOnServer?.Invoke((PlayerTypes)type);
