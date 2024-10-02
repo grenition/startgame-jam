@@ -42,13 +42,19 @@ namespace Gameplay.Player
                 _player = _objectsFactory.SpawnLocalObject(_playerPrefab, TargetScene.GameScene);
                 _player.transform.position += Vector3.up * .5f;
                 _player.SetPlayerType(type);
+                SetPlayerTypeClientRpc((int)type);
             }
+        }
 
+        [ClientRpc]
+        private void SetPlayerTypeClientRpc(int type)
+        {
             if (!IsLocalPlayer) return;
 
-            SelectPlayerType(type);
+            SelectPlayerType((PlayerTypes)type);
             _controllerScene = _objectsFactory.SpawnLocalObject(_controllerScenePrefab, TargetScene.NetworkScene, false);
         }
+
         public override void OnNetworkDespawn()
         {
             _playersService.UnregisterNetworkPlayer(this);
