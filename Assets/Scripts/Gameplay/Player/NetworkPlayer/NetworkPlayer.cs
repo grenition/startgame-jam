@@ -36,16 +36,17 @@ namespace Gameplay.Player
         public override void OnNetworkSpawn()
         {
             _playersService.RegisterNetworkPlayer(this);
+            var type = _playersService.NetworkPlayers.Count == 0 ? PlayerTypes.Big : PlayerTypes.Small;
             if (IsServer)
             {
                 _player = _objectsFactory.SpawnLocalObject(_playerPrefab, TargetScene.GameScene);
                 _player.transform.position += Vector3.up * .5f;
-                _player.SetPlayerType(PlayerTypes.Big);
+                _player.SetPlayerType(type);
             }
 
             if (!IsLocalPlayer) return;
 
-            SelectPlayerType((_playersService.BigPlayer == null) ? PlayerTypes.Big : PlayerTypes.Small);
+            SelectPlayerType(type);
             _controllerScene = _objectsFactory.SpawnLocalObject(_controllerScenePrefab, TargetScene.NetworkScene, false);
         }
         public override void OnNetworkDespawn()
