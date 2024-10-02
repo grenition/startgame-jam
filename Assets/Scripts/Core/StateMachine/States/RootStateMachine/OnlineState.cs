@@ -12,6 +12,7 @@ namespace Core.StateMachine.States
 {
     public class OnlineState<TStateId> : State<TStateId>
     {
+        public override string Name => "OnlineState";
         public const string NetworkScene = "NetworkScene";
         
         private NetworkManager _networkManager;
@@ -31,11 +32,9 @@ namespace Core.StateMachine.States
             _networkObjectsFactory = networkObjectsFactory;
             _saveSystem = saveSystem;
         }
-        
+
         protected async override UniTask OnEnter()
         {
-            Debug.Log($"Entered state: {GetType().Name}");
-            
             SceneManager.sceneLoaded += OnSceneLoad;
             _networkManager.OnClientStopped += CompleteState;
             _networkManager.SceneManager.OnLoadComplete += OnNetworkSceneLoad;
@@ -48,11 +47,7 @@ namespace Core.StateMachine.States
             _networkManager.OnClientStopped -= CompleteState;
             _networkManager.SceneManager.OnLoadComplete -= OnNetworkSceneLoad;
         }
-        private void CompleteState(bool hostStop)
-        {
-            Debug.Log($"{GetType().Name} state completed!");
-            IsCompleted = true;
-        }
+        private void CompleteState(bool hostStop) => CompleteState();
         private async void OnNetworkSceneLoad(ulong clientid, string scenename, LoadSceneMode loadscenemode)
         {
             await UniTask.NextFrame();
@@ -67,8 +62,8 @@ namespace Core.StateMachine.States
         }
         private async void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
         {
-            await UniTask.NextFrame();
-                
+            await UniTask.WaitForSeconds(1f);
+            
             if (scene.name != NetworkScene && !_networkManager.IsServer)
                 SceneManager.UnloadSceneAsync(scene.buildIndex);
         }

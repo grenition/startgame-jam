@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using Core.Constants;
 using SickDev.CommandSystem;
 using UniRx;
 using Unity.Netcode;
@@ -13,9 +14,8 @@ using DevConsole = SickDev.DevConsole.DevConsole;
 
 namespace Core.Networking.RelayService
 {
-    public class RelayController : IRelayController, IInitializable, IDisposable
+    public class RelayControllerUnhandled : IRelayController, IInitializable, IDisposable
     {
-        public const int MaxConnections = 2;
         public string ConnectionPayload { get; set; } = string.Empty;
         public ReadOnlyReactiveProperty<string> JoinCode => _joinCode.ToReadOnlyReactiveProperty();
         
@@ -44,51 +44,37 @@ namespace Core.Networking.RelayService
 
         public async void CreateRelay()
         {
-            try
-            {
-                Allocation allocation = await Unity.Services.Relay.RelayService.Instance
-                    .CreateAllocationAsync(MaxConnections);
-                
-                _joinCode.Value = await Unity.Services.Relay.RelayService.Instance
-                    .GetJoinCodeAsync(allocation.AllocationId);
+            Allocation allocation = await Unity.Services.Relay.RelayService.Instance
+                .CreateAllocationAsync(GamePreferences.PlayersCount);
+            
+            _joinCode.Value = await Unity.Services.Relay.RelayService.Instance
+                .GetJoinCodeAsync(allocation.AllocationId);
 
-                var relayServerData = new RelayServerData(allocation, "dtls");
-                
-                _networkManager.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+            var relayServerData = new RelayServerData(allocation, "dtls");
+            
+            _networkManager.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
-                _networkManager.StartHost();
-                
-                Debug.Log("Relay created, join code: " + JoinCode);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("Failed to create relay! \n" + ex);
-            }
+            _networkManager.StartHost();
+            
+            Debug.Log("Relay created, join code: " + JoinCode);
         }
         
         public async void JoinRelay(string joinCode)
         {
-            try
-            {
-                var joinAllocation = await Unity.Services.Relay.RelayService.Instance
-                    .JoinAllocationAsync(joinCode);
-                
-                var relayServerData = new RelayServerData(joinAllocation, "dtls");
-                
-                _networkManager.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+            var joinAllocation = await Unity.Services.Relay.RelayService.Instance
+                .JoinAllocationAsync(joinCode);
+            
+            var relayServerData = new RelayServerData(joinAllocation, "dtls");
+            
+            _networkManager.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
 
-                var payload = Encoding.UTF8.GetBytes(ConnectionPayload);
-                _networkManager.NetworkConfig.ConnectionData = payload;
-                
-                _networkManager.StartClient();
-                
-                Debug.Log("Joined relay: " + joinCode);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("Failed to join relay! \n" + ex);
-            }
+            var payload = Encoding.UTF8.GetBytes(ConnectionPayload);
+            _networkManager.NetworkConfig.ConnectionData = payload;
+            
+            _networkManager.StartClient();
+            
+            Debug.Log("Joined relay: " + joinCode);
         }
         
         private void OnClientDisconnect(ulong clientId)

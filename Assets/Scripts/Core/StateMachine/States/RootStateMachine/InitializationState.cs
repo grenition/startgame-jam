@@ -6,16 +6,10 @@ namespace Core.StateMachine.States
 {
     public class InitializationState<TStateId> : State<TStateId>
     {
+        public override string Name => "InitializationState";
         protected async override UniTask OnEnter()
         {
-            
-            
-            Debug.Log($"{GetType().Name} state completed!");
-            IsCompleted = true;
-        }
-        protected override UniTask OnExit()
-        {
-            return base.OnExit();
+            CompleteState();
         }
     }
 }

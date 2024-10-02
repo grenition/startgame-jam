@@ -8,6 +8,7 @@ using Core.SceneManagement;
 using Core.Serialization;
 using Core.Serialization.Json;
 using Core.StateMachine.Controllers;
+using Core.UI;
 using SickDev.DevConsole;
 using Unity.Netcode;
 using VContainer;
@@ -22,6 +23,7 @@ namespace Core.LifetimeScopes
             InstallStateMachines(builder);
             InstallCoreSystems(builder);
             InstallNetworking(builder);
+            InstallSystems(builder);
         }
         
         private void InstallStateMachines(IContainerBuilder builder)
@@ -30,7 +32,8 @@ namespace Core.LifetimeScopes
         }
         private void InstallNetworking(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<RelayController>().As<IRelayController>();
+            builder.RegisterEntryPoint<RelayControllerUnhandled>().As<IRelayController>();
+            builder.Register<RelayConnectionRequester>(Lifetime.Singleton).As<IRelayConnectionRequester>();
             
             GetComponent<NetworkManager>().SetSingleton();
             builder.RegisterInstance(NetworkManager.Singleton);
@@ -45,6 +48,10 @@ namespace Core.LifetimeScopes
             builder.RegisterEntryPoint<ResourcesService>(Lifetime.Singleton).AsSelf();
             builder.Register<JsonDataSerializer>(Lifetime.Singleton).As<IDataSerializer>();
             builder.Register<InteractionService>(Lifetime.Singleton).As<IInteractionService>();
+        }
+        private void InstallSystems(IContainerBuilder builder)
+        {
+            builder.Register<UIPanelsRegistry>(Lifetime.Singleton);
         }
     }
 }

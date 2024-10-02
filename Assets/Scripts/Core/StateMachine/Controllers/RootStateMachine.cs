@@ -8,6 +8,8 @@ namespace Core.StateMachine.Controllers
         NetworkInitialization,
         NetworkInitializationFailure,
         Offline,
+        OfflineConnectingToRelay,
+        OfflineConnectingFailure,
         Online
     }
     
@@ -31,7 +33,16 @@ namespace Core.StateMachine.Controllers
 
             var offlineState = new OfflineState<RootStates>()
                 .ConnectToSoStateMachine(this, RootStates.Offline)
-                .WithTransitionOnCompleteTo(RootStates.Online);
+                .WithTransitionOnCompleteTo(RootStates.OfflineConnectingToRelay);
+
+            var offlineConnectingToRelayState = new OfflineConnectingToRelayState<RootStates>()
+                .ConnectToSoStateMachine(this, RootStates.OfflineConnectingToRelay)
+                .WithTransitionOnCompleteTo(RootStates.Online)
+                .WithTransitionOnFailureTo(RootStates.OfflineConnectingFailure);
+
+            var offlineConnectingFailureState = new OfflineConnectingFailure<RootStates>()
+                .ConnectToSoStateMachine(this, RootStates.OfflineConnectingFailure)
+                .WithTransitionOnCompleteTo(RootStates.OfflineConnectingToRelay);
 
             var onlineState = new OnlineState<RootStates>()
                 .ConnectToSoStateMachine(this, RootStates.Online)
