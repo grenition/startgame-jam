@@ -15,7 +15,7 @@ public class SettingsModelView
     [SerializeField] private SettingsView _view;
 
     [field: SerializeField] public QualityLevel[] Levels { get; private set; }
-    public ReactiveProperty<int> QualityIndex { get; private set; }
+    public ReactiveProperty<int> QualityIndex { get; private set; } = new();
 
     private SettingsModel _model;
 

@@ -28,6 +28,8 @@ public class PlayerObject : MonoBehaviour
         _bus = bus;
         _controller = GetComponent<CharacterController>();
         _bus.InteractedOnServer += OnPlayerInteracted;
+
+        FindObjectOfType<FollowPlayersCamera>()?.AddFollowObject(transform);
     }
 
     private void OnPlayerInteracted(PlayerTypes type)

@@ -288,13 +288,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _info: {fileID: 11400000, guid: 0388340244364e84aad5bfd8854e7086, type: 2}
-  _destroyAfterStartingActivity: 1
---- !u!4 &1151176674
   GlobalObjectIdHash: 751392554
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 0
+  SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 1
   SpawnWithObservers: 1

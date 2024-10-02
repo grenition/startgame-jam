@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -9,7 +10,17 @@ public class FollowPlayersCamera : MonoBehaviour
 
     private void Update()
     {
-        transform.position = CalculatePos();
+        if(_followObjects.Length > 0)
+        {
+            transform.position = CalculatePos();
+        }
+    }
+
+    public void AddFollowObject(Transform transform)
+    {
+        var list = new List<Transform>(_followObjects);
+        list.Add(transform);
+        _followObjects = list.ToArray();
     }
 
     private Vector3 GetCenterPos()
