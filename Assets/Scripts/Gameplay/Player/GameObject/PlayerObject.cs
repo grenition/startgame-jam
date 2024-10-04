@@ -10,6 +10,8 @@ public class PlayerObject : MonoBehaviour
 
     [SerializeField] private GameObject _dialogue;
     [SerializeField] private TMP_Text _dialogueText;
+    [SerializeField] private Transform _modelParent;
+    [SerializeField] private GameObject _smallPrefab, _bigPrefab;
 
     private CharacterController _controller;
     private Vector3 _moveDirection = Vector3.zero;
@@ -21,6 +23,8 @@ public class PlayerObject : MonoBehaviour
 
     public bool CanControl { get; private set; } = true;
     public PlayerTypes PlayerType { get; private set; }
+    public GameObject Model { get; private set; }
+    public Animator ModelAnimator { get; private set; }
 
     [Inject]
     private void Construct(ControllerNetworkBus bus)
@@ -47,12 +51,17 @@ public class PlayerObject : MonoBehaviour
             _bus.SmallPlayer = this;
         else
             _bus.BigPlayer = this;
+
+        Model = Instantiate((type is PlayerTypes.Big) ? _bigPrefab : _smallPrefab, _modelParent);
+        Model.TryGetComponent<Animator>(out var anim);
+        ModelAnimator = anim;
     }
 
     public void SetMoveDirection(Vector3 moveDirection, int index)
     {
         if(index > _prevIndex || Mathf.Abs(index - _prevIndex) > 1000)
         {
+            ModelAnimator.SetFloat("Speed", moveDirection.magnitude);
             _moveDirection = moveDirection;
             _prevIndex = index;
         }
