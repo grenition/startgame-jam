@@ -1,7 +1,9 @@
 using Core.Networking.NetworkObjectsFactory;
 using Core.Networking.NetworkPlayersService;
+using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 
 namespace Gameplay.Player
@@ -35,6 +37,8 @@ namespace Gameplay.Player
 
         public override void OnNetworkSpawn()
         {
+            MoveToNetworkScene();
+            
             _playersService.RegisterNetworkPlayer(this);
             var type = _playersService.NetworkPlayers.Count == 0 ? PlayerTypes.Big : PlayerTypes.Small;
             if (IsServer)
@@ -66,6 +70,12 @@ namespace Gameplay.Player
         {
             _clientIdentification.SetPlayerType(playerType);
             _syncPlayerType.Value = playerType;
+        }
+        private async void MoveToNetworkScene()
+        {
+            await UniTask.WaitForSeconds(0.2f);
+            if (gameObject.scene != SceneManager.GetSceneByName(ObjectsFactory.NetworkScene))
+                SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName(ObjectsFactory.NetworkScene));
         }
     }
 }

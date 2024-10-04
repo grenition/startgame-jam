@@ -26,6 +26,9 @@ namespace Core.Networking.NetworkObjectsFactory
         {
             var objectResolver = _objectResolverGetter?.Invoke();
             if (objectResolver == null) return null;
+
+            var wasActive = _prefab.gameObject.activeSelf;
+            _prefab.gameObject.SetActive(false);
             
             var instance = objectResolver.Instantiate(_prefab, position, rotation);
             
@@ -35,7 +38,10 @@ namespace Core.Networking.NetworkObjectsFactory
             if(instance.TryGetComponent(out ServerPlayer serverPlayer))
                 serverPlayer.name = $"ServerPlayer";
 
-            SceneManager.MoveGameObjectToScene(instance.gameObject, SceneManager.GetSceneByName("NetworkScene"));
+            SceneManager.MoveGameObjectToScene(instance.gameObject, SceneManager.GetSceneByName(ObjectsFactory.NetworkScene));
+
+            _prefab.gameObject.SetActive(wasActive);
+            instance.gameObject.SetActive(wasActive);
             
             return instance.GetComponent<NetworkObject>();
         }
