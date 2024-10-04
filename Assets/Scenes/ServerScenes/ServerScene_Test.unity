@@ -348,6 +348,7 @@ GameObject:
   - component: {fileID: 484011620}
   - component: {fileID: 484011622}
   - component: {fileID: 484011621}
+  - component: {fileID: 484011623}
   m_Layer: 0
   m_Name: Point
   m_TagString: Untagged
@@ -407,6 +408,32 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &484011623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484011619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4927d61e15f1458a83969f7d7b1d9c2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions:
+    dependentConditionsSet: []
+    conditions:
+    - condition:
+        rid: 4886338635963564032
+    connection: 0
+  _actions: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 4886338635963564032
+      type: {class: NotFinishGameCondition, ns: Gameplay.QuestSystem.Conditions, asm: Assembly-CSharp}
+      data:
+        _activity: {fileID: 11400000, guid: 4fef876b69af3e44e98b299317fbd701, type: 2}
 --- !u!1 &559937136
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,6 +445,7 @@ GameObject:
   - component: {fileID: 559937137}
   - component: {fileID: 559937139}
   - component: {fileID: 559937138}
+  - component: {fileID: 559937140}
   m_Layer: 0
   m_Name: Point
   m_TagString: Untagged
@@ -452,7 +480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee834e4e4a9c414b90a48489aaea6c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactionPoint: {fileID: 0}
+  _interactionPoint: {fileID: 559937140}
   _info: {fileID: 11400000, guid: d6d5cdaacbda0884cb713852e68e6de5, type: 2}
   _destroyAfterStartingActivity: 0
   _activateInteractionWhenStart: 0
@@ -477,6 +505,32 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &559937140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559937136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4927d61e15f1458a83969f7d7b1d9c2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions:
+    dependentConditionsSet: []
+    conditions:
+    - condition:
+        rid: 4886338635963564033
+    connection: 0
+  _actions: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 4886338635963564033
+      type: {class: NotFinishGameCondition, ns: Gameplay.QuestSystem.Conditions, asm: Assembly-CSharp}
+      data:
+        _activity: {fileID: 11400000, guid: d6d5cdaacbda0884cb713852e68e6de5, type: 2}
 --- !u!1 &567318223
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,6 +542,7 @@ GameObject:
   - component: {fileID: 567318224}
   - component: {fileID: 567318226}
   - component: {fileID: 567318225}
+  - component: {fileID: 567318227}
   m_Layer: 0
   m_Name: Point
   m_TagString: Untagged
@@ -522,7 +577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee834e4e4a9c414b90a48489aaea6c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactionPoint: {fileID: 0}
+  _interactionPoint: {fileID: 567318227}
   _info: {fileID: 11400000, guid: 8459c0a5685258f45af0654433099842, type: 2}
   _destroyAfterStartingActivity: 0
   _activateInteractionWhenStart: 0
@@ -547,6 +602,32 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &567318227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567318223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4927d61e15f1458a83969f7d7b1d9c2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions:
+    dependentConditionsSet: []
+    conditions:
+    - condition:
+        rid: 4886338635963564034
+    connection: 0
+  _actions: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 4886338635963564034
+      type: {class: NotFinishGameCondition, ns: Gameplay.QuestSystem.Conditions, asm: Assembly-CSharp}
+      data:
+        _activity: {fileID: 11400000, guid: 8459c0a5685258f45af0654433099842, type: 2}
 --- !u!1 &635890744
 GameObject:
   m_ObjectHideFlags: 0
