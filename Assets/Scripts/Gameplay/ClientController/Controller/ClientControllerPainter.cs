@@ -15,6 +15,7 @@ public class ClientControllerPainter : MonoBehaviour
 
     public void Paint(PlayerTypes type)
     {
+        Debug.Log($"Your player type is {type}");
         if(type is PlayerTypes.Small)
         {
             Paint(_smallWindow, _smallBox, _smallInventoryBg, _smallActionBar, _smallColor, _smallLightColor);
