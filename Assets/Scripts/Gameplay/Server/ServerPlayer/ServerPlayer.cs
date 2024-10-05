@@ -109,6 +109,8 @@ namespace Gameplay.Server
 
         public void LoadServerScene(string sceneName)
         {
+            _playersService.NetworkPlayers.ForEach(x => DontDestroyOnLoad(x.PlayerObject));
+            
             if (sceneName != _data.activeScene)
                 UnloadCurrentServerScene();
 

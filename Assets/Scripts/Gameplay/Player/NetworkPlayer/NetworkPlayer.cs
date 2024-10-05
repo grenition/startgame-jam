@@ -10,14 +10,15 @@ namespace Gameplay.Player
 {
     public class NetworkPlayer : NetworkBehaviour
     {
+        public PlayerObject PlayerObject => _player;
         public PlayerTypes PlayerType => _syncPlayerType.Value;
 
-        [SerializeField] private GameObject _controllerScenePrefab;
+        [SerializeField] private UnityEngine.GameObject _controllerScenePrefab;
         [SerializeField] private PlayerObject _playerPrefab;
 
         private IObjectsFactory _objectsFactory;
         private ClientIdentification _clientIdentification;
-        private GameObject _controllerScene;
+        private UnityEngine.GameObject _controllerScene;
         private INetworkPlayersService _playersService;
 
         private NetworkVariable<PlayerTypes> _syncPlayerType = new(PlayerTypes.Big,
