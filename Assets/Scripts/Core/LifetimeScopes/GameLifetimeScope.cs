@@ -1,4 +1,5 @@
 using Core.Networking.NetworkObjectsFactory;
+using Gameplay.Player.GameObject;
 using Gameplay.QuestSystem;
 using VContainer;
 using VContainer.Unity;
@@ -10,6 +11,7 @@ namespace Core.LifetimeScopes
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<FactoryContainerOverrider>().AsSelf();
+            builder.RegisterEntryPoint<GamePlayersResolver>().AsSelf();
         }
 
         protected override void Awake()
