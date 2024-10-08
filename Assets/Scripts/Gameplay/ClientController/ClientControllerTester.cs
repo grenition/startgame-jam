@@ -10,12 +10,14 @@ using VContainer;
 public class ClientControllerTester
 {
     [SerializeField] private GameObject _clientControllerPrefab;
+    [SerializeField] private Sprite[] _testComics;
 
     private ControllerNetworkBus _bus;
     private DevConsole _devConsole;
     private ClientIdentification _identification;
     private IObjectsFactory _factory;
     private CompletedTasks _tasks;
+    private ComicsViewer _commicsViewer;
 
     private readonly List<SickDev.CommandSystem.Command> _commands = new();
 
@@ -27,13 +29,15 @@ public class ClientControllerTester
         DevConsole console,
         ClientIdentification identification,
         IObjectsFactory factory,
-        CompletedTasks tasks)
+        CompletedTasks tasks,
+        ComicsViewer viewer)
     {
         _bus = bus;
         _devConsole = console;
         _identification = identification;
         _factory = factory;
         _tasks = tasks;
+        _commicsViewer = viewer;
 
         AddCommand(new(new Action(_bus.ShowTestActivity)));
         AddCommand(new(new Action<int>(_bus.ShowActivity)));
@@ -43,11 +47,17 @@ public class ClientControllerTester
         AddCommand(new(new Action(StartClientControllerTesting)));
         AddCommand(new(new Action(PrintTasks)));
         AddCommand(new(new Action(PleaseDaddyGiveMeAutoWin)));
+        AddCommand(new(new Action(OpenTestComics)));
     }
 
     public void PleaseDaddyGiveMeAutoWin()
     {
         AutoWined?.Invoke();
+    }
+
+    public void OpenTestComics()
+    {
+        _commicsViewer.OpenComics(_testComics);
     }
 
     public void SetPlayerType(int type)

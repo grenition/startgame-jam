@@ -20,6 +20,7 @@ public class ClientController : MonoBehaviour
 
     [SerializeField] private Image _infoImage;
     [SerializeField] private TMP_Text _infoText;
+    [SerializeField] private ActivityInfo _comicsActivity;
 
     public enum States { Nothing, SimpleSprite, WaitCallback, OnMiniGame }
 
@@ -29,6 +30,7 @@ public class ClientController : MonoBehaviour
     private IObjectResolver _container;
     private ClientIdentification _identification;
     private CompletedTasks _tasks;
+    private ComicsViewer _viewer;
     private Vector3 _prevMoveDirection = Vector3.zero;
 
     private Coroutine _infoAnimCor;
@@ -48,7 +50,8 @@ public class ClientController : MonoBehaviour
         Inventory inventory,
         IObjectResolver container,
         ClientIdentification identification,
-        CompletedTasks tasks)
+        CompletedTasks tasks,
+        ComicsViewer viewer)
     {
         _factory = factory;
         _bus = bus;
@@ -58,11 +61,14 @@ public class ClientController : MonoBehaviour
         _identification = identification;
         _tasks = tasks;
         _bus.ResolveInfos(container);
+        _viewer = viewer;
+        _viewer.OpenedClient += OnComicsOpened;
     }
 
     private void OnDestroy()
     {
         _bus.ResetClientController();
+        _viewer.OpenedClient -= OnComicsOpened;
     }
 
     private void Start()
@@ -72,6 +78,12 @@ public class ClientController : MonoBehaviour
         _interactBtn.onClick.AddListener(new(Interact));
         _screenBtn.onClick.AddListener(new(OnScreenTouched));
         HideActivity();
+    }
+
+    private void OnComicsOpened()
+    {
+        _showedInfo = null;
+        SpawnMiniGame(_comicsActivity);
     }
 
     public void ShowActivity(ActivityInfo info)

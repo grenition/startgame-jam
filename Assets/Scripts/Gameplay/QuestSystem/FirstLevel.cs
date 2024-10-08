@@ -3,6 +3,7 @@ using UnityEngine;
 public class FirstLevel : NetworkBusLevelMessageReceiver
 {
     [SerializeField] private GameObject[] _openedFence, _closedFence;
+    [SerializeField] private Sprite[] _startComics, _endComics;
 
     public const string BearDoorsID = "BearDoorsID";
 

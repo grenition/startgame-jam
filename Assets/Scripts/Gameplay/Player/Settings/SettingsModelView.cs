@@ -17,8 +17,11 @@ public class SettingsModelView
 
     public void Initialize(SettingsModel model)
     {
+        _model = model;
+
         QualityIndex.Value = QualitySettings.GetQualityLevel();
         _soundMixer.GetFloat(MasterVolume, out var sound);
+        _soundLevel = sound;
         _view.SettingsAplied += OnApply;
         _view.QualityChanged += OnQualityChange;
         _view.QuitPressed += OnQuit;

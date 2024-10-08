@@ -23,12 +23,12 @@ public class SettingsView
     {
         _viewModel = modelView;
 
-        _qualityDropdown.ClearOptions();
         _qualityDropdown.SetValueWithoutNotify(_viewModel.QualityIndex.Value);
         _applyBtn.onClick.AddListener(new(() => SettingsAplied?.Invoke()));
         _quitBtn.onClick.AddListener(new(OnQuitPress));
         _qualityDropdown.onValueChanged.AddListener(new(i => QualityChanged?.Invoke(i)));
         _soundSlider.onValueChanged.AddListener(new(v => SoundChanged?.Invoke(v)));
+        _soundSlider.value = soundValue;
     }
 
     private void OnQuitPress()

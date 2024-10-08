@@ -17,6 +17,7 @@ namespace Core.LifetimeScopes
         [SerializeField] private ControllerNetworkBus _controllerBus;
         [SerializeField] private NetworkInteractionsService _interactionsService;
         [SerializeField] private AudioPool _audioPool;
+        [SerializeField] private ComicsViewer _comicsViewer;
 
         private ClientIdentification _clientIdentification;
         private CompletedTasks _tasks;
@@ -43,6 +44,9 @@ namespace Core.LifetimeScopes
             
             builder.RegisterInstance(_interactionsService).As<IInteractionService>();
             autoInjectGameObjects.Add(_interactionsService.gameObject);
+
+            builder.RegisterInstance(_comicsViewer);
+            autoInjectGameObjects.Add(_comicsViewer.gameObject);
         }
     }
 }
