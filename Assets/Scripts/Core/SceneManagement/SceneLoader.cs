@@ -37,6 +37,27 @@ namespace Core.SceneManagement
             
             return false;
         }
+        public async UniTask<bool> TryUnloadOnlineScene(string sceneKey, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        {
+            if (!_networkManager.NetworkConfig.EnableSceneManagement)
+            {
+                return await TryLoadOfflineScene(sceneKey, loadSceneMode);
+            }
+            
+            if (_networkManager.IsClient && !_networkManager.IsServer)
+                return false;
+            
+            if (!_networkManager.IsClient && !_networkManager.IsServer)
+                return false;
+
+            if (_networkManager.IsServer)
+            {
+                _networkManager.SceneManager.UnloadScene(SceneManager.GetSceneByName(sceneKey));
+                return true;
+            }
+            
+            return false;
+        }
         public async UniTask<bool> TryLoadOfflineScene(string sceneKey, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             SceneManager.LoadScene(sceneKey, loadSceneMode);
