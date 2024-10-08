@@ -1959,10 +1959,10 @@ MonoBehaviour:
       _name: "\u0424\u043E\u043D\u0430\u0440\u0438\u043A"
       _takeItemSound: {fileID: 0}
     - _icon: {fileID: 21300000, guid: a3887974a4736a44fa77c2a2886bca65, type: 3}
-      _name: "\u041A\u0430\u043C\u0435\u043D\u044C"
+      _name: "\u0422\u043E\u0447\u0438\u043B\u044C\u043D\u044B\u0439 \u043A\u0430\u043C\u0435\u043D\u044C"
       _takeItemSound: {fileID: 0}
     - _icon: {fileID: 21300000, guid: 80bd3927f95f22a46ba3dc6bc4fdc8a3, type: 3}
-      _name: "\u0421\u0435\u043A\u0430\u0442\u043E\u0440"
+      _name: "\u0422\u0443\u043F\u043E\u0439 \u0441\u0435\u043A\u0430\u0442\u043E\u0440"
       _takeItemSound: {fileID: 0}
     - _icon: {fileID: 21300000, guid: 01932b7bdccfd904b84ac44a076c071e, type: 3}
       _name: "\u0418\u0433\u0440\u0443\u0448\u043A\u0430"
@@ -1970,14 +1970,22 @@ MonoBehaviour:
     - _icon: {fileID: 21300000, guid: 871276595c92a2340b62aaa51c9fed6d, type: 3}
       _name: "\u041A\u043E\u0440\u0437\u0438\u043D\u0430 \u0441 \u043C\u0430\u043B\u0438\u043D\u043E\u0439"
       _takeItemSound: {fileID: 0}
+    - _icon: {fileID: 21300000, guid: 108937d2b6815144e92777a607e9258f, type: 3}
+      _name: "\u0421\u0435\u043A\u0430\u0442\u043E\u0440"
+      _takeItemSound: {fileID: 0}
+    _recipes:
+    - _item1Index: 3
+      _item2Index: 4
+      _resultIndex: 7
     _names:
       _key: "\u041A\u043B\u044E\u0447"
       _basket: "\u041A\u043E\u0440\u0437\u0438\u043D\u0430"
       _fullBasket: "\u041A\u043E\u0440\u0437\u0438\u043D\u0430 \u0441 \u043C\u0430\u043B\u0438\u043D\u043E\u0439"
       _light: "\u0424\u043E\u043D\u0430\u0440\u0438\u043A"
-      _stone: "\u041A\u0430\u043C\u0435\u043D\u044C"
-      _pruner: "\u0421\u0435\u043A\u0430\u0442\u043E\u0440"
+      _stone: "\u0422\u043E\u0447\u0438\u043B\u044C\u043D\u044B\u0439 \u043A\u0430\u043C\u0435\u043D\u044C"
+      _pruner: "\u0422\u0443\u043F\u043E\u0439 \u0441\u0435\u043A\u0430\u0442\u043E\u0440"
       _toy: "\u0418\u0433\u0440\u0443\u0448\u043A\u0430"
+      _sharpenedPruner: "\u0421\u0435\u043A\u0430\u0442\u043E\u0440"
     _modelView:
       _view:
         _slots:

@@ -90,6 +90,19 @@ public class InventoryView
             _glow.gameObject.SetActive(true);
             _glow.transform.position = _slots[index].transform.position;
             _actionListItemName.text = ModelView.Items[index].Name;
+
+            _joinItemBtn.gameObject.SetActive(false);
+            if (ModelView.Items[index] == null)
+                return;
+
+            foreach(var recipe in ModelView.Model.Recipes)
+            {
+                if (recipe.CanCombine(ModelView.Items[index]))
+                {
+                    _joinItemBtn.gameObject.SetActive(true);
+                    break;
+                }
+            }
         }
     }
 }

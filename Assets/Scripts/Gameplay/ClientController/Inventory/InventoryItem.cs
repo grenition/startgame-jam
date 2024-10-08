@@ -7,7 +7,6 @@ public class InventoryItem
     [SerializeField] private Sprite _icon;
     [SerializeField] private string _name;
     [SerializeField] private AudioClip _takeItemSound;
-    [SerializeField] private InventoryItem _canConnectWith, _andTakeIt;
 
     public Sprite Icon => _icon;
     public string Name => _name;

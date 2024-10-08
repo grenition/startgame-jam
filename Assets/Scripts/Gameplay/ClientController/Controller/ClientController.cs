@@ -216,6 +216,9 @@ public class ClientController : MonoBehaviour
 
     private void Update()
     {
+        if (State is States.OnMiniGame or States.WaitCallback)
+            return;
+
         var direction = new Vector3(_moveJoy.Horizontal, 0, _moveJoy.Vertical);
         if(Vector3.Distance(direction, _prevMoveDirection) > DeathZoneForJoystick)
         {

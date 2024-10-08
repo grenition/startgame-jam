@@ -4,7 +4,7 @@ using VContainer;
 [CreateAssetMenu(fileName = "StringsInfo", menuName = "Activity/StringsInfo")]
 public class StringsInfo : ActivityInfo
 {
-    [SerializeField] private string _haventPrunerReason;
+    [SerializeField] private string _haventPrunerReason, _notSharpenedPruner;
 
     private Inventory _inventory;
 
@@ -16,9 +16,13 @@ public class StringsInfo : ActivityInfo
 
     public override bool CanInteract(out string reason)
     {
-        if(!_inventory.HasItemByName(_inventory.Names.Pruner))
+        if(!_inventory.HasItemByName(_inventory.Names.SharpenedPruner))
         {
             reason = _haventPrunerReason;
+            if(_inventory.HasItemByName(_inventory.Names.Pruner))
+            {
+                reason = _notSharpenedPruner;
+            }
             return false;
         }
         return base.CanInteract(out reason);
