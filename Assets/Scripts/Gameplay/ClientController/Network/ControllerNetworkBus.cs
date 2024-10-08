@@ -1,15 +1,15 @@
 using System;
-using System.Collections;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Rendering.VirtualTexturing;
+using UnityEngine.Audio;
 using VContainer;
 
 public class ControllerNetworkBus : NetworkBehaviour
 {
     [SerializeField] private ClientControllerTester _tester;
     [SerializeField] private string _playersTooFarMessage;
+    [SerializeField] private AudioMixer _audioMixer;
 
     private ClientController _controller;
     private ClientIdentification _identification;
@@ -26,6 +26,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     public PlayerObject BigPlayer { get; set; }
     public PlayerObject SmallPlayer { get; set; }
     public ClientControllerTester Tester => _tester;
+    public NetworkBusLevelMessageReceiver MessageReceiver { get; set; } = null;
 
     [Inject]
     private void Construct(
@@ -291,6 +292,39 @@ public class ControllerNetworkBus : NetworkBehaviour
     private void InvokeInteractServerRpc(int type)
     {
         InteractedOnServer?.Invoke((PlayerTypes)type);
+    }
+    #endregion
+
+    #region SendMessageToLevelReceiver
+    public void SendMessageToLevelMessageReceiver(string id, params int[] data)
+    {
+        int[] totalData = new int[4];
+        for(int i = 0; i < Mathf.Min(data.Length, totalData.Length); i++)
+        {
+            totalData[i] = data[i];
+        }
+        SendMessageToLevelMessageReceiverServerRpc(id, totalData[0], totalData[1], totalData[2], totalData[3]);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SendMessageToLevelMessageReceiverServerRpc(string id, int data0, int data1, int data2, int data3)
+    {
+        MessageReceiver?.OnReceiveMessage(id, data0, data1, data2, data3);
+    }
+    #endregion
+
+    #region ApplySettings
+    public void ApplySettings(int quality, float volume)
+    {
+        ApplySettingsServerRpc(quality, volume);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ApplySettingsServerRpc(int quality, float volume)
+    {
+        HideActivityServerRpc((int)PlayerTypes.LocalPlayers);
+        QualitySettings.SetQualityLevel(quality);
+        _audioMixer.SetFloat(SettingsModelView.MasterVolume, volume);
     }
     #endregion
 

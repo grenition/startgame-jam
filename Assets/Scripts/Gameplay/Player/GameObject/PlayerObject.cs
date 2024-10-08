@@ -32,8 +32,7 @@ public class PlayerObject : MonoBehaviour
         _bus = bus;
         _controller = GetComponent<CharacterController>();
         _bus.InteractedOnServer += OnPlayerInteracted;
-
-        FindObjectOfType<FollowPlayersCamera>()?.AddFollowObject(transform);
+        Debug.Log("Player injected!");
     }
 
     private void OnPlayerInteracted(PlayerTypes type)
@@ -62,6 +61,12 @@ public class PlayerObject : MonoBehaviour
         if(index > _prevIndex || Mathf.Abs(index - _prevIndex) > 1000)
         {
             ModelAnimator.SetFloat("Speed", moveDirection.magnitude);
+            if(moveDirection.sqrMagnitude > .01f)
+            {
+                ModelAnimator.transform.LookAt(transform.position + moveDirection);
+                ModelAnimator.transform.Rotate(Vector3.up, 180f);
+            }
+            
             _moveDirection = moveDirection;
             _prevIndex = index;
         }
@@ -113,7 +118,7 @@ public class PlayerObject : MonoBehaviour
 
     public void ActivateNearlyPoint()
     {
-        if(_nearlyPoint != null)
+        if(_nearlyPoint != null && _nearlyPoint.Interaction != null)
         {
             _nearlyPoint.Interaction.Interact();
         }

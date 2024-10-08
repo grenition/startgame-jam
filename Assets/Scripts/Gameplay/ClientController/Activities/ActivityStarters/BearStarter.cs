@@ -23,7 +23,10 @@ public class BearStarter : ActivityStarter
     private string[] _scenarioItems;
 
     [Inject]
-    private void Construct(CompletedTasks tasks, Inventory inventory, ClientController controller)
+    private void Construct(
+        CompletedTasks tasks,
+        Inventory inventory,
+        ClientController controller)
     {
         _tasks = tasks;
         _inventory = inventory;
@@ -127,6 +130,7 @@ public class BearStarter : ActivityStarter
         if(_scenarioIndex == 4 && _inventory.HasItemByName(_inventory.Names.FullBasket))
         {
             _inventory.RemoveItemByName(_inventory.Names.FullBasket);
+            Bus.SendMessageToLevelMessageReceiver(FirstLevel.BearDoorsID, null);
         }
     }
 }

@@ -55,7 +55,10 @@ public class InventoryModelView
 
     public void JoinItem()
     {
-
+        if(ChoosenItemIndex.Value > -1)
+        {
+            Model.CombineItem(Items[ChoosenItemIndex.Value]);
+        }
     }
 
     public void GiveToFriend()

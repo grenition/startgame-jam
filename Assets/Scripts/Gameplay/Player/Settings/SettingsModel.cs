@@ -1,23 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class SettingsModel : MonoBehaviour
+public class SettingsModel : ActivityStarter
 {
+    [SerializeField] private RectTransform _parent;
     [SerializeField] private SettingsModelView _view;
 
-    private void Start()
+    public void Close()
+    {
+        Finish(true);
+    }
+
+    protected override void OnInitialize(Image screen)
     {
         _view.Initialize(this);
     }
 
-    public void Open()
+    public override RectTransform GetScreenChild()
     {
-        _view.Open();
+        return _parent;
     }
 
-    public void Close()
+    public void ApplySettings(int quality, float volume)
     {
+        Bus.ApplySettings(quality, volume);
+    }
 
+    public override async UniTask OnFinish()
+    {
+        await UniTask.Yield();
+        return;
     }
 }

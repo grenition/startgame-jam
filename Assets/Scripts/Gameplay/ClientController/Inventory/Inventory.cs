@@ -9,6 +9,7 @@ public class Inventory
     public const int MaxItems = 6;
 
     [SerializeField] private InventoryItem[] _allItems;
+    [SerializeField] private InventoryRecipe[] _recipes;
     [SerializeField] private InventoryItemNames _names;
     [SerializeField] private InventoryModelView _modelView;
 
@@ -21,6 +22,7 @@ public class Inventory
 
     public InventoryItem[] AllItems => _allItems;
     public InventoryItemNames Names => _names;
+    public InventoryRecipe[] Recipes => _recipes;
 
     private readonly List<InventoryItem> Items = new(MaxItems);
 
@@ -33,6 +35,10 @@ public class Inventory
         for (int i = 0; i < _allItems.Length; i++)
         {
             _allItems[i].Id = i;
+        }
+        foreach(var recipe in _recipes)
+        {
+            recipe.Initialize(_allItems);
         }
         _bus = bus;
         _identification = identification;
@@ -104,6 +110,40 @@ public class Inventory
         }
     }
 
+    public void CombineItems(InventoryItem item, InventoryItem other)
+    {
+        foreach(var recipe in Recipes)
+        {
+            if(recipe.CanCombine(item, other))
+            {
+                RemoveItem(item);
+                RemoveItem(other);
+                AddItem(recipe.Result);
+                break;
+            }
+        }
+    }
+
+    public void CombineItem(InventoryItem item)
+    {
+        foreach(var recipe in Recipes)
+        {
+            if(recipe.CanCombine(item))
+            {
+                foreach(var other in Items)
+                {
+                    if(recipe.CanCombine(item, other))
+                    {
+                        RemoveItem(item);
+                        RemoveItem(other);
+                        AddItem(recipe.Result);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     public InventoryItem GetItemFromStorage(string name)
     {
         foreach(var item in _allItems)
@@ -120,7 +160,8 @@ public class Inventory
 [Serializable]
 public class InventoryItemNames
 {
-    [SerializeField] private string _key, _basket, _fullBasket, _light, _stone, _pruner, _toy;
+    [SerializeField] private string _key, _basket, _fullBasket, _light, _stone,
+                                    _pruner, _toy, _sharpenedPruner;
 
     public string Key => _key;
     public string Basket => _basket;
@@ -129,4 +170,5 @@ public class InventoryItemNames
     public string Stone => _stone;
     public string Pruner => _pruner;
     public string Toy => _toy;
+    public string SharpenedPruner => _sharpenedPruner;
 }

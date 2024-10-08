@@ -8,6 +8,17 @@ public class FollowPlayersCamera : MonoBehaviour
     [SerializeField] private Transform[] _followObjects;
     [SerializeField] private float _offset;
 
+    private void Start()
+    {
+        var players = FindObjectsOfType<PlayerObject>();
+        var list = _followObjects.ToList();
+        foreach(var i in players)
+        {
+            list.Add(i.transform);
+        }
+        _followObjects = list.ToArray();
+    }
+
     private void Update()
     {
         if(_followObjects.Length > 0)
@@ -40,7 +51,6 @@ public class FollowPlayersCamera : MonoBehaviour
     {
         var center = GetCenterPos();
         var maxDistance = _followObjects.Max(x => Vector3.Distance(center, x.position));
-        Debug.Log(maxDistance);
         var diameter = maxDistance + _offset;
 
         var distance = diameter / (2f * Mathf.Tan(_camera.fieldOfView * Mathf.Deg2Rad / 2));

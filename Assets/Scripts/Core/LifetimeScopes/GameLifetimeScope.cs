@@ -3,6 +3,7 @@ using Gameplay.Player.GameObject;
 using Gameplay.QuestSystem;
 using VContainer;
 using VContainer.Unity;
+using UnityEngine;
 
 namespace Core.LifetimeScopes
 {
@@ -12,6 +13,12 @@ namespace Core.LifetimeScopes
         {
             builder.RegisterEntryPoint<FactoryContainerOverrider>().AsSelf();
             builder.RegisterEntryPoint<GamePlayersResolver>().AsSelf();
+
+            var points = FindObjectsOfType<ActivityPoint>();
+            foreach (var point in points)
+            {
+                autoInjectGameObjects.Add(point.gameObject);
+            }
         }
 
         protected override void Awake()

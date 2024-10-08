@@ -1,36 +1,30 @@
 using System;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [Serializable]
 public class SettingsModelView
 {
-    [Serializable]
-    public class QualityLevel
-    {
-        public string Name;
-        public int Index;
-    }
-
     [SerializeField] private SettingsView _view;
-
-    [field: SerializeField] public QualityLevel[] Levels { get; private set; }
+    [SerializeField] private AudioMixer _soundMixer;
     public ReactiveProperty<int> QualityIndex { get; private set; } = new();
 
+    public const string MasterVolume = "MasterVolume";
+
     private SettingsModel _model;
+    private float _soundLevel = 0f;
 
     public void Initialize(SettingsModel model)
     {
         QualityIndex.Value = QualitySettings.GetQualityLevel();
+        _soundMixer.GetFloat(MasterVolume, out var sound);
         _view.SettingsAplied += OnApply;
         _view.QualityChanged += OnQualityChange;
+        _view.QuitPressed += OnQuit;
+        _view.SoundChanged += OnSoundLevelChanged;
 
-        _view.Initialize(this);
-    }
-
-    public void Open()
-    {
-        _view.Open();
+        _view.Initialize(this, sound);
     }
 
     private void OnQualityChange(int level)
@@ -40,6 +34,16 @@ public class SettingsModelView
 
     private void OnApply()
     {
-        QualitySettings.SetQualityLevel(QualityIndex.Value);
+        _model.ApplySettings(QualityIndex.Value, _soundLevel);
+    }
+
+    private void OnQuit()
+    {
+        _model.Close();
+    }
+
+    private void OnSoundLevelChanged(float value)
+    {
+        _soundLevel = value;
     }
 }
