@@ -17,17 +17,23 @@ public class BearStarter : ActivityStarter
     private CompletedTasks _tasks;
     private Inventory _inventory;
     private ClientController _controller;
+    private FirstLevel _firstLevel;
     private int _scenarioIndex;
 
     private GameObject[] _scenarioScreens;
     private string[] _scenarioItems;
 
     [Inject]
-    private void Construct(CompletedTasks tasks, Inventory inventory, ClientController controller)
+    private void Construct(
+        CompletedTasks tasks,
+        Inventory inventory,
+        ClientController controller,
+        FirstLevel firstLevel)
     {
         _tasks = tasks;
         _inventory = inventory;
         _controller = controller;
+        _firstLevel = firstLevel;
     }
 
     public override RectTransform GetScreenChild()
@@ -127,6 +133,7 @@ public class BearStarter : ActivityStarter
         if(_scenarioIndex == 4 && _inventory.HasItemByName(_inventory.Names.FullBasket))
         {
             _inventory.RemoveItemByName(_inventory.Names.FullBasket);
+            _firstLevel.BearOpenDoorsClient();
         }
     }
 }
