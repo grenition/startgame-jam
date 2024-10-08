@@ -15,7 +15,10 @@ namespace Core.LifetimeScopes
         {
             builder.RegisterEntryPoint<FactoryContainerOverrider>().AsSelf();
             builder.RegisterEntryPoint<GamePlayersResolver>().AsSelf();
-            builder.RegisterInstance(_firstLevel);
+            if(_firstLevel != null)
+            {
+                builder.RegisterInstance(_firstLevel);
+            }
 
             var points = FindObjectsOfType<ActivityPoint>();
             foreach (var point in points)
