@@ -8,6 +8,17 @@ public class FollowPlayersCamera : MonoBehaviour
     [SerializeField] private Transform[] _followObjects;
     [SerializeField] private float _offset;
 
+    private void Start()
+    {
+        var players = FindObjectsOfType<PlayerObject>();
+        var list = _followObjects.ToList();
+        foreach(var i in players)
+        {
+            list.Add(i.transform);
+        }
+        _followObjects = list.ToArray();
+    }
+
     private void Update()
     {
         if(_followObjects.Length > 0)

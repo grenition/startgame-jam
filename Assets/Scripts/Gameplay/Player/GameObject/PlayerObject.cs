@@ -34,13 +34,6 @@ public class PlayerObject : MonoBehaviour
         _bus.InteractedOnServer += OnPlayerInteracted;
     }
 
-    private void Start()
-    {
-        var camera = FindObjectOfType<FollowPlayersCamera>();
-        camera?.AddFollowObject(transform);
-        Debug.Log(camera);
-    }
-
     private void OnPlayerInteracted(PlayerTypes type)
     {
         if (type == PlayerType)
