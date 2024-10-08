@@ -18,6 +18,12 @@ namespace Core.LifetimeScopes
         {
             base.Awake();
 
+            var points = FindObjectsOfType<ActivityPoint>();
+            foreach (var point in points)
+            {
+                Container.Inject(point);
+            }
+
             foreach (var interactionPoint in FindObjectsOfType<InteractionPoint>(true))
                 Container?.InjectGameObject(interactionPoint.gameObject);
         }

@@ -114,7 +114,7 @@ public class PlayerObject : MonoBehaviour
 
     public void ActivateNearlyPoint()
     {
-        if(_nearlyPoint != null)
+        if(_nearlyPoint != null && _nearlyPoint.Interaction != null)
         {
             _nearlyPoint.Interaction.Interact();
         }
