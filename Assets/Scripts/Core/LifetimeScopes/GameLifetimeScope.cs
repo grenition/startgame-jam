@@ -9,16 +9,10 @@ namespace Core.LifetimeScopes
 {
     public class GameLifetimeScope : LifetimeScope
     {
-        [SerializeField] private FirstLevel _firstLevel;
-
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<FactoryContainerOverrider>().AsSelf();
             builder.RegisterEntryPoint<GamePlayersResolver>().AsSelf();
-            if(_firstLevel != null)
-            {
-                builder.RegisterInstance(_firstLevel);
-            }
 
             var points = FindObjectsOfType<ActivityPoint>();
             foreach (var point in points)

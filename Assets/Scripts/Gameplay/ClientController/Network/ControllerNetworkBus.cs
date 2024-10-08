@@ -26,6 +26,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     public PlayerObject BigPlayer { get; set; }
     public PlayerObject SmallPlayer { get; set; }
     public ClientControllerTester Tester => _tester;
+    public NetworkBusLevelMessageReceiver MessageReceiver { get; set; } = null;
 
     [Inject]
     private void Construct(
@@ -291,6 +292,24 @@ public class ControllerNetworkBus : NetworkBehaviour
     private void InvokeInteractServerRpc(int type)
     {
         InteractedOnServer?.Invoke((PlayerTypes)type);
+    }
+    #endregion
+
+    #region SendMessageToLevelReceiver
+    public void SendMessageToLevelMessageReceiver(string id, params int[] data)
+    {
+        int[] totalData = new int[4];
+        for(int i = 0; i < Mathf.Min(data.Length, totalData.Length); i++)
+        {
+            totalData[i] = data[i];
+        }
+        SendMessageToLevelMessageReceiverServerRpc(id, totalData[0], totalData[1], totalData[2], totalData[3]);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SendMessageToLevelMessageReceiverServerRpc(string id, int data0, int data1, int data2, int data3)
+    {
+        MessageReceiver?.OnReceiveMessage(id, data0, data1, data2, data3);
     }
     #endregion
 

@@ -1,23 +1,26 @@
-using Unity.Netcode;
 using UnityEngine;
 
-public class FirstLevel : NetworkBehaviour
+public class FirstLevel : NetworkBusLevelMessageReceiver
 {
     [SerializeField] private GameObject[] _openedFence, _closedFence;
 
-    public void BearOpenDoorsClient()
+    public const string BearDoorsID = "BearDoorsID";
+
+    public override void OnReceiveMessage(string id, params int[] data)
     {
-        BearOpenDoorsServerRpc();
+        if(id == BearDoorsID)
+        {
+            BearOpenDoors();
+        }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void BearOpenDoorsServerRpc()
+    private void BearOpenDoors()
     {
-        foreach(var opened in _openedFence)
+        foreach (var opened in _openedFence)
         {
             opened.SetActive(true);
         }
-        foreach(var closed in _closedFence)
+        foreach (var closed in _closedFence)
         {
             closed.SetActive(false);
         }
