@@ -102,6 +102,7 @@ public class PlayerObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.name);
         if(other.TryGetComponent<ActivityPoint>(out var point))
         {
             _nearlyPoint = point;
