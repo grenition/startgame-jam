@@ -62,6 +62,7 @@ public class PlayerObject : MonoBehaviour
         if(index > _prevIndex || Mathf.Abs(index - _prevIndex) > 1000)
         {
             ModelAnimator.SetFloat("Speed", moveDirection.magnitude);
+            ModelAnimator.transform.LookAt(transform.position + moveDirection);
             _moveDirection = moveDirection;
             _prevIndex = index;
         }

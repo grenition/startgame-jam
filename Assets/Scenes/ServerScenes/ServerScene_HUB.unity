@@ -4468,7 +4468,7 @@ GameObject:
   - component: {fileID: 1805501236}
   - component: {fileID: 1805501237}
   - component: {fileID: 1805501238}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ActivityPoint
   m_TagString: Untagged
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
