@@ -61,8 +61,12 @@ public class PlayerObject : MonoBehaviour
         if(index > _prevIndex || Mathf.Abs(index - _prevIndex) > 1000)
         {
             ModelAnimator.SetFloat("Speed", moveDirection.magnitude);
-            ModelAnimator.transform.LookAt(transform.position + moveDirection);
-            ModelAnimator.transform.Rotate(Vector3.up, 180f);
+            if(moveDirection.sqrMagnitude > .01f)
+            {
+                ModelAnimator.transform.LookAt(transform.position + moveDirection);
+                ModelAnimator.transform.Rotate(Vector3.up, 180f);
+            }
+            
             _moveDirection = moveDirection;
             _prevIndex = index;
         }
@@ -89,6 +93,7 @@ public class PlayerObject : MonoBehaviour
     private IEnumerator ShowMessageIE(string mess)
     {
         _dialogue.SetActive(true);
+        _dialogue.transform.LookAt(transform.position + new Vector3(1, 1, -1));
         _dialogueText.text = mess;
         yield return new WaitForSeconds(3);
         _dialogue.SetActive(false);
