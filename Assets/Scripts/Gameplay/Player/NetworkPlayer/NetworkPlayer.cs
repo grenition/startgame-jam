@@ -11,7 +11,7 @@ namespace Gameplay.Player
     public class NetworkPlayer : NetworkBehaviour
     {
         public PlayerObject PlayerObject => _player;
-        public PlayerTypes PlayerType => _syncPlayerType.Value;
+        public PlayerTypes PlayerType => default;
 
         [SerializeField] private UnityEngine.GameObject _controllerScenePrefab;
         [SerializeField] private PlayerObject _playerPrefab;
@@ -20,9 +20,7 @@ namespace Gameplay.Player
         private ClientIdentification _clientIdentification;
         private UnityEngine.GameObject _controllerScene;
         private INetworkPlayersService _playersService;
-
-        private NetworkVariable<PlayerTypes> _syncPlayerType = new(PlayerTypes.Big,
-            NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        
         private PlayerObject _player;
 
         [Inject]
@@ -41,7 +39,7 @@ namespace Gameplay.Player
             //MoveToNetworkScene();
             
             _playersService.RegisterNetworkPlayer(this);
-            var type = _playersService.NetworkPlayers.Count == 0 ? PlayerTypes.Big : PlayerTypes.Small;
+            var type = _playersService.NetworkPlayers.Count == 1 ? PlayerTypes.Big : PlayerTypes.Small;
             if (IsServer)
             {
                 _player = _objectsFactory.SpawnLocalObject(_playerPrefab, TargetScene.GameScene);
@@ -56,7 +54,7 @@ namespace Gameplay.Player
         {
             if (!IsLocalPlayer) return;
 
-            SelectPlayerType((PlayerTypes)type);
+            _clientIdentification.SetPlayerType((PlayerTypes)type);
             _controllerScene = _objectsFactory.SpawnLocalObject(_controllerScenePrefab, TargetScene.NetworkScene, false);
         }
 
@@ -72,12 +70,7 @@ namespace Gameplay.Player
 
             if (_controllerScene != null) Destroy(_controllerScene);
         }
-
-        private void SelectPlayerType(PlayerTypes playerType)
-        {
-            _clientIdentification.SetPlayerType(playerType);
-            _syncPlayerType.Value = playerType;
-        }
+        
         private async void MoveToNetworkScene()
         {
             await UniTask.WaitForSeconds(0.2f);
