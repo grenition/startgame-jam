@@ -12,17 +12,17 @@ namespace Core.LifetimeScopes
         {
             builder.RegisterEntryPoint<FactoryContainerOverrider>().AsSelf();
             builder.RegisterEntryPoint<GamePlayersResolver>().AsSelf();
+
+            var points = FindObjectsOfType<ActivityPoint>();
+            foreach (var point in points)
+            {
+                autoInjectGameObjects.Add(point.gameObject);
+            }
         }
 
         protected override void Awake()
         {
             base.Awake();
-
-            var points = FindObjectsOfType<ActivityPoint>();
-            foreach (var point in points)
-            {
-                Container.Inject(point);
-            }
 
             foreach (var interactionPoint in FindObjectsOfType<InteractionPoint>(true))
                 Container?.InjectGameObject(interactionPoint.gameObject);
