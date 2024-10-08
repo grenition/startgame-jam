@@ -64,8 +64,8 @@ namespace Core.StateMachine.States
         {
             await UniTask.WaitForSeconds(1f);
             
-            if (scene.name != NetworkScene && !_networkManager.IsServer)
-                SceneManager.UnloadSceneAsync(scene.buildIndex);
+            // if (scene.name != NetworkScene && !_networkManager.IsServer)
+            //     SceneManager.UnloadSceneAsync(scene.buildIndex);
         }
         private void SpawnPlayer(ulong clientId)
         {

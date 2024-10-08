@@ -38,7 +38,7 @@ namespace Gameplay.Player
 
         public override void OnNetworkSpawn()
         {
-            MoveToNetworkScene();
+            //MoveToNetworkScene();
             
             _playersService.RegisterNetworkPlayer(this);
             var type = _playersService.NetworkPlayers.Count == 0 ? PlayerTypes.Big : PlayerTypes.Small;
