@@ -418,7 +418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9e58339e7e5c674a90804addf58e6e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dialogue: {fileID: 555940519381411426}
+  _dialogue: {fileID: 2071613262410153491}
   _dialogueText: {fileID: 7662547542869340886}
   _modelParent: {fileID: 2978934486940357382}
   _smallPrefab: {fileID: 4880276007708292656, guid: 2218c6d9e5dade542b28cdc415fd42e0,
