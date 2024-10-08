@@ -32,6 +32,7 @@ public class PlayerObject : MonoBehaviour
         _bus = bus;
         _controller = GetComponent<CharacterController>();
         _bus.InteractedOnServer += OnPlayerInteracted;
+        Debug.Log("Player injected!");
     }
 
     private void OnPlayerInteracted(PlayerTypes type)
@@ -95,7 +96,6 @@ public class PlayerObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
         if(other.TryGetComponent<ActivityPoint>(out var point))
         {
             _nearlyPoint = point;

@@ -3120,6 +3120,9 @@ MonoBehaviour:
   - sendTo: 0
     action:
       rid: 4886338589102964736
+  - sendTo: 0
+    action:
+      rid: 4886338721730265088
   references:
     version: 2
     RefIds:
@@ -3127,6 +3130,9 @@ MonoBehaviour:
       type: {class: LoadServerSceneAction, ns: Gameplay.Server, asm: Assembly-CSharp}
       data:
         sceneKey: ServerScene_Test
+    - rid: 4886338721730265088
+      type: {class: HideActivityAction, ns: Gameplay.QuestSystem.Actions, asm: Assembly-CSharp}
+      data: 
 --- !u!1 &1317605261
 GameObject:
   m_ObjectHideFlags: 0

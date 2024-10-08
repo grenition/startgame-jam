@@ -23,7 +23,7 @@ public class ActivityPoint : MonoBehaviour
 
     public void ShowActivity(PlayerTypes type)
     {
-        if(Interaction.CheckConditions())
+        if(Interaction == null || Interaction.CheckConditions())
         {
             _bus.ShowActivity(Info, type);
         }
