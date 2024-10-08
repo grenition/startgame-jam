@@ -40,7 +40,6 @@ public class FollowPlayersCamera : MonoBehaviour
     {
         var center = GetCenterPos();
         var maxDistance = _followObjects.Max(x => Vector3.Distance(center, x.position));
-        Debug.Log(maxDistance);
         var diameter = maxDistance + _offset;
 
         var distance = diameter / (2f * Mathf.Tan(_camera.fieldOfView * Mathf.Deg2Rad / 2));

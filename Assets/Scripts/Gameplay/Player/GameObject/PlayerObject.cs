@@ -32,8 +32,13 @@ public class PlayerObject : MonoBehaviour
         _bus = bus;
         _controller = GetComponent<CharacterController>();
         _bus.InteractedOnServer += OnPlayerInteracted;
+    }
 
-        FindObjectOfType<FollowPlayersCamera>()?.AddFollowObject(transform);
+    private void Start()
+    {
+        var camera = FindObjectOfType<FollowPlayersCamera>();
+        camera?.AddFollowObject(transform);
+        Debug.Log(camera);
     }
 
     private void OnPlayerInteracted(PlayerTypes type)
@@ -63,6 +68,7 @@ public class PlayerObject : MonoBehaviour
         {
             ModelAnimator.SetFloat("Speed", moveDirection.magnitude);
             ModelAnimator.transform.LookAt(transform.position + moveDirection);
+            ModelAnimator.transform.Rotate(Vector3.up, 180f);
             _moveDirection = moveDirection;
             _prevIndex = index;
         }
