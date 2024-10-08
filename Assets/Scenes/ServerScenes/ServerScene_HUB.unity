@@ -3061,7 +3061,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactionPoint: {fileID: 1293840605}
-  _info: {fileID: 11400000, guid: f4829fff2c0adf74d85e4fec531ab7b0, type: 2}
+  _info: {fileID: 11400000, guid: ac0aec49229ea694b9d7158022f1b6d7, type: 2}
   _destroyAfterStartingActivity: 0
   _activateInteractionWhenStart: 1
 --- !u!4 &1293840603
