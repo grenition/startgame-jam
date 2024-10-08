@@ -93,7 +93,7 @@ public class PlayerObject : MonoBehaviour
     private IEnumerator ShowMessageIE(string mess)
     {
         _dialogue.SetActive(true);
-        _dialogue.transform.LookAt(transform.position + new Vector3(1, 1, -1));
+        _dialogue.transform.LookAt(_dialogue.transform.position + new Vector3(1, 1, -1));
         _dialogueText.text = mess;
         yield return new WaitForSeconds(3);
         _dialogue.SetActive(false);
