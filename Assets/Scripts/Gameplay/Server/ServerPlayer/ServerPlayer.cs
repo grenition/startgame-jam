@@ -115,12 +115,12 @@ namespace Gameplay.Server
                 UnloadCurrentServerScene();
 
             _data.activeScene = sceneName;
-            _sceneLoader.TryLoadOfflineScene(_data.activeScene, LoadSceneMode.Additive);
+            _sceneLoader.TryLoadOnlineScene(_data.activeScene, LoadSceneMode.Additive);
         }
 
         public void UnloadCurrentServerScene()
         {
-            _sceneLoader.TryUnloadOfflineScene(_data.activeScene);
+            _sceneLoader.TryUnloadOnlineScene(_data.activeScene);
         }
 
         #endregion
