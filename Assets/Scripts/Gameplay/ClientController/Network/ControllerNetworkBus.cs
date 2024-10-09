@@ -340,7 +340,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         IsAllPlayersConnectedServerRpc(task.Id);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void IsAllPlayersConnectedServerRpc(int id)
     {
         bool value = BigPlayer != null && SmallPlayer != null;
