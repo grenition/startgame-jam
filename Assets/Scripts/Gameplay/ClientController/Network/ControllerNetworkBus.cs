@@ -202,7 +202,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     [ClientRpc]
     private void CantWaitForTeammateClientRpc()
     {
-        _controller.HideActivity();
+        _controller?.ResetState();
     }
     #endregion
 

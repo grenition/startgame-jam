@@ -58,6 +58,7 @@ public class InventoryModelView
         if(ChoosenItemIndex.Value > -1)
         {
             Model.CombineItem(Items[ChoosenItemIndex.Value]);
+            ChoosenItemIndex.Value = -1;
         }
     }
 

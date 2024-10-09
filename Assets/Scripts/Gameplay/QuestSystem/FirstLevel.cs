@@ -33,9 +33,11 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
 
     private void OnActivityFinished(ActivityInfo activity)
     {
+        Debug.Log($"Finished! {activity}");
         if(activity == _stringsActivity)
         {
             _finishedFinalActivity = true;
+            Debug.Log("ShowComics");
             _ = WaitForFrame(() => _comics.OpenComicsWithControllers(_endComics));
         }
         else if(activity == _comicsActivity && _finishedFinalActivity)

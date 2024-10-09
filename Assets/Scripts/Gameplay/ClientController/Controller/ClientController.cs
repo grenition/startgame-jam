@@ -146,6 +146,11 @@ public class ClientController : MonoBehaviour
         }
     }
 
+    public void ResetState()
+    {
+        State = States.Nothing;
+    }
+
     public void ShowMessage(string mess)
     {
         if (_infoAnimCor != null)
