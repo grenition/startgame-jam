@@ -126,10 +126,12 @@ public class BearStarter : ActivityStarter
             _itemBtn.image.sprite = _inventory.GetItemFromStorage(_scenarioItems[_scenarioIndex]).Icon;
             _itemBtn.onClick.AddListener(new(TakeItem));
         }
-
+        Debug.Log("TEST");
         if(_scenarioIndex == 4 && _inventory.HasItemByName(_inventory.Names.FullBasket))
         {
+            Debug.Log("If statement");
             _inventory.RemoveItemByName(_inventory.Names.FullBasket);
+            Debug.Log("Send message");
             Bus.SendMessageToLevelMessageReceiver(FirstLevel.BearDoorsID, null);
         }
     }

@@ -76,7 +76,9 @@ public class PlayerObject : MonoBehaviour
     {
         if(transform.position.y > 0)
         {
-            Debug.Log("PIZDEC!");
+            var pos = transform.position;
+            pos.y = 0f;
+            transform.position = pos;
         }
 
         if(CanControl)

@@ -302,6 +302,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     #region SendMessageToLevelReceiver
     public void SendMessageToLevelMessageReceiver(string id, params int[] data)
     {
+        Debug.Log("Method called!");
         int[] totalData = new int[4];
         for(int i = 0; i < Mathf.Min(data.Length, totalData.Length); i++)
         {
