@@ -26,6 +26,7 @@ public class InventoryModelView
 
     public void UpdateInventoryGrid()
     {
+        ChoosenItemIndex.Value = -1;
         var items = Model.GetCopy();
         for(int i = 0; i < Inventory.MaxItems; i++)
         {
