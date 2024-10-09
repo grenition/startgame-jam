@@ -97,8 +97,7 @@ public class InputCodeStarter : ActivityStarter
 
     private void OnInteract()
     {
-        _controller.Interacted -= OnInteract;
-        _controller.HideActivity();
+        Finish();
     }
 
     protected override void OnInitialize(Image screen)
