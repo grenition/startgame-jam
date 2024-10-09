@@ -15,19 +15,22 @@ public class SettingsModelView
     private SettingsModel _model;
     private float _soundLevel = 0f;
 
-    public void Initialize(SettingsModel model)
+    public void Initialize(SettingsModel model, ControllerNetworkBus bus)
     {
         _model = model;
 
-        QualityIndex.Value = QualitySettings.GetQualityLevel();
-        _soundMixer.GetFloat(MasterVolume, out var sound);
-        _soundLevel = sound;
         _view.SettingsAplied += OnApply;
         _view.QualityChanged += OnQualityChange;
         _view.QuitPressed += OnQuit;
         _view.SoundChanged += OnSoundLevelChanged;
 
-        _view.Initialize(this, sound);
+        bus.GetSettings((quality, volume) =>
+        {
+            QualityIndex.Value = quality;
+            _soundLevel = volume;
+
+            _view.Initialize(this, volume);
+        });
     }
 
     private void OnQualityChange(int level)

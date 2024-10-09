@@ -43,6 +43,8 @@ public class ClientController : MonoBehaviour
     public ActivityStarter PlayingMiniGame { get; private set; } = null;
     public Inventory InventoryModel { get; private set; }
 
+    [field: SerializeField] public float MoveAngle = -45f;
+
     [Inject]
     private void Construct(
         IObjectsFactory factory, 
@@ -260,9 +262,20 @@ public class ClientController : MonoBehaviour
         } 
 
         var direction = new Vector3(_moveJoy.Horizontal, 0, _moveJoy.Vertical);
+        
         if(Vector3.Distance(direction, _prevMoveDirection) > DeathZoneForJoystick)
         {
             _prevMoveDirection = direction;
+
+            float x =
+            direction.x * Mathf.Cos(MoveAngle * Mathf.Deg2Rad) -
+            direction.z * Mathf.Sin(MoveAngle * Mathf.Deg2Rad);
+            float y =
+                direction.x * Mathf.Sin(MoveAngle * Mathf.Deg2Rad) +
+                direction.z * Mathf.Cos(MoveAngle * Mathf.Deg2Rad);
+
+            direction = new(x, 0, y);
+
             _bus.SetMoveDirection(direction);
         }
     }
