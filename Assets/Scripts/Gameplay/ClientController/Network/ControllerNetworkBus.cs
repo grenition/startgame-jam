@@ -157,7 +157,10 @@ public class ControllerNetworkBus : NetworkBehaviour
         if(_identification.IsMyType((PlayerTypes)type)) {
             _controller.FinishActivity();
         }
-        AfterFinishActivityServerRpc(activityName);
+        if(_identification.PlayerType is PlayerTypes.Small)
+        {
+            AfterFinishActivityServerRpc(activityName);
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
