@@ -25,7 +25,7 @@ public abstract class ActivityStarter : MonoBehaviour
     public abstract RectTransform GetScreenChild();
     protected void Finish(bool singlePlayer = false)
     {
-        Bus.FinishActivity(singlePlayer ? Identification.PlayerType : PlayerTypes.LocalPlayers);
+        Bus.FinishActivity(singlePlayer ? Identification.PlayerType : PlayerTypes.LocalPlayers, this);
     }
 
     public abstract UniTask OnFinish();

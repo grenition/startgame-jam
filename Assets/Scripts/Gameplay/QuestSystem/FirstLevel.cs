@@ -9,7 +9,6 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
 {
     [SerializeField] private GameObject[] _openedFence, _closedFence;
     [SerializeField] private Sprite[] _startComics, _endComics;
-    [SerializeField] private ActivityInfo _stringsActivity, _comicsActivity;
     [SerializeField] private InteractionPoint _loadNextScene;
 
     public const string BearDoorsID = "BearDoorsID";
@@ -31,16 +30,14 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
         _comics.OpenComicsWithControllers(_startComics);
     }
 
-    private void OnActivityFinished(ActivityInfo activity)
+    private void OnActivityFinished(string activityName)
     {
-        Debug.Log($"Finished! {activity}");
-        if(activity == _stringsActivity)
+        if(activityName == nameof(StringStarter))
         {
             _finishedFinalActivity = true;
-            Debug.Log("ShowComics");
             _ = WaitForFrame(() => _comics.OpenComicsWithControllers(_endComics));
         }
-        else if(activity == _comicsActivity && _finishedFinalActivity)
+        else if(activityName == nameof(ComicsControllerStarter) && _finishedFinalActivity)
         {
             _ = WaitForFrame(() =>
             {
