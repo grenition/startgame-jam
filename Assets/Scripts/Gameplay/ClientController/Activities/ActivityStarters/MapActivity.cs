@@ -8,7 +8,7 @@ public class MapActivity : ActivityStarter
 {
     [SerializeField] private RectTransform _parent;
     [SerializeField] private InteractionPoint _nextScene;
-    [SerializeField] private string _comingSoonMessage;
+    [SerializeField] private string _comingSoonMessage, _waitingPlayersMessage;
 
     private ClientController _controller;
 
@@ -35,6 +35,11 @@ public class MapActivity : ActivityStarter
     {
         if(index == 0)
         {
+            if(!_nextScene.CheckConditions())
+            {
+                _controller.ShowMessage(_waitingPlayersMessage);
+                return;
+            }
             _nextScene.Interact();
             Finish(true);
         }
