@@ -56,7 +56,7 @@ namespace Core.StateMachine.States
             {
                 if (clientid == NetworkManager.ServerClientId)
                     _saveSystem.LoadData();
-                
+
                 SpawnPlayer(clientid);
             }
         }

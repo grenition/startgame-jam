@@ -10,9 +10,6 @@ namespace Core.LifetimeScopes
 {
     public class NetworkSceneLifetimeScope : LifetimeScope
     {
-        public static IObjectResolver Resolver => instance != null ? instance.Container : null;
-        private static NetworkSceneLifetimeScope instance = null;
-        
         [SerializeField] private NetworkGameStateMachine _stateMachine;
         [SerializeField] private ControllerNetworkBus _controllerBus;
         [SerializeField] private NetworkInteractionsService _interactionsService;
@@ -21,10 +18,15 @@ namespace Core.LifetimeScopes
 
         private ClientIdentification _clientIdentification;
         private CompletedTasks _tasks;
-        
+
+        protected override void Awake()
+        {
+            Debug.Log($"Initialiazed {nameof(NetworkSceneLifetimeScope)}");
+            base.Awake();
+        }
         protected override void Configure(IContainerBuilder builder)
         {
-            instance ??= this;
+            Debug.Log($"Start building {nameof(NetworkSceneLifetimeScope)}");
             
             builder.RegisterInstance(_stateMachine);
             autoInjectGameObjects.Add(_stateMachine.gameObject);
@@ -40,13 +42,15 @@ namespace Core.LifetimeScopes
             _tasks = new();
             builder.RegisterInstance(_tasks);
             
-            builder.RegisterEntryPoint<FactoryContainerOverrider>();
+            builder.RegisterEntryPoint<FactoryContainerOverrider>().AsSelf();
             
             builder.RegisterInstance(_interactionsService).As<IInteractionService>();
             autoInjectGameObjects.Add(_interactionsService.gameObject);
 
             builder.RegisterInstance(_comicsViewer);
             autoInjectGameObjects.Add(_comicsViewer.gameObject);
+
+            Debug.Log($"{nameof(NetworkSceneLifetimeScope)} builded!");
         }
     }
 }

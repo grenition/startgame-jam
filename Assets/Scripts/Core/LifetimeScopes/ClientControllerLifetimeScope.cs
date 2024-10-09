@@ -13,5 +13,7 @@ public class ClientControllerLifetimeScope : LifetimeScope
         builder.RegisterInstance(_controller);
         builder.RegisterInstance(_inventory);
         builder.RegisterEntryPoint<ObjectsFactory>(Lifetime.Scoped).As<IObjectsFactory>();
+        
+        Debug.Log($"{nameof(ClientControllerLifetimeScope)} builded!");
     }
 }
