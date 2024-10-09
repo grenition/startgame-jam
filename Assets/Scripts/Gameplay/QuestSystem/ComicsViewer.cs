@@ -23,18 +23,17 @@ public class ComicsViewer : NetworkBehaviour
     public void UpdateScreenSize()
     {
         float mp = _resolution.x / _resolution.y;
-        float width = _canvas.pixelRect.x, height = _canvas.pixelRect.y;
+        float width = Screen.width / _canvas.scaleFactor;
+        float height = Screen.height / _canvas.scaleFactor;
 
         if(mp > 1)
         {
-            height /= mp;
+            width = height * mp;
         }
         else
         {
-            width *= mp;
+            height = width / mp;
         }
-
-        Debug.Log($"{_canvas.pixelRect.x} {_canvas.pixelRect.y}");
 
         _image.rectTransform.offsetMin = new(-width / 2, -height / 2);
         _image.rectTransform.offsetMax = new(width / 2, height / 2);

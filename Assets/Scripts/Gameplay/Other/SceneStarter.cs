@@ -6,17 +6,16 @@ public class SceneStarter : MonoBehaviour
     public enum LevelType { None, FirstLevel }
 
     [SerializeField] private LevelType _levelType;
-    [SerializeField] private Sprite[] _startComics;
+    [SerializeField] private FirstLevel _firstLevel;
 
     [Inject]
-    private void Construct(ControllerNetworkBus bus, ComicsViewer viewer)
+    private void Construct(ControllerNetworkBus bus, ComicsViewer viewer, IObjectResolver resolver)
     {
         if (_levelType is LevelType.FirstLevel)
         {
-            bus.MessageReceiver = new FirstLevel();
+            bus.MessageReceiver = _firstLevel;
+            resolver.Inject(_firstLevel);
         }
-
-        viewer.OpenComicsWithControllers(_startComics);
 
         Destroy(gameObject);
     }
