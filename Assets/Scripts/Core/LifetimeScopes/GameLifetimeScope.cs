@@ -19,6 +19,8 @@ namespace Core.LifetimeScopes
             {
                 autoInjectGameObjects.Add(point.gameObject);
             }
+            
+            Debug.Log($"{nameof(GameLifetimeScope)} builded!");
         }
 
         protected override void Awake()

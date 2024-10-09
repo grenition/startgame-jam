@@ -6,6 +6,7 @@ using Core.SaveSystem.Savable;
 using Core.SaveSystem.System;
 using Core.SceneManagement;
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
@@ -47,6 +48,11 @@ namespace Gameplay.Server
             _clientIdentification = clientIdentification;
             _playersService = playersService;
             _saveSystem = saveSystem;
+        }
+
+        private void Awake()
+        {
+            Debug.Log($"{nameof(ServerPlayer)} spawned in {SceneManager.GetActiveScene().name}");
         }
 
         #region OnNetworkSpawn/Despawn callbacks

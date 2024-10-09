@@ -11,6 +11,7 @@ using Core.StateMachine.Controllers;
 using Core.UI;
 using SickDev.DevConsole;
 using Unity.Netcode;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -24,6 +25,8 @@ namespace Core.LifetimeScopes
             InstallCoreSystems(builder);
             InstallNetworking(builder);
             InstallSystems(builder);
+            
+            Debug.Log($"{nameof(RootLifetimeScope)} builded!");
         }
         
         private void InstallStateMachines(IContainerBuilder builder)

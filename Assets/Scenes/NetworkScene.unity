@@ -1233,11 +1233,6 @@ PrefabInstance:
       objectReference: {fileID: 932345990}
     - target: {fileID: 3463643757786144558, guid: 1ecb5ab4abf24423bb1ba9f9173403c1,
         type: 3}
-      propertyPath: autoInjectGameObjects.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3463643757786144558, guid: 1ecb5ab4abf24423bb1ba9f9173403c1,
-        type: 3}
       propertyPath: autoInjectGameObjects.Array.data[0]
       value: 
       objectReference: {fileID: 1674853181}
