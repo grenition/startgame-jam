@@ -1962,7 +1962,7 @@ MonoBehaviour:
     - _icon: {fileID: 21300000, guid: a3887974a4736a44fa77c2a2886bca65, type: 3}
       _name: "\u0422\u043E\u0447\u0438\u043B\u044C\u043D\u044B\u0439 \u043A\u0430\u043C\u0435\u043D\u044C"
       _takeItemSound: {fileID: 0}
-    - _icon: {fileID: 21300000, guid: 80bd3927f95f22a46ba3dc6bc4fdc8a3, type: 3}
+    - _icon: {fileID: 21300000, guid: 108937d2b6815144e92777a607e9258f, type: 3}
       _name: "\u0422\u0443\u043F\u043E\u0439 \u0441\u0435\u043A\u0430\u0442\u043E\u0440"
       _takeItemSound: {fileID: 0}
     - _icon: {fileID: 21300000, guid: 01932b7bdccfd904b84ac44a076c071e, type: 3}

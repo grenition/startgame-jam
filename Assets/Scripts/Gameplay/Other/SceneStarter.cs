@@ -9,12 +9,13 @@ public class SceneStarter : MonoBehaviour
     [SerializeField] private FirstLevel _firstLevel;
 
     [Inject]
-    private void Construct(ControllerNetworkBus bus, ComicsViewer viewer, IObjectResolver resolver)
+    private void Construct(ControllerNetworkBus bus, IObjectResolver resolver)
     {
         if (_levelType is LevelType.FirstLevel)
         {
             bus.MessageReceiver = _firstLevel;
             resolver.Inject(_firstLevel);
+            Debug.Log("Injected");
         }
 
         Destroy(gameObject);
