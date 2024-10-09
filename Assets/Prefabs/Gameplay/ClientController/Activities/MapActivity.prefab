@@ -109,9 +109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _conditions:
     dependentConditionsSet: []
-    conditions:
-    - condition:
-        rid: 4886338738392662018
+    conditions: []
     connection: 0
   _actions:
   - sendTo: 0
@@ -124,10 +122,6 @@ MonoBehaviour:
       type: {class: LoadServerSceneAction, ns: Gameplay.Server, asm: Assembly-CSharp}
       data:
         sceneKey: ServerScene_Test
-    - rid: 4886338738392662018
-      type: {class: AllPlayersConnectedCondition, ns: Gameplay.QuestSystem.Conditions,
-        asm: Assembly-CSharp}
-      data: 
 --- !u!1 &885322583258858441
 GameObject:
   m_ObjectHideFlags: 0
