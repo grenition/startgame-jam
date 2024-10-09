@@ -83,9 +83,9 @@ public class BearStarter : ActivityStarter
         StartCoroutine(TakeItemIE());
     }
 
-    private IEnumerator TakeItemIE()
+    private IEnumerator TakeItemIE(float seconds = 1)
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(seconds);
         Finish();
     }
 

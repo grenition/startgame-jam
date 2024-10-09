@@ -313,6 +313,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SendMessageToLevelMessageReceiverServerRpc(string id, int data0, int data1, int data2, int data3)
     {
+        Debug.Log(MessageReceiver);
         MessageReceiver?.OnReceiveMessage(id, data0, data1, data2, data3);
     }
     #endregion

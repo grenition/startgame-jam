@@ -15,7 +15,6 @@ public class SceneStarter : MonoBehaviour
         {
             bus.MessageReceiver = _firstLevel;
             resolver.Inject(_firstLevel);
-            Debug.Log("Injected");
         }
 
         Destroy(gameObject);

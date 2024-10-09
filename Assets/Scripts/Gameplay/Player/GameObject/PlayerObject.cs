@@ -74,6 +74,11 @@ public class PlayerObject : MonoBehaviour
 
     private void Update()
     {
+        if(transform.position.y > 0)
+        {
+            Debug.Log("PIZDEC!");
+        }
+
         if(CanControl)
         {
             if(_moveDirection.sqrMagnitude > 0)
