@@ -11,7 +11,11 @@ namespace Core.Constants
         
         #if UNITY_EDITOR
         public static bool IsServer => !ClonesManager.IsClone();
-        #else
+        #elif UNITY_STANDALONE
+        public static bool IsServer => true;
+        #elif UNITY_ANDROID
+        public static bool IsServer => false;
+        #elif UNITY_IOS
         public static bool IsServer => false;
         #endif
     }
