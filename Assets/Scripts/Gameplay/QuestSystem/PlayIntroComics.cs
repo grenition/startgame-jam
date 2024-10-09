@@ -29,6 +29,11 @@ public class PlayIntroComics : MonoBehaviour
             await UniTask.Yield();
         }
 
+        while(_identification.PlayerType is PlayerTypes.All)
+        {
+            await UniTask.Yield();
+        }
+
         Debug.Log("Start async");
         Debug.Log($"{_identification.PlayerType}");
 

@@ -48,8 +48,11 @@ public class RasberryStarter : ActivityStarter
     private void OnHideActivity()
     {
         _controller.ActivityHided -= OnHideActivity;
-        _controller.ShowActivity(_rasberyInfo);
-        _controller.Interact();
+        if(Identification.PlayerType is PlayerTypes.Small)
+        {
+            _controller.ShowActivity(_rasberyInfo);
+            _controller.Interact();
+        }
     }
 
     protected override void OnInitialize(Image screen)

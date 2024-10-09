@@ -958,7 +958,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6d867975ef279d14bb5d404ca5040501, type: 3}
   - {fileID: 21300000, guid: e8fd194ab3a919e4b85fecd92035a5d1, type: 3}
   - {fileID: 21300000, guid: 5f80b6eb8a3344640985ed96607f3711, type: 3}
-  _comicsViewer: {fileID: 800102143}
   _text: {fileID: 706423522}
 --- !u!4 &1821661015
 Transform:
@@ -1235,7 +1234,7 @@ PrefabInstance:
     - target: {fileID: 3463643757786144558, guid: 1ecb5ab4abf24423bb1ba9f9173403c1,
         type: 3}
       propertyPath: autoInjectGameObjects.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3463643757786144558, guid: 1ecb5ab4abf24423bb1ba9f9173403c1,
         type: 3}
@@ -1246,7 +1245,7 @@ PrefabInstance:
         type: 3}
       propertyPath: autoInjectGameObjects.Array.data[1]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1821661013}
     - target: {fileID: 5385133619665205347, guid: 1ecb5ab4abf24423bb1ba9f9173403c1,
         type: 3}
       propertyPath: m_LocalPosition.x
