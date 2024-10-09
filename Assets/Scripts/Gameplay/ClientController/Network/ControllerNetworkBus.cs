@@ -148,17 +148,22 @@ public class ControllerNetworkBus : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void FinishActivityServerRpc(int type, string activityName)
     {
-        ActivityFinished?.Invoke(activityName);
-        
-        FinishActivityClientRpc(type);
+        FinishActivityClientRpc(type, activityName);
     }
 
     [ClientRpc]
-    private void FinishActivityClientRpc(int type)
+    private void FinishActivityClientRpc(int type, string activityName)
     {
         if(_identification.IsMyType((PlayerTypes)type)) {
             _controller.FinishActivity();
         }
+        AfterFinishActivityServerRpc(activityName);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void AfterFinishActivityServerRpc(string activityName)
+    {
+        ActivityFinished?.Invoke(activityName);
     }
     #endregion
 

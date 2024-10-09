@@ -32,6 +32,7 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
 
     private void OnActivityFinished(string activityName)
     {
+        Debug.Log(activityName);
         if(activityName == nameof(StringStarter))
         {
             _finishedFinalActivity = true;
