@@ -41,7 +41,10 @@ public class InputCodeStarter : ActivityStarter
     public override async UniTask OnFinish()
     {
         _controller.Interacted -= OnInteract;
-        _controller.ActivityHided += OnActivityHided;
+        if(_isFinished)
+        {
+            _controller.ActivityHided += OnActivityHided;
+        }
         await UniTask.Yield();
         return;
     }
