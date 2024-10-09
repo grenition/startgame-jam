@@ -302,7 +302,6 @@ public class ControllerNetworkBus : NetworkBehaviour
     #region SendMessageToLevelReceiver
     public void SendMessageToLevelMessageReceiver(string id, params int[] data)
     {
-        Debug.Log("Method called!");
         int[] totalData = new int[4];
         for(int i = 0; i < Mathf.Min(data.Length, totalData.Length); i++)
         {
@@ -314,7 +313,6 @@ public class ControllerNetworkBus : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SendMessageToLevelMessageReceiverServerRpc(string id, int data0, int data1, int data2, int data3)
     {
-        Debug.Log(MessageReceiver);
         MessageReceiver?.OnReceiveMessage(id, data0, data1, data2, data3);
     }
     #endregion

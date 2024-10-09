@@ -112,6 +112,7 @@ public class BearStarter : ActivityStarter
         else if(_scenarioIndex == 4 && _inventory.HasItemByName(_inventory.Names.FullBasket))
         {
             _inventory.RemoveItemByName(_inventory.Names.FullBasket);
+            Bus.SendMessageToLevelMessageReceiver(FirstLevel.BearDoorsID, null);
         }
 
         _scenarioScreens[_scenarioIndex].SetActive(true);
@@ -125,14 +126,6 @@ public class BearStarter : ActivityStarter
             _itemBtn.gameObject.SetActive(true);
             _itemBtn.image.sprite = _inventory.GetItemFromStorage(_scenarioItems[_scenarioIndex]).Icon;
             _itemBtn.onClick.AddListener(new(TakeItem));
-        }
-        Debug.Log("TEST");
-        if(_scenarioIndex == 4 && _inventory.HasItemByName(_inventory.Names.FullBasket))
-        {
-            Debug.Log("If statement");
-            _inventory.RemoveItemByName(_inventory.Names.FullBasket);
-            Debug.Log("Send message");
-            Bus.SendMessageToLevelMessageReceiver(FirstLevel.BearDoorsID, null);
         }
     }
 }
