@@ -220,7 +220,11 @@ public class ClientController : MonoBehaviour
         if(PlayingMiniGame != null)
         {
             await PlayingMiniGame.OnFinish();
-            Destroy(PlayingMiniGame.gameObject);
+            if(PlayingMiniGame != null)
+            {
+                Destroy(PlayingMiniGame.gameObject);
+            }
+            
             PlayingMiniGame = null;
         }
         HideActivity();

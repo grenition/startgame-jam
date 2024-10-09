@@ -35,7 +35,11 @@ public class RasberryStarter : ActivityStarter
     public override async UniTask OnFinish()
     {
         _inventory.RemoveItemByName(_inventory.Names.Basket);
-        _inventory.AddItemFromStorage(_inventory.Names.FullBasket);
+        if(Identification.PlayerType is PlayerTypes.Small)
+        {
+            _inventory.AddItemFromStorage(_inventory.Names.FullBasket);
+        }
+        
         _controller.ActivityHided += OnHideActivity;
         await UniTask.Yield();
         return;

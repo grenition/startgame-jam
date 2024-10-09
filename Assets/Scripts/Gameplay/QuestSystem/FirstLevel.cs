@@ -55,6 +55,7 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
 
     public override void OnReceiveMessage(string id, params int[] data)
     {
+        Debug.Log("Message Received");
         if(id == BearDoorsID)
         {
             BearOpenDoors();
@@ -63,6 +64,7 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
 
     private void BearOpenDoors()
     {
+        Debug.Log("Open doors");
         foreach (var opened in _openedFence)
         {
             opened.SetActive(true);
