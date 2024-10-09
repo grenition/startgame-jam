@@ -179,6 +179,7 @@ public class ControllerNetworkBus : NetworkBehaviour
             var player = BigPlayer;
             if (player == null) player = SmallPlayer;
             player?.ShowMessage(_playersTooFarMessage);
+            CantWaitForTeammateClientRpc();
         }
     }
 
@@ -196,6 +197,12 @@ public class ControllerNetworkBus : NetworkBehaviour
 
         var info = _infos[index];
         _controller.SpawnMiniGame(info);
+    }
+
+    [ClientRpc]
+    private void CantWaitForTeammateClientRpc()
+    {
+        _controller.HideActivity();
     }
     #endregion
 
