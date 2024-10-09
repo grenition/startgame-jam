@@ -213,6 +213,7 @@ MonoBehaviour:
   _big: {fileID: 2308964768104931993}
   _takeBookSound: {fileID: 8300000, guid: 7d995207bab7a6240b6625244c53a6e7, type: 3}
   _lightSound: {fileID: 8300000, guid: 14390657bcef400438551f736e9e621c, type: 3}
+  _shakePhone: "\u041F\u043E\u0442\u0440\u044F\u0441\u0438 \u0442\u0435\u043B\u0435\u0444\u043E\u043D!"
   _blueLayout: {fileID: 4716063299647804146}
   _greenLayout: {fileID: 1746210489935948625}
   _redLayout: {fileID: 324538208762837928}

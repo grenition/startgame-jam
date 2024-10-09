@@ -8,6 +8,7 @@ public class HoleStarter : ActivityStarter
     [SerializeField] private RectTransform _parent;
     [SerializeField] private GameObject _small, _big;
     [SerializeField] private AudioClip _takeBookSound, _lightSound;
+    [SerializeField] private string _shakePhone;
     //Small
     [SerializeField] private PointerElement _blueLayout, _greenLayout, _redLayout;
     [SerializeField] private BookHoleItem[] _books;
@@ -22,6 +23,7 @@ public class HoleStarter : ActivityStarter
     private int _booksCount = 0;
     private Inventory _inventory;
     private AudioPool _audioPool;
+    private ClientController _controller;
     public const float MinimumLightLevelForWork = .3f;
     private bool _cantWork = true;
     //Big
@@ -40,10 +42,11 @@ public class HoleStarter : ActivityStarter
     public const string SyncMessageID = "HoleStarterSync";
 
     [Inject]
-    private void Construct(Inventory inventory, AudioPool pool)
+    private void Construct(Inventory inventory, AudioPool pool, ClientController controller)
     {
         _inventory = inventory;
         _audioPool = pool;
+        _controller = controller;
     }
 
     public override RectTransform GetScreenChild()
@@ -210,6 +213,7 @@ public class HoleStarter : ActivityStarter
 
             _isBigAnim = true;
             _bgColor = _noLightBGColor;
+            _controller.ShowMessage(_shakePhone);
         }
     }
 }
