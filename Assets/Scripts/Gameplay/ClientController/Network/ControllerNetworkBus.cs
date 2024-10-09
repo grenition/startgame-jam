@@ -412,6 +412,19 @@ public class ControllerNetworkBus : NetworkBehaviour
     }
     #endregion
 
+    #region FinishGame
+    public void FinishGame()
+    {
+        FinishGameClientRpc();
+    }
+
+    [ClientRpc]
+    private void FinishGameClientRpc()
+    {
+        _controller?.OnFinishGame();
+    }
+    #endregion
+
     public override void OnDestroy()
     {
         _tester.OnDestroy();

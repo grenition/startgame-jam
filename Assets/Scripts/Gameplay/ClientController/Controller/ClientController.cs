@@ -65,6 +65,12 @@ public class ClientController : MonoBehaviour
         _viewer.OpenedClient += OnComicsOpened;
     }
 
+    public void OnFinishGame()
+    {
+        InventoryModel.Clear();
+        _tasks.Tasks.Clear();
+    }
+
     private void OnDestroy()
     {
         _bus.ResetClientController();
