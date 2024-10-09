@@ -15089,7 +15089,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 4e7ceabde4b1556418368bf4c6b86811, type: 3}
     - {fileID: 21300000, guid: d0bacf71c93e88e42b93db789afdc376, type: 3}
     _loadNextScene: {fileID: 1293840602}
-    _bearAnimator: {fileID: 0}
+    _bearAnimator: {fileID: 820840684}
 --- !u!4 &1623597196
 Transform:
   m_ObjectHideFlags: 0
