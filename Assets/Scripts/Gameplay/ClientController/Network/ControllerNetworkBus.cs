@@ -166,7 +166,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     private void WaitForTeammateServerRpc(int index)
     {
         if(SmallPlayer != null && BigPlayer != null &&
-            Vector3.Distance(SmallPlayer.transform.position, BigPlayer.transform.position) <= 10f)
+            Vector3.Distance(SmallPlayer.transform.position, BigPlayer.transform.position) <= 4f)
         {
             WaitForTeammateClientRpc(index);
         }
@@ -303,10 +303,14 @@ public class ControllerNetworkBus : NetworkBehaviour
     public void SendMessageToLevelMessageReceiver(string id, params int[] data)
     {
         int[] totalData = new int[4];
-        for(int i = 0; i < Mathf.Min(data.Length, totalData.Length); i++)
+        if(data != null)
         {
-            totalData[i] = data[i];
+            for (int i = 0; i < Mathf.Min(data.Length, totalData.Length); i++)
+            {
+                totalData[i] = data[i];
+            }
         }
+        
         SendMessageToLevelMessageReceiverServerRpc(id, totalData[0], totalData[1], totalData[2], totalData[3]);
     }
 
