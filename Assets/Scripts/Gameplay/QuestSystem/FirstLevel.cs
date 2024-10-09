@@ -17,16 +17,22 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
 
     private ComicsViewer _comics;
     private ControllerNetworkBus _bus;
+    private Inventory _inventory;
+    private CompletedTasks _tasks;
 
     private bool _finishedFinalActivity = false;
 
     [Inject]
     private void Construct(
         ComicsViewer comics,
-        ControllerNetworkBus bus)
+        ControllerNetworkBus bus,
+        Inventory inventory,
+        CompletedTasks tasks)
     {
         _comics = comics;
         _bus = bus;
+        _inventory = inventory;
+        _tasks = tasks;
 
         _bus.ActivityFinished += OnActivityFinished;
         _comics.OpenComicsWithControllers(_startComics);
@@ -44,6 +50,8 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
             _finishedFinalActivity = false;
             _ = WaitForFrame(() =>
             {
+                _tasks.Tasks.Clear();
+                _inventory.Clear();
                 _loadNextScene.Interact();
             });
         }

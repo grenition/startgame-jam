@@ -14,6 +14,7 @@ public class ControllerNetworkBus : NetworkBehaviour
 
     private ClientController _controller;
     private ClientIdentification _identification;
+    private CompletedTasks _tasks;
     private int _moveDirectionIndex = 0;
     private ActivityInfo[] _infos;
 
@@ -36,9 +37,11 @@ public class ControllerNetworkBus : NetworkBehaviour
     [Inject]
     private void Construct(
         ClientIdentification identification,
-        IObjectResolver resolver)
+        IObjectResolver resolver,
+        CompletedTasks tasks)
     {
         _identification = identification;
+        _tasks = tasks;
         resolver.Inject(_tester);
         _infos = Resources.LoadAll<ActivityInfo>(ResourcesPath);
     }
@@ -383,6 +386,27 @@ public class ControllerNetworkBus : NetworkBehaviour
                 task.Response?.Invoke(value);
                 _allPlayersConnectedTasks.Remove(task);
                 break;
+            }
+        }
+    }
+    #endregion
+
+    #region AddTask
+    public void AddTask(ActivityInfo info)
+    {
+        var index = _infos.ToList().IndexOf(info);
+        AddTaskServerRpc(index);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void AddTaskServerRpc(int index)
+    {
+        if(index >= 0 && index < _infos.Length)
+        {
+            var info = _infos[index];
+            if(!_tasks.Tasks.Contains(info))
+            {
+                _tasks.Tasks.Add(info);
             }
         }
     }

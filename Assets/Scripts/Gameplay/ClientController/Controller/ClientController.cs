@@ -188,6 +188,11 @@ public class ClientController : MonoBehaviour
 
     public void SpawnMiniGame(ActivityInfo info)
     {
+        if(PlayingMiniGame != null)
+        {
+            Destroy(PlayingMiniGame.gameObject);
+        }
+
         if (info != null && info.MiniGamePrefab != null)
         {
             _showedInfo = info;
@@ -220,6 +225,7 @@ public class ClientController : MonoBehaviour
         if(_showedInfo != null && !_tasks.Tasks.Contains(_showedInfo))
         {
             _tasks.Tasks.Add(_showedInfo);
+            _bus.AddTask(_showedInfo);
         }
 
         if(PlayingMiniGame != null)

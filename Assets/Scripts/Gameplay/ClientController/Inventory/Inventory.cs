@@ -46,6 +46,12 @@ public class Inventory
         _audioPool = audioPool;
     }
 
+    public void Clear()
+    {
+        Items.Clear();
+        InventoryChanged?.Invoke();
+    }
+
     public void AddItem(InventoryItem item)
     {
         Items.Add(item);
