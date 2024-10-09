@@ -578,6 +578,7 @@ MonoBehaviour:
   - {fileID: 3899392571877611073}
   - {fileID: 5918705104279183083}
   _missingKeyIndex: 2
+  _oneKeyIsDifferent: "\u041E\u0434\u0438\u043D \u043A\u043B\u044E\u0447 \u043B\u0438\u0448\u043D\u0438\u0439"
 --- !u!1 &5597868166242166937
 GameObject:
   m_ObjectHideFlags: 0

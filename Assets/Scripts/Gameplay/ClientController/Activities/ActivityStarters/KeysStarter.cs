@@ -11,6 +11,7 @@ public class KeysStarter : ActivityStarter
     [SerializeField] private RectTransform _parent;
     [SerializeField] private Button[] _keys;
     [SerializeField] private int _missingKeyIndex;
+    [SerializeField] private string _oneKeyIsDifferent;
 
     private ClientController _controller;
     private Inventory _inventory;
@@ -47,6 +48,8 @@ public class KeysStarter : ActivityStarter
 
     protected override void OnInitialize(Image screen)
     {
+        _controller.ShowMessage(_oneKeyIsDifferent);
+
         if(_inventory.HasItemByName(_inventory.Names.Key))
         {
             _inventory.RemoveItemByName(_inventory.Names.Key);
