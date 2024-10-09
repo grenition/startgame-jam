@@ -65,12 +65,12 @@ public class StringStarter : ActivityStarter
             if(_smallWin && _bigWin)
             {
                 Bus.SpecialDataTransmitted -= OnReceiveMessage;
-                StartCoroutine(FinishIE(type));
+                StartCoroutine(FinishIE());
             }
         }
     }
 
-    private IEnumerator FinishIE(PlayerTypes type)
+    private IEnumerator FinishIE()
     {
         _finalBackground.color = new(0, 0, 0, 0);
         _finalBackground.gameObject.SetActive(true);
@@ -78,7 +78,7 @@ public class StringStarter : ActivityStarter
 
         yield return new WaitForSeconds(1);
 
-        if(type is PlayerTypes.Big)
+        if(Identification.PlayerType is PlayerTypes.Big)
         {
             Finish();
         }

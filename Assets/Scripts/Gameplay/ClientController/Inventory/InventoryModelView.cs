@@ -26,6 +26,7 @@ public class InventoryModelView
 
     public void UpdateInventoryGrid()
     {
+        ChoosenItemIndex.Value = -1;
         var items = Model.GetCopy();
         for(int i = 0; i < Inventory.MaxItems; i++)
         {
@@ -58,6 +59,7 @@ public class InventoryModelView
         if(ChoosenItemIndex.Value > -1)
         {
             Model.CombineItem(Items[ChoosenItemIndex.Value]);
+            ChoosenItemIndex.Value = -1;
         }
     }
 

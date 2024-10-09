@@ -1,5 +1,7 @@
 using Core.Networking.NetworkPlayersService;
+using System.Numerics;
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
@@ -27,6 +29,7 @@ namespace Gameplay.Player.GameObject
             {
                 if(networkPlayer.PlayerObject == null) continue;
                 SceneManager.MoveGameObjectToScene(networkPlayer.PlayerObject.gameObject, SceneManager.GetSceneByName(serverScene));
+                networkPlayer.PlayerObject.transform.position = UnityEngine.Vector3.zero;
             }
         }
     }

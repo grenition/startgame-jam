@@ -57,7 +57,7 @@ public class GarbageStarter : ActivityStarter
         var size = _containers[index].offsetMax - _containers[index].offsetMin;
         var dist = size.magnitude / 2f;
 
-        if(Vector3.Distance(drop.transform.position, _containers[index].transform.position) <= dist)
+        if(Vector3.Distance(drop.transform.localPosition, _containers[index].transform.localPosition) <= dist)
         {
             Destroy(drop.gameObject);
             _curItems++;

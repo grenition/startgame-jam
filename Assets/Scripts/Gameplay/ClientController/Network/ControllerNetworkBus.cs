@@ -23,7 +23,8 @@ public class ControllerNetworkBus : NetworkBehaviour
     public const string ResourcesPath = "Activities";
 
     public event Action<string, int[]> SpecialDataTransmitted;
-    public event Action<ActivityInfo> ActivityStarted, ActivityFinished;
+    public event Action<ActivityInfo> ActivityStarted;
+    public event Action<string> ActivityFinished;
     public event Action<PlayerTypes> InteractedOnServer;
 
     [field: SerializeField] public bool TestMode { get; private set; }
@@ -75,7 +76,7 @@ public class ControllerNetworkBus : NetworkBehaviour
 
     public void FinishTestActivity()
     {
-        FinishActivity(_identification.PlayerType);
+        FinishActivity(_identification.PlayerType, null);
     }
     #endregion
 
@@ -134,24 +135,38 @@ public class ControllerNetworkBus : NetworkBehaviour
     #endregion
 
     #region FinishActivity
-    public void FinishActivity(PlayerTypes type)
+    public void FinishActivity(PlayerTypes type, ActivityStarter activity)
     {
-        FinishActivityServerRpc((int)type);
+        string output = "";
+        if(activity != null)
+        {
+            output = activity.GetType().ToString();
+        }
+        FinishActivityServerRpc((int)type, output);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void FinishActivityServerRpc(int type)
+    private void FinishActivityServerRpc(int type, string activityName)
     {
-        ActivityFinished?.Invoke(_infos[type]);
-        FinishActivityClientRpc(type);
+        FinishActivityClientRpc(type, activityName);
     }
 
     [ClientRpc]
-    private void FinishActivityClientRpc(int type)
+    private void FinishActivityClientRpc(int type, string activityName)
     {
         if(_identification.IsMyType((PlayerTypes)type)) {
             _controller.FinishActivity();
         }
+        if(_identification.PlayerType is PlayerTypes.Small)
+        {
+            AfterFinishActivityServerRpc(activityName);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void AfterFinishActivityServerRpc(string activityName)
+    {
+        ActivityFinished?.Invoke(activityName);
     }
     #endregion
 
@@ -179,6 +194,7 @@ public class ControllerNetworkBus : NetworkBehaviour
             var player = BigPlayer;
             if (player == null) player = SmallPlayer;
             player?.ShowMessage(_playersTooFarMessage);
+            CantWaitForTeammateClientRpc();
         }
     }
 
@@ -196,6 +212,12 @@ public class ControllerNetworkBus : NetworkBehaviour
 
         var info = _infos[index];
         _controller.SpawnMiniGame(info);
+    }
+
+    [ClientRpc]
+    private void CantWaitForTeammateClientRpc()
+    {
+        _controller?.ResetState();
     }
     #endregion
 

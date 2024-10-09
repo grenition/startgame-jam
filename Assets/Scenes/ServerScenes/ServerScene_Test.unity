@@ -3174,7 +3174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee834e4e4a9c414b90a48489aaea6c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactionPoint: {fileID: 0}
+  _interactionPoint: {fileID: 484011623}
   _info: {fileID: 11400000, guid: 4ac79471b8d1bbf4188de866509e7d00, type: 2}
   _destroyAfterStartingActivity: 0
   _activateInteractionWhenStart: 0
@@ -5672,12 +5672,12 @@ PrefabInstance:
     - target: {fileID: 5252843849220907417, guid: 84fb2e3865a198547ae66a68e03b1cfd,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.09
+      value: 1.082
       objectReference: {fileID: 0}
     - target: {fileID: 5252843849220907417, guid: 84fb2e3865a198547ae66a68e03b1cfd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.23
+      value: -0.109
       objectReference: {fileID: 0}
     - target: {fileID: 5252843849220907417, guid: 84fb2e3865a198547ae66a68e03b1cfd,
         type: 3}
@@ -5727,7 +5727,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5805942746710692610, guid: 84fb2e3865a198547ae66a68e03b1cfd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 820840684}
   m_SourcePrefab: {fileID: 100100000, guid: 84fb2e3865a198547ae66a68e03b1cfd, type: 3}
 --- !u!4 &820840682 stripped
 Transform:
@@ -5735,6 +5739,33 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 820840681}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &820840683 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5805942746710692610, guid: 84fb2e3865a198547ae66a68e03b1cfd,
+    type: 3}
+  m_PrefabInstance: {fileID: 820840681}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &820840684
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 820840683}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 99110c21c22dcf047b68931c627b87b5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &823378348
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9427,10 +9458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _conditions:
-    dependentConditionsSet:
-    - dependentConditionsSet: []
-      conditions: []
-      connection: 0
+    dependentConditionsSet: []
     conditions: []
     connection: 0
   _actions:
@@ -15060,9 +15088,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 02894d8e9d05c6142b52b5f97de21332, type: 3}
     - {fileID: 21300000, guid: 4e7ceabde4b1556418368bf4c6b86811, type: 3}
     - {fileID: 21300000, guid: d0bacf71c93e88e42b93db789afdc376, type: 3}
-    _stringsActivity: {fileID: 11400000, guid: d086a9f7626e9e44f98e38269d7fbad2, type: 2}
-    _comicsActivity: {fileID: 11400000, guid: 755182de050c2344ca1c04c0264e7f1c, type: 2}
     _loadNextScene: {fileID: 1293840602}
+    _bearAnimator: {fileID: 820840684}
 --- !u!4 &1623597196
 Transform:
   m_ObjectHideFlags: 0
