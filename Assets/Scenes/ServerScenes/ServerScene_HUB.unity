@@ -3273,7 +3273,6 @@ GameObject:
   - component: {fileID: 1293840603}
   - component: {fileID: 1293840602}
   - component: {fileID: 1293840604}
-  - component: {fileID: 1293840605}
   m_Layer: 7
   m_Name: NextScene
   m_TagString: Untagged
@@ -3293,10 +3292,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee834e4e4a9c414b90a48489aaea6c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactionPoint: {fileID: 1293840605}
+  _interactionPoint: {fileID: 0}
   _info: {fileID: 11400000, guid: ac0aec49229ea694b9d7158022f1b6d7, type: 2}
   _destroyAfterStartingActivity: 0
-  _activateInteractionWhenStart: 1
+  _activateInteractionWhenStart: 0
 --- !u!4 &1293840603
 Transform:
   m_ObjectHideFlags: 0
@@ -3333,39 +3332,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.35
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1293840605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1293840601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4927d61e15f1458a83969f7d7b1d9c2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _conditions:
-    dependentConditionsSet: []
-    conditions: []
-    connection: 0
-  _actions:
-  - sendTo: 0
-    action:
-      rid: 4886338589102964736
-  - sendTo: 0
-    action:
-      rid: 4886338721730265088
-  references:
-    version: 2
-    RefIds:
-    - rid: 4886338589102964736
-      type: {class: LoadServerSceneAction, ns: Gameplay.Server, asm: Assembly-CSharp}
-      data:
-        sceneKey: ServerScene_Test
-    - rid: 4886338721730265088
-      type: {class: HideActivityAction, ns: Gameplay.QuestSystem.Actions, asm: Assembly-CSharp}
-      data: 
 --- !u!1 &1317605261
 GameObject:
   m_ObjectHideFlags: 0

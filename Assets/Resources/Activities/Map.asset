@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Map
   m_EditorClassIdentifier: 
   _image: {fileID: 21300000, guid: 75a74a9838aa9964fb019900a8b10115, type: 3}
-  _miniGamePrefab: {fileID: 0}
+  _miniGamePrefab: {fileID: 4127027231922981093, guid: f7ed3d34c81b5af4baf206eeca7a4be6,
+    type: 3}
   _singlePlayer: 1
