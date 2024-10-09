@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
@@ -15,6 +16,9 @@ public class ControllerNetworkBus : NetworkBehaviour
     private ClientIdentification _identification;
     private int _moveDirectionIndex = 0;
     private ActivityInfo[] _infos;
+
+    private List<BusTask> _allPlayersConnectedTasks = new();
+    private int _allPlayersConenctedId = 0;
 
     public const string ResourcesPath = "Activities";
 
@@ -328,9 +332,51 @@ public class ControllerNetworkBus : NetworkBehaviour
     }
     #endregion
 
+    #region IsAllPlayersConnected
+    public void IsAllPlayersConnected(Action<bool> response)
+    {
+        var task = new BusTask(response, _allPlayersConenctedId++);
+        _allPlayersConnectedTasks.Add(task);
+        IsAllPlayersConnectedServerRpc(task.Id);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void IsAllPlayersConnectedServerRpc(int id)
+    {
+        bool value = BigPlayer != null && SmallPlayer != null;
+        IsAllPlayersConnectedClientRpc(value, id);
+    }
+
+    [ClientRpc]
+    private void IsAllPlayersConnectedClientRpc(bool value, int id)
+    {
+        foreach(var task in _allPlayersConnectedTasks)
+        {
+            if(task.Id == id)
+            {
+                task.Response?.Invoke(value);
+                _allPlayersConnectedTasks.Remove(task);
+                break;
+            }
+        }
+    }
+    #endregion
+
     public override void OnDestroy()
     {
         _tester.OnDestroy();
         base.OnDestroy();
+    }
+}
+
+public class BusTask
+{
+    public Action<bool> Response;
+    public int Id;
+
+    public BusTask(Action<bool> response, int id)
+    {
+        Response = response;
+        Id = id;
     }
 }

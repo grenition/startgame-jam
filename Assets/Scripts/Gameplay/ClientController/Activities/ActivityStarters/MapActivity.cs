@@ -11,11 +11,13 @@ public class MapActivity : ActivityStarter
     [SerializeField] private string _comingSoonMessage, _waitingPlayersMessage;
 
     private ClientController _controller;
+    private ControllerNetworkBus _bus;
 
     [Inject]
-    private void Construct(ClientController controller)
+    private void Construct(ClientController controller, ControllerNetworkBus bus)
     {
         _controller = controller;
+        _bus = bus;
     }
 
     public override RectTransform GetScreenChild()
@@ -35,13 +37,19 @@ public class MapActivity : ActivityStarter
     {
         if(index == 0)
         {
-            if(!_nextScene.CheckConditions())
+            _bus.IsAllPlayersConnected(b =>
             {
-                _controller.ShowMessage(_waitingPlayersMessage);
-                return;
-            }
-            _nextScene.Interact();
-            Finish(true);
+                if(b)
+                {
+                    _nextScene.Interact();
+                    Finish(true);
+                }
+                else
+                {
+                    _controller.ShowMessage(_waitingPlayersMessage);
+                    return;
+                }
+            });
         }
         else
         {

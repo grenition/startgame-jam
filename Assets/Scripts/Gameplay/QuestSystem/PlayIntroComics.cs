@@ -1,16 +1,43 @@
-using TMPro;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using VContainer;
 
 public class PlayIntroComics : MonoBehaviour
 {
     [SerializeField] private Sprite[] _introComics;
-    [SerializeField] private ComicsViewer _comicsViewer;
     [SerializeField] private GameObject _text;
+
+    private ComicsViewer _comicsViewer;
+    private ClientIdentification _identification;
+
+    [Inject]
+    private void Construct(ComicsViewer viewer, ClientIdentification identification)
+    {
+        _comicsViewer = viewer;
+        _identification = identification;
+    }
 
     private void Start()
     {
-        _comicsViewer.Closed += OnComicsFinished;
-        _comicsViewer.OpenComics(_introComics);
+        _ = StartAsync();
+    }
+
+    private async UniTask StartAsync()
+    {
+        while(_comicsViewer == null)
+        {
+            await UniTask.Yield();
+        }
+
+        if(_identification.PlayerType is PlayerTypes.Host)
+        {
+            _comicsViewer.Closed += OnComicsFinished;
+            _comicsViewer.OpenComics(_introComics);
+        }
+        else
+        {
+            DestroyAll();
+        }
     }
 
     private void Update()
@@ -29,8 +56,13 @@ public class PlayIntroComics : MonoBehaviour
 
     private void OnComicsFinished()
     {
-        Destroy(_text);
         _comicsViewer.Closed -= OnComicsFinished;
+        DestroyAll();
+    }
+
+    private void DestroyAll()
+    {
+        Destroy(_text);
         Destroy(gameObject);
     }
 }
