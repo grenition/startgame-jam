@@ -12,6 +12,7 @@ public class MapActivity : ActivityStarter
 
     private ClientController _controller;
     private ControllerNetworkBus _bus;
+    private bool _goToNextSceneAfterFinish = false;
 
     [Inject]
     private void Construct(ClientController controller, ControllerNetworkBus bus)
@@ -29,6 +30,10 @@ public class MapActivity : ActivityStarter
     {
         _controller.Interacted -= OnInteracted;
         await UniTask.Yield();
+        if(_goToNextSceneAfterFinish)
+        {
+            _nextScene.Interact();
+        }
         return;
     }
 
@@ -41,7 +46,7 @@ public class MapActivity : ActivityStarter
             {
                 if(b)
                 {
-                    _nextScene.Interact();
+                    _goToNextSceneAfterFinish = true;
                     Finish(true);
                 }
                 else

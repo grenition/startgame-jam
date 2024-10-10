@@ -34,12 +34,8 @@ public class PlayIntroComics : MonoBehaviour
             await UniTask.Yield();
         }
 
-        Debug.Log("Start async");
-        Debug.Log($"{_identification.PlayerType}");
-
         if(_identification.PlayerType is PlayerTypes.Host)
         {
-            Debug.Log("I am host");
             _comicsViewer.Closed += OnComicsFinished;
             _comicsViewer.OpenComics(_introComics);
         }

@@ -34,6 +34,13 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
 
         _bus.ActivityFinished += OnActivityFinished;
         _comics.Closed += OnFinishComicsFirstTime;
+        OpenComicsWithDelay();
+    }
+
+    private async void OpenComicsWithDelay()
+    {
+        await UniTask.Yield();
+        await UniTask.Yield();
         _comics.OpenComicsWithControllers(_startComics);
     }
 
