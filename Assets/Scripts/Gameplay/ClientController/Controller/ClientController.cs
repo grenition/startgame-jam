@@ -269,7 +269,9 @@ public class ClientController : MonoBehaviour
     {
         if(_showedInfo == info && State is States.WaitCallback or States.OnMiniGame)
         {
-            _ = FinishActivity();
+            info.CanInteractWithTwoPlayers(_bus, _identification, out var reason);
+            _bus.FinishActivity(PlayerTypes.LocalPlayers, PlayingMiniGame);
+            ShowMessage(reason);
         }
     }
 
