@@ -9,6 +9,7 @@ public class LeaveLevelControlls : MonoBehaviour
     [SerializeField] private InteractionPoint _leaveLevelPoint;
     [SerializeField] private GameObject _messageParent;
     [SerializeField] private bool _fullQuitFromApplication;
+    [SerializeField] private ControllerNetworkBus _bus;
 
     private bool _cantQuit = false;
 
@@ -28,6 +29,7 @@ public class LeaveLevelControlls : MonoBehaviour
     //UnityEvent
     public void SubmitPressed()
     {
+        _bus.FinishGame();
         _messageParent.SetActive(false);
         _leaveLevelPoint?.Interact();
         if(_fullQuitFromApplication && !_cantQuit)

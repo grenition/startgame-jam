@@ -34,7 +34,7 @@ public class ActivityInfo : ScriptableObject
         if(_onlyOnePlayer)
         {
             var info = bus.SmallPlayerActivity;
-            if (identification.PlayerType is PlayerTypes.Big)
+            if (identification.PlayerType is PlayerTypes.Small)
                 info = bus.BigPlayerActivity;
 
             return info == null;

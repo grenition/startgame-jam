@@ -173,6 +173,9 @@ public class ControllerNetworkBus : NetworkBehaviour
         else BigPlayerActivity = null;
 
         if (_identification.IsMyType((PlayerTypes)type)) {
+            SmallPlayerActivity = null;
+            BigPlayerActivity = null;
+
             _controller.FinishActivity();
         }
         if(_identification.PlayerType is PlayerTypes.Small)
