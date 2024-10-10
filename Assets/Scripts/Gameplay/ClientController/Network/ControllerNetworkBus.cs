@@ -558,6 +558,35 @@ public class ControllerNetworkBus : NetworkBehaviour
     }
     #endregion
 
+    #region FinishOnlyOnePlayerActivity
+    public void FinishOnlyOnePlayerActivity(ActivityInfo info)
+    {
+        var index = _infos.ToList().IndexOf(info);
+        if(index >= 0 && index < _infos.Length)
+        {
+            FinishOnlyOnePlayerActivityServerRpc(index, (int)_identification.PlayerType);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void FinishOnlyOnePlayerActivityServerRpc(int index, int type)
+    {
+        FinishOnlyOnePlayerActivityClientRpc(index, type);
+    }
+
+    [ClientRpc]
+    private void FinishOnlyOnePlayerActivityClientRpc(int index, int type)
+    {
+        if(_identification.IsMyType((PlayerTypes)type) ||
+            _identification.PlayerType is PlayerTypes.Host)
+        {
+            return;
+        }
+
+        _controller?.FinishOnlyOnePlayerActivity(_infos[index]);
+    }
+    #endregion
+
     public override void OnDestroy()
     {
         _tester.OnDestroy();

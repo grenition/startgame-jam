@@ -217,6 +217,11 @@ public class ClientController : MonoBehaviour
             _showedInfo = info;
             State = States.OnMiniGame;
 
+            if(info.OnlyOnePlayer)
+            {
+                _bus.FinishOnlyOnePlayerActivity(info);
+            }
+
             var obj = _factory.SpawnLocalObject(info.MiniGamePrefab, TargetScene.None);
             PlayingMiniGame = obj;
             var screenChild = obj.GetScreenChild();
@@ -258,6 +263,14 @@ public class ClientController : MonoBehaviour
             PlayingMiniGame = null;
         }
         HideActivity();
+    }
+
+    public void FinishOnlyOnePlayerActivity(ActivityInfo info)
+    {
+        if(_showedInfo == info && State is States.WaitCallback or States.OnMiniGame)
+        {
+            _ = FinishActivity();
+        }
     }
 
     private void Update()
