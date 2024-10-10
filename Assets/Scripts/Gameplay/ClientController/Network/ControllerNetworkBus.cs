@@ -18,8 +18,9 @@ public class ControllerNetworkBus : NetworkBehaviour
     private int _moveDirectionIndex = 0;
     private ActivityInfo[] _infos;
 
-    private List<BusTask> _allPlayersConnectedTasks = new();
-    private int _allPlayersConenctedId = 0;
+    private List<BusTask<Action<bool>>> _allPlayersConnectedTasks = new();
+    private List<BusTask<Action<int, float>>> _getSettingsTasks = new();
+    private int _allPlayersConenctedId = 0, _getSettingsId = 0;
 
     public const string ResourcesPath = "Activities";
 
@@ -346,6 +347,39 @@ public class ControllerNetworkBus : NetworkBehaviour
     }
     #endregion
 
+    #region GetSettings
+    public void GetSettings(Action<int, float> callback)
+    {
+        var task = new BusTask<Action<int, float>>(callback, _getSettingsId++);
+        _getSettingsTasks.Add(task);
+        GetSettingsServerRpc(task.Id, (int)_identification.PlayerType);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void GetSettingsServerRpc(int id, int type)
+    {
+        int quality = QualitySettings.GetQualityLevel();
+        _audioMixer.GetFloat(SettingsModelView.MasterVolume, out var volume);
+        GetSettingsClientRpc(type, id, quality, volume);
+    }
+
+    [ClientRpc]
+    private void GetSettingsClientRpc(int type, int id, int quality, float volume)
+    {
+        if (_identification.IsMyType((PlayerTypes)type))
+        {
+            foreach(var task in _getSettingsTasks)
+            {
+                if(task.Id == id)
+                {
+                    task.Response?.Invoke(quality, volume);
+                    break;
+                }
+            }
+        }
+    }
+    #endregion
+
     #region ApplySettings
     public void ApplySettings(int quality, float volume)
     {
@@ -364,7 +398,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     #region IsAllPlayersConnected
     public void IsAllPlayersConnected(Action<bool> response)
     {
-        var task = new BusTask(response, _allPlayersConenctedId++);
+        var task = new BusTask<Action<bool>>(response, _allPlayersConenctedId++);
         _allPlayersConnectedTasks.Add(task);
         IsAllPlayersConnectedServerRpc(task.Id);
     }
@@ -432,12 +466,12 @@ public class ControllerNetworkBus : NetworkBehaviour
     }
 }
 
-public class BusTask
+public class BusTask<T>
 {
-    public Action<bool> Response;
+    public T Response;
     public int Id;
 
-    public BusTask(Action<bool> response, int id)
+    public BusTask(T response, int id)
     {
         Response = response;
         Id = id;

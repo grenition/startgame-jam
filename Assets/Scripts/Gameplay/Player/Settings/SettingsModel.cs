@@ -14,7 +14,7 @@ public class SettingsModel : ActivityStarter
 
     protected override void OnInitialize(Image screen)
     {
-        _view.Initialize(this);
+        _view.Initialize(this, Bus);
     }
 
     public override RectTransform GetScreenChild()
