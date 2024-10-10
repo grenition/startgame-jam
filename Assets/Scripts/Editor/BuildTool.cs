@@ -25,7 +25,7 @@ public class BuildTool : EditorWindow
         
         GUILayout.Label("Build Name", EditorStyles.label);
         buildName = EditorGUILayout.TextField(buildName);
-        developmentBuild = EditorGUILayout.Toggle(developmentBuild);
+        developmentBuild = EditorGUILayout.Toggle("Developmnet build", developmentBuild);
 
         if (GUILayout.Button("Build All"))
         {
