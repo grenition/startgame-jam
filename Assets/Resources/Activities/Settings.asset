@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41348d482040df440b7373447a940a90, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
-  _image: {fileID: 21300000, guid: 09edf3ff90091e2429ec2e13fdf50fb9, type: 3}
+  _image: {fileID: 21300000, guid: faa029969139ab748b3ff9e1ff0fc9f4, type: 3}
   _miniGamePrefab: {fileID: 1509241168221730004, guid: dd1f659853b24c84b8e9fd314c73dcfe,
     type: 3}
   _singlePlayer: 1
+  _onlyOnePlayer: 0
+  _cantInteractWithTwoReason: 
