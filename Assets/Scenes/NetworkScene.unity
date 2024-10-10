@@ -780,6 +780,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 5f80b6eb8a3344640985ed96607f3711, type: 3}
   _playersTooFarMessage: "\u042D\u0442\u043E \u043D\u0435 \u043F\u043E \u0441\u0438\u043B\u0430\u043C
     \u043B\u0438\u0448\u044C \u043E\u0434\u043D\u043E\u043C\u0443!"
+  _settingsChangedMessage: "\u0414\u0440\u0443\u0433\u043E\u0439 \u0438\u0433\u0440\u043E\u043A
+    \u043F\u043E\u043C\u0435\u043D\u044F\u043B \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"
   _audioMixer: {fileID: 24100000, guid: 5148537d188bf6d4ca1a32255632ce85, type: 2}
   <TestMode>k__BackingField: 0
 --- !u!4 &1674853184

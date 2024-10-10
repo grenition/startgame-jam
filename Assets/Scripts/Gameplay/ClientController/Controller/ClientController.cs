@@ -33,6 +33,8 @@ public class ClientController : MonoBehaviour
     private ComicsViewer _viewer;
     private Vector3 _prevMoveDirection = Vector3.zero;
 
+    private float _sinMove, _cosMove;
+
     private Coroutine _infoAnimCor;
 
     public event Action Interacted;
@@ -43,7 +45,7 @@ public class ClientController : MonoBehaviour
     public ActivityStarter PlayingMiniGame { get; private set; } = null;
     public Inventory InventoryModel { get; private set; }
 
-    [field: SerializeField] public float MoveAngle = -45f;
+    [field: SerializeField] public float MoveAngle { get; private set; } = 45f;
 
     [Inject]
     private void Construct(
@@ -86,6 +88,9 @@ public class ClientController : MonoBehaviour
         _interactBtn.onClick.AddListener(new(Interact));
         _screenBtn.onClick.AddListener(new(OnScreenTouched));
         HideActivity();
+
+        _sinMove = Mathf.Sin(MoveAngle * Mathf.Deg2Rad);
+        _cosMove = Mathf.Cos(MoveAngle * Mathf.Deg2Rad);
     }
 
     private void OnComicsOpened()
@@ -267,12 +272,8 @@ public class ClientController : MonoBehaviour
         {
             _prevMoveDirection = direction;
 
-            float x =
-            direction.x * Mathf.Cos(MoveAngle * Mathf.Deg2Rad) -
-            direction.z * Mathf.Sin(MoveAngle * Mathf.Deg2Rad);
-            float y =
-                direction.x * Mathf.Sin(MoveAngle * Mathf.Deg2Rad) +
-                direction.z * Mathf.Cos(MoveAngle * Mathf.Deg2Rad);
+            float x = direction.x * _cosMove - direction.z * _sinMove;
+            float y = direction.x * _sinMove + direction.z * _cosMove;
 
             direction = new(x, 0, y);
 

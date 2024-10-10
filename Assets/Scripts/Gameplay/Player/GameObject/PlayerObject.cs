@@ -118,8 +118,11 @@ public class PlayerObject : MonoBehaviour
     {
         if(other.TryGetComponent<ActivityPoint>(out var point))
         {
-            _nearlyPoint = null;
-            point.HideActivity(PlayerType);
+            if(_nearlyPoint == point)
+            {
+                _nearlyPoint = null;
+                point.HideActivity(PlayerType);
+            }
         }
     }
 

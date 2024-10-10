@@ -9,7 +9,7 @@ using VContainer;
 public class ControllerNetworkBus : NetworkBehaviour
 {
     [SerializeField] private ClientControllerTester _tester;
-    [SerializeField] private string _playersTooFarMessage;
+    [SerializeField] private string _playersTooFarMessage, _settingsChangedMessage;
     [SerializeField] private AudioMixer _audioMixer;
 
     private ClientController _controller;
@@ -383,15 +383,25 @@ public class ControllerNetworkBus : NetworkBehaviour
     #region ApplySettings
     public void ApplySettings(int quality, float volume)
     {
-        ApplySettingsServerRpc(quality, volume);
+        ApplySettingsServerRpc(quality, volume, (int)_identification.PlayerType);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ApplySettingsServerRpc(int quality, float volume)
+    private void ApplySettingsServerRpc(int quality, float volume, int type)
     {
-        HideActivityServerRpc((int)PlayerTypes.LocalPlayers);
         QualitySettings.SetQualityLevel(quality);
         _audioMixer.SetFloat(SettingsModelView.MasterVolume, volume);
+        ApplySettingsClientRpc(type);
+    }
+
+    [ClientRpc]
+    private void ApplySettingsClientRpc(int type)
+    {
+        if (_identification.IsMyType((PlayerTypes)type) ||
+            _identification.PlayerType is PlayerTypes.Host)
+            return;
+
+        _controller?.ShowMessage(_settingsChangedMessage);
     }
     #endregion
 
@@ -442,6 +452,17 @@ public class ControllerNetworkBus : NetworkBehaviour
             {
                 _tasks.Tasks.Add(info);
             }
+            AddTaskClientRpc(index);
+        }
+    }
+
+    [ClientRpc]
+    private void AddTaskClientRpc(int index)
+    {
+        var info = _infos[index];
+        if(!_tasks.Tasks.Contains(info))
+        {
+            _tasks.Tasks.Add(info);
         }
     }
     #endregion
