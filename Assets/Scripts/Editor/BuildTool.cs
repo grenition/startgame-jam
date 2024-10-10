@@ -11,6 +11,7 @@ public class BuildTool : EditorWindow
     private static string windowsBuildPath = string.Empty;
     private static string androidBuildPath = string.Empty;
     private static string buildName = "startgame-jam";
+    private static bool developmentBuild = false;
 
     [MenuItem("Tools/Build for All Platforms")]
     public static void ShowWindow()
@@ -24,6 +25,7 @@ public class BuildTool : EditorWindow
         
         GUILayout.Label("Build Name", EditorStyles.label);
         buildName = EditorGUILayout.TextField(buildName);
+        developmentBuild = EditorGUILayout.Toggle("Developmnet build", developmentBuild);
 
         if (GUILayout.Button("Build All"))
         {
@@ -43,12 +45,15 @@ public class BuildTool : EditorWindow
         if (!Directory.Exists(windowsBuildPath)) Directory.CreateDirectory(windowsBuildPath);
         if (!Directory.Exists(androidBuildPath)) Directory.CreateDirectory(androidBuildPath);
 
+        var buildOptions = BuildOptions.None;
+        if (developmentBuild) buildOptions |= BuildOptions.Development;
+        
         BuildPlayerOptions macOptions = new BuildPlayerOptions
         {
             scenes = GetScenes(),
             locationPathName = Path.Combine(macOsBuildPath, buildName + ".app"),
             target = BuildTarget.StandaloneOSX,
-            options = BuildOptions.None
+            options = buildOptions
         };
         BuildPipeline.BuildPlayer(macOptions);
 
@@ -57,16 +62,17 @@ public class BuildTool : EditorWindow
             scenes = GetScenes(),
             locationPathName = Path.Combine(windowsBuildPath, buildName + ".exe"),
             target = BuildTarget.StandaloneWindows64,
-            options = BuildOptions.None
+            options = buildOptions
         };
         BuildPipeline.BuildPlayer(windowsOptions);
 
+        PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
         BuildPlayerOptions androidOptions = new BuildPlayerOptions
         {
             scenes = GetScenes(),
             locationPathName = Path.Combine(androidBuildPath, buildName + ".apk"),
             target = BuildTarget.Android,
-            options = BuildOptions.None
+            options = buildOptions
         };
         BuildPipeline.BuildPlayer(androidOptions);
 
