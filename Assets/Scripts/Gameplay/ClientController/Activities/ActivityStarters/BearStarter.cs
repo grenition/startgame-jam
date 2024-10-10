@@ -13,6 +13,7 @@ public class BearStarter : ActivityStarter
                        _giveKeysScreen, _givesBaketScreen, _happyBearScreen;
     [SerializeField] private Button _itemBtn;
     [SerializeField] private Image _itemImage;
+    [SerializeField] private GameObject _loadingScreen;
 
     private CompletedTasks _tasks;
     private Inventory _inventory;
@@ -132,5 +133,7 @@ public class BearStarter : ActivityStarter
             _itemBtn.image.sprite = _inventory.GetItemFromStorage(_scenarioItems[_scenarioIndex]).Icon;
             _itemBtn.onClick.AddListener(new(TakeItem));
         }
+
+        Destroy(_loadingScreen);
     }
 }
