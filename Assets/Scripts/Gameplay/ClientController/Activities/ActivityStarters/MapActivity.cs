@@ -7,7 +7,6 @@ using VContainer;
 public class MapActivity : ActivityStarter
 {
     [SerializeField] private RectTransform _parent;
-    [SerializeField] private InteractionPoint _nextScene;
     [SerializeField] private string _comingSoonMessage, _waitingPlayersMessage;
 
     private ClientController _controller;
@@ -32,7 +31,7 @@ public class MapActivity : ActivityStarter
         await UniTask.Yield();
         if(_goToNextSceneAfterFinish)
         {
-            _nextScene.Interact();
+            Bus.GoToHub();
         }
         return;
     }

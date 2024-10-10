@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class GoToHubStarter : ActivityStarter
 {
     [SerializeField] private RectTransform _parent;
-    [SerializeField] private InteractionPoint _toNextScene;
 
     public override RectTransform GetScreenChild()
     {
@@ -16,8 +15,7 @@ public class GoToHubStarter : ActivityStarter
     public override async UniTask OnFinish()
     {
         await UniTask.Yield();
-        _toNextScene.Interact();
-        Bus.FinishGame();
+        Bus.GoToHub();
         return;
     }
 

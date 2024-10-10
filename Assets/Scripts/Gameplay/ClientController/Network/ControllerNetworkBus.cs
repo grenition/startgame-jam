@@ -587,6 +587,19 @@ public class ControllerNetworkBus : NetworkBehaviour
     }
     #endregion
 
+    #region GoToHub
+    public void GoToHub()
+    {
+        GoToHubServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void GoToHubServerRpc()
+    {
+        MessageReceiver.GoToHub();
+    }
+    #endregion
+
     public override void OnDestroy()
     {
         _tester.OnDestroy();
