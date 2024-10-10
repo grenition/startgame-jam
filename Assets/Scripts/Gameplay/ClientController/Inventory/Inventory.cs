@@ -1,10 +1,11 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
 [Serializable]
-public class Inventory
+public class Inventory : IDisposable
 {
     public const int MaxItems = 6;
 
@@ -44,6 +45,7 @@ public class Inventory
         _identification = identification;
         _modelView.Initialize(this);
         _audioPool = audioPool;
+        bus.SetInventory(this);
     }
 
     public void Clear()
@@ -85,6 +87,31 @@ public class Inventory
     public bool HasItemByName(string name)
     {
         return Items.Exists(x => x.Name == name);
+    }
+
+    public async UniTask<bool> HasItemInAllPlayers(string name)
+    {
+        if(HasItemByName(name))
+        {
+            return true;
+        }
+        else
+        {
+            bool ended = false;
+            bool result = false;
+            _bus.HasItemInAlls(name, val =>
+            {
+                result = val;
+                ended = true;
+            });
+
+            while(!ended)
+            {
+                await UniTask.Yield();
+            }
+
+            return result;
+        }
     }
 
     public InventoryItem GetItem(int index)
@@ -160,6 +187,11 @@ public class Inventory
             }
         }
         return null;
+    }
+
+    public void Dispose()
+    {
+        _bus.ResetInventory();
     }
 }
 

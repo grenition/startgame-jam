@@ -147,6 +147,12 @@ public class ClientController : MonoBehaviour
             return;
         }
 
+        if(!_showedInfo.CanInteractWithTwoPlayers(_bus, _identification, out reason))
+        {
+            ShowMessage(reason);
+            return;
+        }
+
         State = States.WaitCallback;
         _bus.InvokeActivityStarted(_showedInfo);
         if(_showedInfo.SinglePlayer)

@@ -13,6 +13,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     [SerializeField] private AudioMixer _audioMixer;
 
     private ClientController _controller;
+    private Inventory _inventory;
     private ClientIdentification _identification;
     private CompletedTasks _tasks;
     private int _moveDirectionIndex = 0;
@@ -20,7 +21,8 @@ public class ControllerNetworkBus : NetworkBehaviour
 
     private List<BusTask<Action<bool>>> _allPlayersConnectedTasks = new();
     private List<BusTask<Action<int, float>>> _getSettingsTasks = new();
-    private int _allPlayersConenctedId = 0, _getSettingsId = 0;
+    private List<BusTask<Action<bool>>> _hasItemInAll = new();
+    private int _allPlayersConenctedId = 0, _getSettingsId = 0, _hasItemInAllId = 0;
 
     public const string ResourcesPath = "Activities";
 
@@ -34,6 +36,8 @@ public class ControllerNetworkBus : NetworkBehaviour
     public PlayerObject SmallPlayer { get; set; }
     public ClientControllerTester Tester => _tester;
     public NetworkBusLevelMessageReceiver MessageReceiver { get; set; } = null;
+    public ActivityInfo BigPlayerActivity { get; private set; } = null;
+    public ActivityInfo SmallPlayerActivity { get; private set; } = null;
 
     [Inject]
     private void Construct(
@@ -60,6 +64,10 @@ public class ControllerNetworkBus : NetworkBehaviour
         => _controller ??= clientController;
 
     public void ResetClientController() => _controller = null;
+
+    public void SetInventory(Inventory inventory) => _inventory ??= inventory;
+
+    public void ResetInventory() => _inventory = null;
     #endregion
 
     #region DevConsoleCommands
@@ -146,19 +154,25 @@ public class ControllerNetworkBus : NetworkBehaviour
         {
             output = activity.GetType().ToString();
         }
-        FinishActivityServerRpc((int)type, output);
+        if (_identification.PlayerType is PlayerTypes.Small) SmallPlayerActivity = null;
+        else BigPlayerActivity = null;
+
+        FinishActivityServerRpc((int)type, output, (int)_identification.PlayerType);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void FinishActivityServerRpc(int type, string activityName)
+    private void FinishActivityServerRpc(int type, string activityName, int senderType)
     {
-        FinishActivityClientRpc(type, activityName);
+        FinishActivityClientRpc(type, activityName, senderType);
     }
 
     [ClientRpc]
-    private void FinishActivityClientRpc(int type, string activityName)
+    private void FinishActivityClientRpc(int type, string activityName, int senderType)
     {
-        if(_identification.IsMyType((PlayerTypes)type)) {
+        if ((PlayerTypes)senderType is PlayerTypes.Small) SmallPlayerActivity = null;
+        else BigPlayerActivity = null;
+
+        if (_identification.IsMyType((PlayerTypes)type)) {
             _controller.FinishActivity();
         }
         if(_identification.PlayerType is PlayerTypes.Small)
@@ -302,13 +316,25 @@ public class ControllerNetworkBus : NetworkBehaviour
     public void InvokeActivityStarted(ActivityInfo info)
     {
         int index = _infos.ToList().IndexOf(info);
-        InvokeActivityStartedServerRpc(index);
+        InvokeActivityStartedServerRpc(index, (int)_identification.PlayerType);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void InvokeActivityStartedServerRpc(int index)
+    private void InvokeActivityStartedServerRpc(int index, int type)
     {
+        var info = _infos[index];
+        if ((PlayerTypes)type is PlayerTypes.Big) BigPlayerActivity = info;
+        else SmallPlayerActivity = info;
         ActivityStarted?.Invoke(_infos[index]);
+        InvokeActivityStartedClientRpc(index, type);
+    }
+
+    [ClientRpc]
+    private void InvokeActivityStartedClientRpc(int index, int type)
+    {
+        var info = _infos[index];
+        if ((PlayerTypes)type is PlayerTypes.Big) BigPlayerActivity = info;
+        else SmallPlayerActivity = info;
     }
     #endregion
 
@@ -477,6 +503,55 @@ public class ControllerNetworkBus : NetworkBehaviour
     private void FinishGameClientRpc()
     {
         _controller?.OnFinishGame();
+    }
+    #endregion
+
+    #region HasItemInAlls
+    public void HasItemInAlls(string name, Action<bool> response)
+    {
+        var task = new BusTask<Action<bool>>(response, _hasItemInAllId++);
+        _hasItemInAll.Add(task);
+        HasItemInAllsServerRpc(name, (int)_identification.PlayerType, task.Id);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void HasItemInAllsServerRpc(string name, int type, int id)
+    {
+        HasItemInAllsClientRpc(name, type, id);
+    }
+
+    [ClientRpc]
+    private void HasItemInAllsClientRpc(string name, int type, int id)
+    {
+        if(!_identification.IsMyType((PlayerTypes)type) &&
+            _identification.PlayerType is not PlayerTypes.Host)
+        {
+            var val = _inventory.HasItemByName(name);
+            HasItemInAllsResponseServerRpc(type, id, val);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void HasItemInAllsResponseServerRpc(int type, int id, bool value)
+    {
+        HasItemInAllResponseClientRpc(type, id, value);
+    }
+
+    [ClientRpc]
+    private void HasItemInAllResponseClientRpc(int type, int id, bool value)
+    {
+        if(_identification.IsMyType((PlayerTypes)type))
+        {
+            foreach(var task in _hasItemInAll)
+            {
+                if (task.Id == id)
+                {
+                    task.Response?.Invoke(value);
+                    _hasItemInAll.Remove(task);
+                    break;
+                }
+            }
+        }
     }
     #endregion
 

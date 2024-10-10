@@ -48,17 +48,17 @@ public class BearStarter : ActivityStarter
         return;
     }
 
-    private int GetScenarioIndex()
+    private async UniTask<int> GetScenarioIndex()
     {
-        if(_inventory.HasItemByName(_inventory.Names.Key))
+        if(await _inventory.HasItemInAllPlayers(_inventory.Names.Key))
         {
             return 0;
         }
-        else if(_inventory.HasItemByName(_inventory.Names.Toy))
+        else if(await _inventory.HasItemInAllPlayers(_inventory.Names.Toy))
         {
             return 3;
         }
-        else if(_inventory.HasItemByName(_inventory.Names.Basket))
+        else if(await _inventory.HasItemInAllPlayers(_inventory.Names.Basket))
         {
             return 1;
         }
@@ -104,12 +104,17 @@ public class BearStarter : ActivityStarter
             null, null, _inventory.Names.Key, _inventory.Names.Basket, null
         };
 
-        _scenarioIndex = GetScenarioIndex();
-        if(_scenarioIndex == 3 && _inventory.HasItemByName(_inventory.Names.Toy))
+        OnInitializeAsync();
+    }
+
+    private async void OnInitializeAsync()
+    {
+        _scenarioIndex = await GetScenarioIndex();
+        if (_scenarioIndex == 3 && _inventory.HasItemByName(_inventory.Names.Toy))
         {
             _inventory.RemoveItemByName(_inventory.Names.Toy);
         }
-        else if(_scenarioIndex == 4 && _inventory.HasItemByName(_inventory.Names.FullBasket))
+        else if (_scenarioIndex == 4 && _inventory.HasItemByName(_inventory.Names.FullBasket))
         {
             _inventory.RemoveItemByName(_inventory.Names.FullBasket);
             Bus.SendMessageToLevelMessageReceiver(FirstLevel.BearDoorsID, null);
