@@ -3,19 +3,18 @@ using UnityEngine;
 
 public class BigPapaModelEvents : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem _stepEffects;
+    [SerializeField] private ParticleSystem[] _stepEffects;
     [SerializeField] private AudioSource _stepSound;
+
+    private int _effectIndex = 0;
 
     public void StepEffect()
     {
-        StepEffectAsync();
-    }
+        _effectIndex++;
+        if (_effectIndex >= _stepEffects.Length)
+            _effectIndex = 0;
 
-    private async void StepEffectAsync()
-    {
-        _stepEffects.Play();
+        _stepEffects[_effectIndex].Play();
         _stepSound.Play();
-        await UniTask.Yield();
-        _stepEffects.Stop();
     }
 }
