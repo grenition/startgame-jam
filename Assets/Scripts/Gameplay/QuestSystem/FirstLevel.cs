@@ -66,7 +66,9 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
             _finishedFinalActivity = false;
             _ = WaitForFrame(() =>
             {
-                GoToHub();
+                _bus.FinishGame();
+                _tasks.Tasks.Clear();
+                _loadNextScene.Interact();
             });
         }
     }
@@ -101,12 +103,5 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
     public void Dispose()
     {
         _bus.ActivityFinished -= OnActivityFinished;
-    }
-
-    public override void GoToHub()
-    {
-        _bus.FinishGame();
-        _tasks.Tasks.Clear();
-        _loadNextScene.Interact();
     }
 }

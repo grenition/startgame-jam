@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2278230300392934247}
   - component: {fileID: 5344709921631972398}
   - component: {fileID: 2712639121456900900}
+  - component: {fileID: 2432973591944062534}
   m_Layer: 5
   m_Name: GoToHubActivity
   m_TagString: Untagged
@@ -59,14 +60,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.3660378, g: 0.3660378, b: 0.3660378, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bc2be91515cb6f9419eb669cc96d961a, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -89,3 +90,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: 7328081762842435865}
+  _toNextScene: {fileID: 2432973591944062534}
+--- !u!114 &2432973591944062534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378791792422579331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4927d61e15f1458a83969f7d7b1d9c2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions:
+    dependentConditionsSet: []
+    conditions: []
+    connection: 0
+  _actions:
+  - sendTo: 0
+    action:
+      rid: 4886338769939595264
+  references:
+    version: 2
+    RefIds:
+    - rid: 4886338769939595264
+      type: {class: LoadServerSceneAction, ns: Gameplay.Server, asm: Assembly-CSharp}
+      data:
+        sceneKey: ServerScene_HUB
