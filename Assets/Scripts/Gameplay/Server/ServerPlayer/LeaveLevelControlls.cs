@@ -1,17 +1,22 @@
-using Cysharp.Threading.Tasks;
 using Gameplay.QuestSystem;
-using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using VContainer;
 
 public class LeaveLevelControlls : MonoBehaviour
 {
     [SerializeField] private InteractionPoint _leaveLevelPoint;
     [SerializeField] private GameObject _messageParent;
     [SerializeField] private bool _fullQuitFromApplication;
-    [SerializeField] private ControllerNetworkBus _bus;
 
     private bool _cantQuit = false;
+    private ControllerNetworkBus _bus;
+
+    [Inject]
+    private void Construct(ControllerNetworkBus bus)
+    {
+        _bus = bus;
+    }
 
     private void Start()
     {

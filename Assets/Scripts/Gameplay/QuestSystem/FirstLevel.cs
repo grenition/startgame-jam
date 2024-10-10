@@ -40,7 +40,6 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
     private async void OpenComicsWithDelay()
     {
         await UniTask.Yield();
-        await UniTask.Yield();
         _comics.OpenComicsWithControllers(_startComics);
     }
 
