@@ -23,6 +23,8 @@ public class PlayerObject : MonoBehaviour
 
     private Coroutine _dialogueCor;
 
+    public const float ModelRotationSpeed = 3f;
+
     public bool CanControl { get; private set; } = true;
     public PlayerTypes PlayerType { get; private set; }
     public GameObject Model { get; private set; }
@@ -84,7 +86,7 @@ public class PlayerObject : MonoBehaviour
             {
                 _controller.Move(_moveDirection * Speed * Time.deltaTime);
 
-                _modelLookDirection = Vector3.Lerp(_modelLookDirection, _moveDirection, Time.deltaTime);
+                _modelLookDirection = Vector3.Lerp(_modelLookDirection, _moveDirection, Time.deltaTime * ModelRotationSpeed);
                 ModelAnimator.transform.LookAt(transform.position + _modelLookDirection);
                 ModelAnimator.transform.Rotate(Vector3.up, 180f);
             }
