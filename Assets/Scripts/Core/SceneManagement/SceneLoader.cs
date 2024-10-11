@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
@@ -9,6 +11,7 @@ namespace Core.SceneManagement
     public class SceneLoader : ISceneLoader
     {
         private NetworkManager _networkManager;
+        private Dictionary<string, AsyncOperation> _loadingScenes = new();
 
         [Inject]
         private void Construct(NetworkManager networkManager)
@@ -58,9 +61,17 @@ namespace Core.SceneManagement
             
             return false;
         }
+        // ReSharper disable Unity.PerformanceAnalysis
         public async UniTask<bool> TryLoadOfflineScene(string sceneKey, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
-            SceneManager.LoadScene(sceneKey, loadSceneMode);
+            if (_loadingScenes.ContainsKey(sceneKey)) return false;
+            
+            var asyncOperation = SceneManager.LoadSceneAsync(sceneKey, loadSceneMode);
+            _loadingScenes.Add(sceneKey, asyncOperation);
+
+            await asyncOperation.ToUniTask();
+
+            _loadingScenes.Remove(sceneKey);
             return true;
         }
         public async UniTask<bool> TryUnloadOfflineScene(string sceneKey)
