@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Gameplay.QuestSystem;
 using System;
+using Unity.Netcode;
 using UnityEngine;
 using VContainer;
 
@@ -19,6 +20,7 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
     private ComicsViewer _comics;
     private ControllerNetworkBus _bus;
     private CompletedTasks _tasks;
+    private NetworkManager _networkManager;
 
     private bool _finishedFinalActivity = false;
 
@@ -26,15 +28,27 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
     private void Construct(
         ComicsViewer comics,
         ControllerNetworkBus bus,
-        CompletedTasks tasks)
+        CompletedTasks tasks,
+        NetworkManager manager)
     {
         _comics = comics;
         _bus = bus;
         _tasks = tasks;
+        _networkManager = manager;
 
         _bus.ActivityFinished += OnActivityFinished;
         _comics.Closed += OnFinishComicsFirstTime;
+        _networkManager.OnClientDisconnectCallback += OnClientDisconnect;
         OpenComicsWithDelay();
+    }
+
+    private void OnClientDisconnect(ulong id)
+    {
+        if(_networkManager.IsServer && _networkManager.LocalClient.ClientId != id)
+        {
+            _bus.FinishGame();
+            _loadNextScene.Interact();
+        }
     }
 
     private async void OpenComicsWithDelay()
@@ -102,6 +116,7 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
 
     public void Dispose()
     {
+        _networkManager.OnClientDisconnectCallback -= OnClientDisconnect;
         _bus.ActivityFinished -= OnActivityFinished;
     }
 }
