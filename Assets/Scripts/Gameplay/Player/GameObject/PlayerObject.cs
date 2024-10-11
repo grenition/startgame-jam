@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using VContainer;
 
 [RequireComponent(typeof(CharacterController))]
@@ -61,13 +62,7 @@ public class PlayerObject : MonoBehaviour
     {
         if(index > _prevIndex || Mathf.Abs(index - _prevIndex) > 1000)
         {
-            ModelAnimator.SetFloat("Speed", _modelLookDirection.magnitude);
-            if(moveDirection.sqrMagnitude > .01f)
-            {
-                _modelLookDirection = Vector3.Lerp(_modelLookDirection, moveDirection, Time.deltaTime);
-                ModelAnimator.transform.LookAt(transform.position + _modelLookDirection);
-                ModelAnimator.transform.Rotate(Vector3.up, 180f);
-            }
+            ModelAnimator.SetFloat("Speed", moveDirection.magnitude);
             
             _moveDirection = moveDirection;
             _prevIndex = index;
@@ -88,6 +83,10 @@ public class PlayerObject : MonoBehaviour
             if(_moveDirection.sqrMagnitude > 0)
             {
                 _controller.Move(_moveDirection * Speed * Time.deltaTime);
+
+                _modelLookDirection = Vector3.Lerp(_modelLookDirection, _moveDirection, Time.deltaTime);
+                ModelAnimator.transform.LookAt(transform.position + _modelLookDirection);
+                ModelAnimator.transform.Rotate(Vector3.up, 180f);
             }
         }
     }
