@@ -16,7 +16,11 @@ public class GoToHubStarter : ActivityStarter
     public override async UniTask OnFinish()
     {
         await UniTask.Yield();
-        _toNextScene.Interact();
+        if(Identification.PlayerType is PlayerTypes.Big)
+        {
+            _toNextScene.Interact();
+        }
+        
         Bus.FinishGame();
         return;
     }

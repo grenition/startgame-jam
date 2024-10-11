@@ -32,9 +32,15 @@ public class MapActivity : ActivityStarter
         await UniTask.Yield();
         if(_goToNextSceneAfterFinish)
         {
-            _nextScene.Interact();
+            _controller.ActivityHided += OnActivityHide;
         }
         return;
+    }
+
+    private void OnActivityHide()
+    {
+        _controller.ActivityHided -= OnActivityHide;
+        _nextScene.Interact();
     }
 
     //UnityEvent
