@@ -88,6 +88,8 @@ public class PlayerObject : MonoBehaviour
                 _controller.Move(_moveDirection * Speed * Time.deltaTime);
             }
         }
+
+        Debug.Log(QualitySettings.GetQualityLevel());
     }
 
     public void ShowMessage(string mess)
