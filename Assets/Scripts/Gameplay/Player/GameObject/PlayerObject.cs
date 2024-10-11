@@ -23,7 +23,7 @@ public class PlayerObject : MonoBehaviour
 
     private Coroutine _dialogueCor;
 
-    public const float ModelRotationSpeed = 3f;
+    public const float ModelRotationSpeed = 10f;
 
     public bool CanControl { get; private set; } = true;
     public PlayerTypes PlayerType { get; private set; }
@@ -36,7 +36,6 @@ public class PlayerObject : MonoBehaviour
         _bus = bus;
         _controller = GetComponent<CharacterController>();
         _bus.InteractedOnServer += OnPlayerInteracted;
-        Debug.Log("Player injected!");
     }
 
     private void OnPlayerInteracted(PlayerTypes type)
