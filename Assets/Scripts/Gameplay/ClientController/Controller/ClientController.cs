@@ -205,7 +205,7 @@ public class ClientController : MonoBehaviour
         _infoImage.gameObject.SetActive(false);
     }
 
-    public void SpawnMiniGame(ActivityInfo info)
+    public async void SpawnMiniGame(ActivityInfo info)
     {
         if(PlayingMiniGame != null)
         {
