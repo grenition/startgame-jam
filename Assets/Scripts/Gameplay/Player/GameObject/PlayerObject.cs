@@ -18,6 +18,7 @@ public class PlayerObject : MonoBehaviour
     private int _prevIndex = -1;
     private ControllerNetworkBus _bus;
     private ActivityPoint _nearlyPoint;
+    private Vector3 _modelLookDirection = Vector3.zero;
 
     private Coroutine _dialogueCor;
 
@@ -60,10 +61,11 @@ public class PlayerObject : MonoBehaviour
     {
         if(index > _prevIndex || Mathf.Abs(index - _prevIndex) > 1000)
         {
-            ModelAnimator.SetFloat("Speed", moveDirection.magnitude);
+            ModelAnimator.SetFloat("Speed", _modelLookDirection.magnitude);
             if(moveDirection.sqrMagnitude > .01f)
             {
-                ModelAnimator.transform.LookAt(transform.position + moveDirection);
+                _modelLookDirection = Vector3.Lerp(_modelLookDirection, moveDirection, Time.deltaTime);
+                ModelAnimator.transform.LookAt(transform.position + _modelLookDirection);
                 ModelAnimator.transform.Rotate(Vector3.up, 180f);
             }
             
@@ -88,8 +90,6 @@ public class PlayerObject : MonoBehaviour
                 _controller.Move(_moveDirection * Speed * Time.deltaTime);
             }
         }
-
-        Debug.Log(QualitySettings.GetQualityLevel());
     }
 
     public void ShowMessage(string mess)

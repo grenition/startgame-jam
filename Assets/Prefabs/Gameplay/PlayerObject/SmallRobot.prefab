@@ -1098,7 +1098,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300002, guid: 5148537d188bf6d4ca1a32255632ce85,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: 91004b541109246478a5f76478befa3b, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.35
   m_Pitch: 1
   Loop: 1
@@ -1953,6 +1953,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2990068783806552092}
   - component: {fileID: 1060372577029506209}
+  - component: {fileID: 302193982890110129}
   m_Layer: 0
   m_Name: SmallRobot
   m_TagString: Untagged
@@ -2010,6 +2011,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &302193982890110129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4880276007708292656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4e8400d15aaf584e816cb76ebd28d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _walkingSoundSource: {fileID: 3580348639678754735}
 --- !u!1 &4892405087274064952
 GameObject:
   m_ObjectHideFlags: 0
