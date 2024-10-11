@@ -9,12 +9,22 @@ public class SmallRobotModelEvents : MonoBehaviour
     private Coroutine _walkingSoundCor;
     private float _maxVolume = 1f;
     private bool _playing = false;
+    private PlayerObject _player;
 
     public const float FadeDuration = .5f;
 
     private void Start()
     {
         _maxVolume = _walkingSoundSource.volume;
+        _player = transform.parent.parent.GetComponent<PlayerObject>();
+    }
+
+    private void Update()
+    {
+        if (_player.CurrentSpeed > .1f && !_playing)
+            WalkingAnim();
+        else if (_player.CurrentSpeed < .1f && _playing)
+            IdleAnim();
     }
 
     public void IdleAnim()

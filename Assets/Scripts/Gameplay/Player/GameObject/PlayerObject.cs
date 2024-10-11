@@ -29,6 +29,7 @@ public class PlayerObject : MonoBehaviour
     public PlayerTypes PlayerType { get; private set; }
     public GameObject Model { get; private set; }
     public Animator ModelAnimator { get; private set; }
+    public float CurrentSpeed { get; private set; } = 0f;
 
     [Inject]
     private void Construct(ControllerNetworkBus bus)
@@ -63,8 +64,8 @@ public class PlayerObject : MonoBehaviour
     {
         if(index > _prevIndex || Mathf.Abs(index - _prevIndex) > 1000)
         {
-            ModelAnimator.SetFloat("Speed", moveDirection.magnitude);
-            
+            CurrentSpeed = moveDirection.magnitude;
+            ModelAnimator.SetFloat("Speed", CurrentSpeed);
             _moveDirection = moveDirection;
             _prevIndex = index;
         }
