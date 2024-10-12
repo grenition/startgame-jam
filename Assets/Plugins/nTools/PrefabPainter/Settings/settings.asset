@@ -1977,8 +1977,8 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Grass
       settings:
-        brushRadius: 6
-        brushSpacing: 0.25
+        brushRadius: 3
+        brushSpacing: 0.1
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
@@ -1996,7 +1996,7 @@ MonoBehaviour:
         scaleTransformMode: 0
         scaleMode: 0
         scaleUniformMin: 1
-        scaleUniformMax: 1.1
+        scaleUniformMax: 1
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
