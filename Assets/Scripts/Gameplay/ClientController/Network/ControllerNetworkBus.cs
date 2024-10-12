@@ -484,6 +484,8 @@ public class ControllerNetworkBus : NetworkBehaviour
     private void IsAllPlayersConnectedServerRpc(int id)
     {
         bool value = BigPlayer != null && SmallPlayer != null;
+        if (TestMode)
+            value = true;
         IsAllPlayersConnectedClientRpc(value, id);
     }
 
