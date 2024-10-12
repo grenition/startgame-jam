@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using VContainer;
 
 [RequireComponent(typeof(CharacterController))]

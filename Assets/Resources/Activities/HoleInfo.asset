@@ -16,5 +16,8 @@ MonoBehaviour:
   _miniGamePrefab: {fileID: 7029546418295864023, guid: 92e8585c6077a694bb7231a53393e579,
     type: 3}
   _singlePlayer: 0
+  _onlyOnePlayer: 0
+  _cantInteractWithTwoReason: 
+  _markerYOffset: 1
   _noLightReason: "\u0411\u0435\u0437 \u0444\u043E\u043D\u0430\u0440\u0438\u043A\u0430
     \u043D\u0435 \u0432\u0438\u0434\u043D\u043E!"

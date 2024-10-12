@@ -73,6 +73,7 @@ public class ClientController : MonoBehaviour
     {
         InventoryModel.Clear();
         _tasks.Tasks.Clear();
+        HideActivity();
     }
 
     private void OnDestroy()
@@ -101,6 +102,15 @@ public class ClientController : MonoBehaviour
 
     public void ShowActivity(ActivityInfo info)
     {
+        if (State is States.SimpleSprite)
+        {
+            if(_showedInfo != null)
+            {
+                _bus.HideMarker(_showedInfo);
+            }
+            State = States.Nothing;
+        }
+
         if (State is not States.Nothing)
             return;
 

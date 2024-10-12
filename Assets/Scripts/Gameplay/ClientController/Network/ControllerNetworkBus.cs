@@ -5,12 +5,14 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Audio;
 using VContainer;
+using static UnityEditor.PlayerSettings;
 
 public class ControllerNetworkBus : NetworkBehaviour
 {
     [SerializeField] private ClientControllerTester _tester;
     [SerializeField] private string _playersTooFarMessage, _settingsChangedMessage;
     [SerializeField] private AudioMixer _audioMixer;
+    [SerializeField] private GameObject[] _markers;
 
     private ClientController _controller;
     private Inventory _inventory;
@@ -38,6 +40,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     public NetworkBusLevelMessageReceiver MessageReceiver { get; set; } = null;
     public ActivityInfo BigPlayerActivity { get; private set; } = null;
     public ActivityInfo SmallPlayerActivity { get; private set; } = null;
+    public InteractionMarker Marker { get; private set; } = null;
 
     [Inject]
     private void Construct(
@@ -49,6 +52,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         _tasks = tasks;
         resolver.Inject(_tester);
         _infos = Resources.LoadAll<ActivityInfo>(ResourcesPath);
+        Marker = new(_markers);
     }
 
     public void ResolveInfos(IObjectResolver resolver)
@@ -121,6 +125,40 @@ public class ControllerNetworkBus : NetworkBehaviour
 
         var info = _infos[index];
         _controller?.ShowActivity(info);
+    }
+    #endregion
+
+    #region Markers
+    public void ShowMarker(Vector3 pos, ActivityInfo info)
+    {
+        int index = _infos.ToList().IndexOf(info);
+        if(index >= 0 && index < _infos.Length)
+        {
+            ShowMarkerServerRpc(pos, index);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ShowMarkerServerRpc(Vector3 pos, int index)
+    {
+        var info = _infos[index];
+        Marker.Mark(pos + Vector3.up * info.MarkerYOffset, info);
+    }
+
+    public void HideMarker(ActivityInfo info)
+    {
+        int index = _infos.ToList().IndexOf(info);
+        if (index >= 0 && index < _infos.Length)
+        {
+            HideMarkerServerRpc(index);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void HideMarkerServerRpc(int index)
+    {
+        var info = _infos[index];
+        Marker.DeMark(info);
     }
     #endregion
 
@@ -499,6 +537,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     #region FinishGame
     public void FinishGame()
     {
+        Marker.DeMarkAll();
         FinishGameClientRpc();
     }
 

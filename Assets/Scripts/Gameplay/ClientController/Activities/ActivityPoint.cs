@@ -26,16 +26,19 @@ public class ActivityPoint : MonoBehaviour
         if(Interaction == null || Interaction.CheckConditions())
         {
             _bus.ShowActivity(Info, type);
+            _bus.ShowMarker(transform.position, Info);
         }
     }
 
     public void HideActivity(PlayerTypes type)
     {
         _bus.HideActivity(type);
+        _bus.HideMarker(Info);
     }
 
     private void OnActivityStarted(ActivityInfo info)
     {
+        _bus.HideMarker(_info);
         if(info == _info && _destroyAfterStartingActivity)
         {
             Destroy(gameObject);

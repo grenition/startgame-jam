@@ -18,3 +18,4 @@ MonoBehaviour:
   _singlePlayer: 1
   _onlyOnePlayer: 0
   _cantInteractWithTwoReason: 
+  _markerYOffset: 1

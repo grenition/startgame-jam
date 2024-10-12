@@ -16,3 +16,6 @@ MonoBehaviour:
   _miniGamePrefab: {fileID: 4127027231922981093, guid: f7ed3d34c81b5af4baf206eeca7a4be6,
     type: 3}
   _singlePlayer: 1
+  _onlyOnePlayer: 0
+  _cantInteractWithTwoReason: 
+  _markerYOffset: 1

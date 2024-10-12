@@ -8,11 +8,13 @@ public class ActivityInfo : ScriptableObject
     [SerializeField] private bool _singlePlayer;
     [SerializeField] private bool _onlyOnePlayer;
     [SerializeField] private string _cantInteractWithTwoReason;
+    [SerializeField] private float _markerYOffset;
 
     public Sprite Image => _image;
     public ActivityStarter MiniGamePrefab => GetActivityStarter();
     public bool SinglePlayer => _singlePlayer;
     public bool OnlyOnePlayer => _onlyOnePlayer;
+    public float MarkerYOffset => _markerYOffset;
 
     public virtual ActivityStarter GetActivityStarter()
     {

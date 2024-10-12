@@ -124,7 +124,7 @@ public class HoleStarter : ActivityStarter
                 _noLightBGColor * ((MaxLightLevel - _lightLevel) / MaxLightLevel);
             _lightBG.color = _bgColor;
 
-            if(Input.acceleration.magnitude > 5f && _lightTime <= 0f || Input.GetKeyDown(KeyCode.T))
+            if(Input.acceleration.magnitude > 3f && _lightTime <= 0f || Input.GetKeyDown(KeyCode.T))
             {
                 _lightLevel = Mathf.Clamp(_lightLevel + LightLevelSpeed, 0, MaxLightLevel);
                 _lightTime = LightCooldown;
