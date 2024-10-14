@@ -48,6 +48,7 @@ public class BuildTool : EditorWindow
         var buildOptions = BuildOptions.None;
         if (developmentBuild) buildOptions |= BuildOptions.Development;
 
+        PlayerSettings.applicationIdentifier = "com.Kvas.BunnyBotsAtWork";
         SetIcon("Icons/icon_PC", BuildTargetGroup.Standalone);
         BuildPlayerOptions macOptions = new BuildPlayerOptions
         {
@@ -58,6 +59,7 @@ public class BuildTool : EditorWindow
         };
         BuildPipeline.BuildPlayer(macOptions);
 
+        PlayerSettings.applicationIdentifier = "com.Kvas.BunnyBotsAtWork";
         SetIcon("Icons/icon_PC", BuildTargetGroup.Standalone);
         BuildPlayerOptions windowsOptions = new BuildPlayerOptions
         {
@@ -69,6 +71,7 @@ public class BuildTool : EditorWindow
         BuildPipeline.BuildPlayer(windowsOptions);
 
         SetIcon("Icons/icon_Mobile", BuildTargetGroup.Android);
+        PlayerSettings.applicationIdentifier = "com.Kvas.BunnyBotsAtWork";
         PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
         
         BuildPlayerOptions androidOptions = new BuildPlayerOptions
