@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +25,14 @@ public class SettingsModel : ActivityStarter
 
     public void ApplySettings(int quality, float volume)
     {
+        if(volume <= .0005f)
+        {
+            volume = -80f;
+        }
+        else
+        {
+            volume = Mathf.Clamp(Mathf.Log10(volume) * 20, -80, 0);
+        }
         Bus.ApplySettings(quality, volume);
     }
 
