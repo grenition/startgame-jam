@@ -24,6 +24,7 @@ public class ControllerNetworkBus : NetworkBehaviour
     private List<BusTask<Action<int, float>>> _getSettingsTasks = new();
     private List<BusTask<Action<bool>>> _hasItemInAll = new();
     private int _allPlayersConenctedId = 0, _getSettingsId = 0, _hasItemInAllId = 0;
+    private int _activityFinishedCallbacks = 0;
 
     public const string ResourcesPath = "Activities";
 
@@ -213,18 +214,27 @@ public class ControllerNetworkBus : NetworkBehaviour
             SmallPlayerActivity = null;
             BigPlayerActivity = null;
 
-            _controller.FinishActivity();
+            var info = _infos.ToList().Find(a =>
+            a.MiniGamePrefab != null && a.MiniGamePrefab.GetType().ToString() == activityName);
+
+            if(info != null)
+            {
+                _controller.FinishActivity(info);
+            }
         }
-        if(_identification.PlayerType is PlayerTypes.Small)
-        {
-            AfterFinishActivityServerRpc(activityName);
-        }
+
+        AfterFinishActivityServerRpc(activityName);
     }
 
     [ServerRpc(RequireOwnership = false)]
     private void AfterFinishActivityServerRpc(string activityName)
     {
-        ActivityFinished?.Invoke(activityName);
+        _activityFinishedCallbacks++;
+        if(_activityFinishedCallbacks >= 2)
+        {
+            _activityFinishedCallbacks = 0;
+            ActivityFinished?.Invoke(activityName);
+        }
     }
     #endregion
 
@@ -538,7 +548,14 @@ public class ControllerNetworkBus : NetworkBehaviour
     #region FinishGame
     public void FinishGame()
     {
+        FinishGameServerRpc();
+    }
+
+    [ServerRpc]
+    private void FinishGameServerRpc()
+    {
         Marker.DeMarkAll();
+        _tasks.Tasks.Clear();
         FinishGameClientRpc();
     }
 

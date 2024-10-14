@@ -51,15 +51,28 @@ public class BearStarter : ActivityStarter
 
     private async UniTask<int> GetScenarioIndex()
     {
-        if(await _inventory.HasItemInAllPlayers(_inventory.Names.Key))
+        var asyncKey = _inventory.HasItemInAllPlayers(_inventory.Names.Key);
+        var asyncToy = _inventory.HasItemInAllPlayers(_inventory.Names.Toy);
+        var asyncBasket = _inventory.HasItemInAllPlayers(_inventory.Names.Basket);
+
+        var results = await UniTask.WhenAll(asyncKey, asyncToy, asyncBasket);
+
+        if (results.Item1)
         {
             return 0;
         }
-        else if(await _inventory.HasItemInAllPlayers(_inventory.Names.Toy))
+        else if(results.Item2)
         {
-            return 3;
+            if(_inventory.HasItemByName(_inventory.Names.Toy))
+            {
+                return 3;
+            }
+            else
+            {
+                return 0;
+            }
         }
-        else if(await _inventory.HasItemInAllPlayers(_inventory.Names.Basket))
+        else if(results.Item3)
         {
             return 1;
         }

@@ -164,7 +164,6 @@ public class ClientController : MonoBehaviour
         }
 
         State = States.WaitCallback;
-        _bus.InvokeActivityStarted(_showedInfo);
         if(_showedInfo.SinglePlayer)
         {
             SpawnMiniGame(_showedInfo);
@@ -177,7 +176,10 @@ public class ClientController : MonoBehaviour
 
     public void ResetState()
     {
-        State = States.Nothing;
+        if(State is States.WaitCallback)
+        {
+            State = _showedInfo == null ? States.Nothing : States.SimpleSprite;
+        }
     }
 
     public void ShowMessage(string mess)
@@ -217,7 +219,7 @@ public class ClientController : MonoBehaviour
 
     public async void SpawnMiniGame(ActivityInfo info)
     {
-        if(PlayingMiniGame != null)
+        if (PlayingMiniGame != null)
         {
             Destroy(PlayingMiniGame.gameObject);
         }
@@ -225,6 +227,7 @@ public class ClientController : MonoBehaviour
         if (info != null && info.MiniGamePrefab != null)
         {
             _showedInfo = info;
+            _bus.InvokeActivityStarted(info);
             State = States.OnMiniGame;
 
             if(info.OnlyOnePlayer)
@@ -254,13 +257,16 @@ public class ClientController : MonoBehaviour
         }
     }
 
-    public async UniTask FinishActivity()
+    public async UniTask FinishActivity(ActivityInfo info)
     {
-        if(_showedInfo != null && !_tasks.Tasks.Contains(_showedInfo))
+        if(!_tasks.Tasks.Contains(info))
         {
-            _tasks.Tasks.Add(_showedInfo);
-            _bus.AddTask(_showedInfo);
+            _tasks.Tasks.Add(info);
+            _bus.AddTask(info);
         }
+
+        if (_showedInfo != info)
+            return;
 
         if(PlayingMiniGame != null)
         {
