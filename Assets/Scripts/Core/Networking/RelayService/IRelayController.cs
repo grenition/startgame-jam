@@ -9,7 +9,7 @@ namespace Core.Networking.RelayService
         public string ConnectionPayload { get; set; }
         public ReadOnlyReactiveProperty<string> JoinCode { get; }
         
-        public void CreateRelay();
-        public void JoinRelay(string joinCode);
+        public Task CreateRelay();
+        public Task JoinRelay(string joinCode);
     }
 }

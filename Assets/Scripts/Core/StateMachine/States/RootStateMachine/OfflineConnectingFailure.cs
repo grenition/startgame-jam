@@ -7,7 +7,7 @@ namespace Core.StateMachine.States
     public class OfflineConnectingFailure<TStateId> : State<TStateId>
     {
         public override string Name => "OfflineConnectingFailure";
-        public const float ReinitializationDelay = 10f;
+        public const float ReinitializationDelay = 1f;
         protected async override UniTask OnEnter()
         {
             Debug.Log($"Reinitializing relay in {ReinitializationDelay} seconds");

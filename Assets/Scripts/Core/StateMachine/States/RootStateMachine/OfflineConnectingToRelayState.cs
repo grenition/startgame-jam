@@ -1,8 +1,10 @@
+using System;
 using Core.Constants;
 using Core.Networking.RelayService;
 using Core.StateMachine.Abstract.CreatableState;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
+using UnityEngine;
 using VContainer;
 
 namespace Core.StateMachine.States
@@ -41,6 +43,16 @@ namespace Core.StateMachine.States
             _networkManager.OnClientStarted -= CompleteState;
             _relayConnectionRequester.OnResponce -= JoinRelay;
         }
-        private void JoinRelay(string code) => _relayController.JoinRelay(code);
+        private async void JoinRelay(string code)
+        {
+            try
+            {
+                await _relayController.JoinRelay(code);
+            }
+            catch (Exception e)
+            {
+                IsFailed = true;
+            }
+        }
     }
 }
