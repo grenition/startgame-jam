@@ -54,8 +54,9 @@ public class BearStarter : ActivityStarter
         var asyncKey = _inventory.HasItemInAllPlayers(_inventory.Names.Key);
         var asyncToy = _inventory.HasItemInAllPlayers(_inventory.Names.Toy);
         var asyncBasket = _inventory.HasItemInAllPlayers(_inventory.Names.Basket);
+        var asyncRasberry = _inventory.HasItemInAllPlayers(_inventory.Names.FullBasket);
 
-        var results = await UniTask.WhenAll(asyncKey, asyncToy, asyncBasket);
+        var results = await UniTask.WhenAll(asyncKey, asyncToy, asyncBasket, asyncRasberry);
 
         if (results.Item1)
         {
@@ -78,7 +79,14 @@ public class BearStarter : ActivityStarter
         }
         else if(_tasks.Tasks.Contains(_rasberyInfo))
         {
-            return 4;
+            if(results.Item4)
+            {
+                return _inventory.HasItemByName(_inventory.Names.FullBasket) ? 4 : 1;
+            }
+            else
+            {
+                return 4;
+            }
         }
         else if(!_tasks.Tasks.Contains(_keysInfo))
         {
