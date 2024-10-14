@@ -67,7 +67,7 @@ namespace Gameplay.Server
             _clientIdentification.SetPlayerType(PlayerTypes.Host);
             
             _saveSystem.RegisterSavable(this);
-            _saveSystem.LoadDataTo(this);
+            _saveSystem.ResetDataIn(this);
             
             LoadServerScene(_data.activeScene);
         }
@@ -79,7 +79,7 @@ namespace Gameplay.Server
             _networkManager.OnClientConnectedCallback -= OnClientConnected;
             _networkManager.OnClientDisconnectCallback -= OnClientDisconnected;
             
-            _saveSystem.SaveDataFrom(this);
+            //_saveSystem.SaveDataFrom(this);
             _saveSystem.UnregisterSavable(this);
             
             UnloadCurrentServerScene();

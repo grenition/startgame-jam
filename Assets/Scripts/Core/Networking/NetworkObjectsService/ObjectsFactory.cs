@@ -12,15 +12,15 @@ using Object = UnityEngine.Object;
 
 namespace Core.Networking.NetworkObjectsFactory
 {
-    public class ObjectsFactory : IObjectsFactory, IInitializable
+    public class ObjectsFactory : IObjectsFactory
     {
         public const string NetworkScene = "NetworkScene";
 
         public Func<IObjectResolver> OvveridedContainer { get; set; }
 
-        private NetworkManager _networkManager;
-        private ResourcesService _resources;
-        private IObjectResolver _objectResolver;
+        protected NetworkManager _networkManager;
+        protected ResourcesService _resources;
+        protected IObjectResolver _objectResolver;
         
         [Inject]
         public ObjectsFactory(
@@ -31,19 +31,6 @@ namespace Core.Networking.NetworkObjectsFactory
             _networkManager = networkManager;
             _resources = resources;
             _objectResolver = objectResolver;
-        }
-        
-        public void Initialize()
-        {
-            foreach (var prefabsList in _networkManager.NetworkConfig.Prefabs.NetworkPrefabsLists)
-            {
-                foreach (var prefab in prefabsList.PrefabList)
-                {
-                    var networkObject = prefab.Prefab.GetComponent<NetworkObject>();
-                    _networkManager.PrefabHandler.AddHandler(networkObject, 
-                        new NetworkObjectsSpawnHandler(networkObject, GetContainer));
-                }
-            }
         }
 
         public NetworkObject SpawnNetworkObject(NetworkObject prefab)
@@ -123,7 +110,7 @@ namespace Core.Networking.NetworkObjectsFactory
             return obj;
         }
 
-        private IObjectResolver GetContainer()
+        protected IObjectResolver GetContainer()
         {
             var resolver = OvveridedContainer?.Invoke();
 
