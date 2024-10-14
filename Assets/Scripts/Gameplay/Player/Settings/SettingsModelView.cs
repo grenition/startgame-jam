@@ -27,9 +27,9 @@ public class SettingsModelView
         bus.GetSettings((quality, volume) =>
         {
             QualityIndex.Value = quality;
-            _soundLevel = volume;
+            _soundLevel = Mathf.Pow(10, volume / 20f);
 
-            _view.Initialize(this, volume);
+            _view.Initialize(this, _soundLevel);
         });
     }
 
