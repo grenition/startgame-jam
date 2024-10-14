@@ -551,7 +551,7 @@ public class ControllerNetworkBus : NetworkBehaviour
         FinishGameServerRpc();
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void FinishGameServerRpc()
     {
         Marker.DeMarkAll();

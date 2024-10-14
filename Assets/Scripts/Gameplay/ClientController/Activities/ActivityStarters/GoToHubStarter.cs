@@ -19,9 +19,9 @@ public class GoToHubStarter : ActivityStarter
         if(Identification.PlayerType is PlayerTypes.Big)
         {
             _toNextScene.Interact();
+            Bus.FinishGame();
         }
         
-        Bus.FinishGame();
         return;
     }
 
