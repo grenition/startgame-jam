@@ -10,7 +10,7 @@ public class BuildTool : EditorWindow
     private static string macOsBuildPath = string.Empty;
     private static string windowsBuildPath = string.Empty;
     private static string androidBuildPath = string.Empty;
-    private static string buildName = "bunnyrobots-at-work";
+    private static string buildName = "BunnyBotsAtWork";
     private static bool developmentBuild = false;
 
     [MenuItem("Tools/Build for All Platforms")]
