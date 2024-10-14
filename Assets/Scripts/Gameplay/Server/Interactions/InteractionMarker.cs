@@ -18,7 +18,7 @@ public class InteractionMarker
 
     public async void Mark(Vector3 pos, ActivityInfo info)
     {
-        if (_tasks.Contains(info))
+        if (_tasks.Contains(info) || UsedMarkers.ContainsKey(info))
             return;
         _tasks.Add(info);
 
@@ -42,7 +42,16 @@ public class InteractionMarker
         await UniTask.WaitForSeconds(.2f);
 
         _tasks.Remove(info);
-        UsedMarkers.Add(info, marker);
+
+        if(UsedMarkers.ContainsKey(info))
+        {
+            Markers.Add(marker);
+            marker.SetActive(false);
+        }
+        else
+        {
+            UsedMarkers.Add(info, marker);
+        }
     }
 
     public async UniTask DeMark(ActivityInfo info)

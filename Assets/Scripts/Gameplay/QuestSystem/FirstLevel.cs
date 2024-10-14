@@ -55,6 +55,8 @@ public class FirstLevel : NetworkBusLevelMessageReceiver, IDisposable
     {
         await UniTask.Yield();
         _comics.OpenComicsWithControllers(_startComics);
+        await UniTask.Yield();
+        _bus.Marker.DeMarkAll();
     }
 
     private void OnFinishComicsFirstTime()
