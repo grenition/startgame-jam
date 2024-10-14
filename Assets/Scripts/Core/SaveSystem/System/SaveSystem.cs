@@ -67,6 +67,7 @@ namespace Core.SaveSystem.System
         {
             if(!_savables.ContainsKey(savable)) return;
             _savables[savable].ResetAction.Invoke();
+            LoadDataTo(savable);
         }
         public void SetSlot(int slotId)
         {

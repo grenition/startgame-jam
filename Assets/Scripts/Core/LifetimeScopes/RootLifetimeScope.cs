@@ -41,7 +41,7 @@ namespace Core.LifetimeScopes
             GetComponent<NetworkManager>().SetSingleton();
             builder.RegisterInstance(NetworkManager.Singleton);
             builder.RegisterEntryPoint<NetworkAuthentificator>();
-            builder.RegisterEntryPoint<ObjectsFactory>(Lifetime.Singleton).As<IObjectsFactory>();
+            builder.RegisterEntryPoint<NetworkObjectsFactory>(Lifetime.Singleton).As<IObjectsFactory>();
         }
         private void InstallCoreSystems(IContainerBuilder builder)
         {
