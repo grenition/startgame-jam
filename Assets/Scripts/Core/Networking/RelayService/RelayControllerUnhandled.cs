@@ -1,6 +1,8 @@
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using Core.Constants;
+using Cysharp.Threading.Tasks;
 using SickDev.CommandSystem;
 using UniRx;
 using Unity.Netcode;
@@ -32,8 +34,8 @@ namespace Core.Networking.RelayService
         
         public void Initialize()
         {
-            _devConsole.AddCommand(new ActionCommand(CreateRelay));
-            _devConsole.AddCommand(new ActionCommand<string>(JoinRelay));
+            // _devConsole.AddCommand(new ActionCommand(CreateRelay));
+            // _devConsole.AddCommand(new ActionCommand<string>(JoinRelay));
             
             _networkManager.OnClientDisconnectCallback += OnClientDisconnect;
         }
@@ -42,7 +44,7 @@ namespace Core.Networking.RelayService
             _networkManager.OnClientDisconnectCallback -= OnClientDisconnect;
         }
 
-        public async void CreateRelay()
+        public async Task CreateRelay()
         {
             Allocation allocation = await Unity.Services.Relay.RelayService.Instance
                 .CreateAllocationAsync(GamePreferences.PlayersCount);
@@ -59,10 +61,9 @@ namespace Core.Networking.RelayService
             Debug.Log("Relay created, join code: " + JoinCode);
         }
         
-        public async void JoinRelay(string joinCode)
+        public async Task JoinRelay(string joinCode)
         {
-            var joinAllocation = await Unity.Services.Relay.RelayService.Instance
-                .JoinAllocationAsync(joinCode);
+            var joinAllocation = await Unity.Services.Relay.RelayService.Instance.JoinAllocationAsync(joinCode);
             
             var relayServerData = new RelayServerData(joinAllocation, "dtls");
             

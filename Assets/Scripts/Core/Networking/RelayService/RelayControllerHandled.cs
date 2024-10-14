@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using Core.Constants;
 using SickDev.CommandSystem;
 using UniRx;
@@ -32,8 +33,8 @@ namespace Core.Networking.RelayService
         
         public void Initialize()
         {
-            _devConsole.AddCommand(new ActionCommand(CreateRelay));
-            _devConsole.AddCommand(new ActionCommand<string>(JoinRelay));
+            // _devConsole.AddCommand(new ActionCommand(CreateRelay));
+            // _devConsole.AddCommand(new ActionCommand<string>(JoinRelay));
             
             _networkManager.OnClientDisconnectCallback += OnClientDisconnect;
         }
@@ -42,7 +43,7 @@ namespace Core.Networking.RelayService
             _networkManager.OnClientDisconnectCallback -= OnClientDisconnect;
         }
 
-        public async void CreateRelay()
+        public async Task CreateRelay()
         {
             try
             {
@@ -66,7 +67,7 @@ namespace Core.Networking.RelayService
             }
         }
         
-        public async void JoinRelay(string joinCode)
+        public async Task JoinRelay(string joinCode)
         {
             try
             {
