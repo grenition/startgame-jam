@@ -577,7 +577,14 @@ public class ControllerNetworkBus : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void HasItemInAllsServerRpc(string name, int type, int id)
     {
-        HasItemInAllsClientRpc(name, type, id);
+        if(BigPlayer == null || SmallPlayer == null)
+        {
+            HasItemInAllResponseClientRpc(type, id, false);
+        }
+        else
+        {
+            HasItemInAllsClientRpc(name, type, id);
+        }
     }
 
     [ClientRpc]

@@ -22,6 +22,8 @@ public class ClientController : MonoBehaviour
     [SerializeField] private TMP_Text _infoText;
     [SerializeField] private ActivityInfo _comicsActivity;
 
+    [SerializeField] private string _cannotStartMultiplayerTaskReason;
+
     public enum States { Nothing, SimpleSprite, WaitCallback, OnMiniGame }
 
     private IObjectsFactory _factory;
@@ -179,6 +181,7 @@ public class ClientController : MonoBehaviour
         if(State is States.WaitCallback)
         {
             State = _showedInfo == null ? States.Nothing : States.SimpleSprite;
+            ShowMessage(_cannotStartMultiplayerTaskReason);
         }
     }
 

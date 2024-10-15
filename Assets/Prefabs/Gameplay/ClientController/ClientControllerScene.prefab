@@ -942,6 +942,8 @@ MonoBehaviour:
   _infoImage: {fileID: 4038950323297880858}
   _infoText: {fileID: 7814997243868807995}
   _comicsActivity: {fileID: 11400000, guid: 755182de050c2344ca1c04c0264e7f1c, type: 2}
+  _cannotStartMultiplayerTaskReason: "\u0422\u0443\u0442 \u043D\u0435 \u0441\u043F\u0440\u0430\u0432\u0438\u0442\u044C\u0441\u044F
+    \u043E\u0434\u043D\u043E\u043C\u0443"
   <MoveAngle>k__BackingField: 45
 --- !u!1 &2751294939687919449
 GameObject:

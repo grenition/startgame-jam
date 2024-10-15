@@ -6,7 +6,7 @@ public class RasberryActivityInfo : ActivityInfo
 {
     [SerializeField] private RasberryStarter _rasberryStarter;
     [SerializeField] private ActivityInfo _keysInfo;
-    [SerializeField] private string _nothingHere;
+    [SerializeField] private string _nothingHere, _cantStartWithoutBucket;
 
     private Inventory _inventory;
     private CompletedTasks _tasks;
@@ -23,6 +23,11 @@ public class RasberryActivityInfo : ActivityInfo
         if(!_tasks.Tasks.Contains(_keysInfo))
         {
             reason = _nothingHere;
+            return false;
+        }
+        else if(!_tasks.Tasks.Contains(this) && !_inventory.HasItemByName(_inventory.Names.Basket))
+        {
+            reason = _cantStartWithoutBucket;
             return false;
         }
         return base.CanInteract(out reason);
