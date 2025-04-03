@@ -1,10 +1,7 @@
-# Зайцеботы за работой
-Два игрока управляют зайцеботами, целью которых является спасение пропавшей заячьей семьи. На пути к спасению игрокам предстоит изучать локацию, решать несложные головоломки и проходить аркадные мини-игры.
+# Bunny bots at work
+Cooperative quest game.
 
-Глобальная цель игроков — последовательно отыскать всех членов пропавшей семьи, исследовав для этого все доступные локации.
-![image](https://github.com/user-attachments/assets/2d49caa6-3025-41d8-ac7c-6c3db713627e)
-
-Игра доступна на странице [itch.io](https://battlecrow.itch.io/bunnybots-at-work)
+Available on: [itch.io](https://battlecrow.itch.io/bunnybots-at-work)
 
 ---
 # startgame-jam technology stack
